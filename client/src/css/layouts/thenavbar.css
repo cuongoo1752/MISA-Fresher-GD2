@@ -1,0 +1,74 @@
+/* NAVBAR
+========================================================================== */
+
+.navbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 150px;
+}
+
+
+/* NAVBAR LOGO
+========================================================================== */
+
+.navbar__logo {
+    padding-top: 3px;
+    height: 50.23px;
+    background: var(--color-secondary-dark);
+}
+
+.logo {
+    height: 100%;
+    background-image: url('../../assets/img/Logo_Full_White.png');
+    background-position: center;
+    background-size: cover;
+}
+
+
+/* NAVBAR LIST
+========================================================================== */
+
+.navbar__box {
+    background: var(--color-secondary-medium);
+    height: calc(100vh - 53.23px);
+}
+
+.navbar__list {}
+
+.navbar__element {}
+
+.navbar__link {
+    background-color: var(--color-secondary-medium);
+    display: block;
+    text-decoration: none;
+    height: 40px;
+    display: flex;
+    align-items: center;
+}
+
+.navbar__link:hover {
+    background-color: var(--color-secondary-dark);
+}
+
+.navbar__link:visited {
+    background-color: var(--color-secondary-dark);
+}
+
+.navbar__icon {
+    height: 29px;
+    width: 22px;
+    margin-left: 9px;
+    margin-right: 9px;
+    background: url('../../assets/img/slibarmenu.png');
+    background-position: 0 -351px;
+    background-repeat: no-repeat;
+}
+
+.navbar__text {
+    color: #aaacc7;
+}
+
+.navbar__text:hover {
+    color: white;
+}

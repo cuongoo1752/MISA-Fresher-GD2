@@ -1,0 +1,84 @@
+/* FONT FAMILY
+========================================================================== */
+
+@font-face {
+    font-family: 'Roboto-Regular';
+    src: url('../assets/font/Roboto/Roboto-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto-Bold';
+    src: url('../assets/font/Roboto/Roboto-Bold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto-Italic';
+    src: url('../assets/font/Roboto/Roboto-Italic.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Roboto-Light';
+    src: url('../assets/font/Roboto/Roboto-Light.ttf') format('truetype');
+}
+
+
+/* VARIABLES 
+========================================================================== */
+
+:root {
+    /* text */
+    --color-text-1: #F1F3F8;
+    --color-text-2: #DFE3E8;
+    --color-text-3: #c4cdd5;
+    --color-text-4: #919eab;
+    --color-text-5: #637381;
+    --color-text-6: #212b36;
+    /* primary */
+    --color-primary-light: #dee1f9;
+    --color-primary-medium: #616ce6;
+    --color-primary-dark: #190472;
+    /* secondary */
+    --color-secondary-medium: #2b3173;
+    --color-secondary-dark: #1e235a;
+    /* error */
+    --color-error-light: #fbeae5;
+    --color-error-medium: #fdac9a;
+    --color-error-dark: #ed6347;
+    /* success */
+    --color-success-light: #dcf1db;
+    --color-success-medium: #50b83c;
+    --color-success-dark: #188203;
+    /* warning */
+    --color-warning-light: #ffebcc;
+    --color-warning-medium: #ff9900;
+    --color-warning-dark: #eb7500;
+    --font-main-regular: 'Roboto-Regular', Tahoma, sans-serif;
+    --font-main-bold: 'Roboto-Bold', Tahoma, sans-serif;
+    --font-main-italic: 'Roboto-Italic', Tahoma, sans-serif;
+    --font-main-light: 'Roboto-Light', Tahoma, sans-serif;
+}
+
+
+/* GLOBAL
+========================================================================== */
+
+* {
+    font-family: var(--font-main-regular);
+    padding: 0;
+    margin: 0;
+    color: #404040;
+    font-size: 13px;
+    line-height: 17px;
+    font-weight: 300;
+}
+
+
+/* IMPORT GLOBAL
+========================================================================== */
+
+
+/* Layouts */
+
+@import './layouts/thecontent.css';
+@import './layouts/theheader.css';
+@import './layouts/thenavbar.css';

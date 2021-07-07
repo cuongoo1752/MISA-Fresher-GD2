@@ -1,0 +1,17 @@
+.header {
+    position: absolute;
+    top: 0px;
+    left: 150px;
+    height: 50px;
+    width: calc(100vw - 150px);
+    border-bottom: #dddddd solid 1px;
+    display: flex;
+    align-items: center;
+}
+
+.header__page {
+    padding-left: 21px;
+    font-family: var(--font-main-bold);
+    font-size: 18px;
+    color: rgb(33, 33, 33);
+}
