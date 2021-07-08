@@ -1,0 +1,83 @@
+/* STYLE CHO TRANG ITEMS
+========================================================================== */
+
+.item {
+    padding: 8px;
+    background: #e5e6eb;
+}
+
+.pagination-items {
+    box-sizing: border-box;
+    height: 52px;
+    padding: 10px;
+    padding-top: 13px;
+    padding-right: 22px;
+    background: white;
+    border: #dddddd solid 1px;
+}
+
+
+/* STYLE TABLE CHUNG TABLE
+========================================================================== */
+
+.table-box {
+    overflow-y: scroll;
+    height: calc(100vh - 155px);
+    position: relative;
+    background: white;
+}
+
+.table-items {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+
+/* STYLE TIÊU ĐỀ TABLE
+========================================================================== */
+
+.items-thead {
+    position: sticky;
+    top: 0;
+}
+
+.items-element-title {
+    border-left: #e9e9e9 1px solid;
+    border-bottom: #e9e9e9 1px solid;
+}
+
+.items-tr-title {}
+
+
+/* STYLE NỘI DUNG TABLE
+========================================================================== */
+
+.items-tbody {}
+
+.items-tr-element {}
+
+.items-tr-element:nth-child(even) {
+    background: #f6f6f6;
+}
+
+.items-tr-element:nth-child(odd) {
+    background: white;
+}
+
+.items-tr-element:hover {
+    background: #e2e4f1;
+}
+
+.item-tr-element-click {
+    background: #e2e4f1;
+}
+
+.items-element {
+    padding: 7px 10px 6px;
+    height: 19px;
+    text-align: left;
+    border-left: #e9e9e9 1px solid;
+    border-bottom: #e9e9e9 1px solid;
+}
+
+.items-text {}

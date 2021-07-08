@@ -1,0 +1,112 @@
+/* GROUP BUTTON DIRECTION
+/*   THÀNH PHẦN DÙNG CHUNG
+========================================================================== */
+
+.groupbtn {
+    background: #2b3173;
+    height: 36px;
+    display: flex;
+    align-items: center;
+}
+
+.groupbtn__btndir {
+    background: #2b3173;
+    height: 36px;
+    display: flex;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-right: #190472 1px solid;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+}
+
+.groupbtn__btndir:hover {
+    background: #6b6f9d;
+}
+
+.groupbtn__icon {
+    margin-right: 3px;
+    width: 16px;
+    height: 16px;
+    background: url('../../assets/img/common-icon.png');
+}
+
+.groupbtn__text {
+    line-height: 16px;
+    padding-left: 5px;
+    padding-right: 5px;
+    color: white;
+}
+
+
+/* STYLE RIÊNG CHO CÁC NÚT ĐIỀU HƯỚNG
+========================================================================== */
+
+.add-icon {
+    background-position: -2px -128px;
+}
+
+.dup-icon {
+    background-position: -978px -127px;
+}
+
+.fix-icon {
+    background-position: -1454px -128px;
+}
+
+.del-icon {
+    background-position: -1080px -129px;
+}
+
+.refresh-icon {
+    background-position: -129px -202px;
+}
+
+.export-icon {
+    background-position: -127px -128px;
+}
+
+
+/* Nút có chức năng select nhiều đối tượng
+========================================================================== */
+
+.add-select {
+    background: url('../../assets/img/down-arrow.svg');
+    padding-top: 14px;
+    padding-bottom: 14px;
+    padding-left: 13px;
+    width: 7px;
+    height: 7px;
+    background-size: 7px;
+    background-repeat: no-repeat;
+    background-position: 11px 13px;
+}
+
+.add-list {
+    position: absolute;
+    left: 0px;
+    top: 37px;
+    width: 132px;
+    background: white;
+    border-radius: 1px;
+    border: #dfdfdf 1px solid;
+    outline: none;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, .5);
+}
+
+.add-element {
+    text-decoration: none;
+    list-style-type: none;
+    line-height: 32px;
+    padding-left: 8px;
+    padding-right: 8px;
+    color: black;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.add-element:hover {
+    background: #2b3173;
+    color: white;
+}

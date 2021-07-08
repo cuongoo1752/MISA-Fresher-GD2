@@ -1,0 +1,130 @@
+/* STYLE CHUNG CHO TIÊU ĐỀ BẢNG
+========================================================================== */
+
+.headtb {
+    border-right: 1px solid #d0d0d0;
+    color: #212121;
+    background-color: #f0f0f0!important;
+    outline: 0;
+}
+
+.headtb__title {
+    padding: 7px 10px 6px;
+    height: 32px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.headtb__title:hover {
+    background: #eaeff4;
+}
+
+.headtb__text {
+    color: #212121;
+    font-family: var(--font-main-bold);
+    font-size: 13px;
+}
+
+.headtb__sort {}
+
+.arrow-up {
+    height: 16px;
+    width: 13px;
+    background: url('../../assets/lib/fontawesome/svgs/solid/long-arrow-alt-up.svg');
+    background-repeat: no-repeat;
+    background-position: 4px -1px;
+    margin-left: 4px;
+}
+
+.arrow-down {
+    height: 16px;
+    width: 13px;
+    background: url('../../assets/lib/fontawesome/svgs/solid/long-arrow-alt-down.svg');
+    background-repeat: no-repeat;
+    background-position: 4px -1px;
+    margin-left: 4px;
+}
+
+
+/* INPUT CHUNG
+========================================================================== */
+
+input {
+    width: 34px;
+    height: 34px;
+    padding: 7px;
+    border: #e1e1e1 solid 1px;
+    background: white;
+    outline: none;
+    font-size: 12px;
+}
+
+
+/* STYLE RIÊNG TỪNG TRƯỜNG
+========================================================================== */
+
+.headtb__input {
+    display: flex;
+    position: relative;
+}
+
+.headtb__btn {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+.headtb__input-text {
+    width: calc(100% - 34px);
+    box-sizing: border-box;
+}
+
+.headtb__input-text:focus {
+    border-color: #cacaca;
+}
+
+.list {
+    position: absolute;
+    left: 0px;
+    top: 37px;
+    width: calc(100% + 20px);
+    background: white;
+    border-radius: 1px;
+    border: #dfdfdf 1px solid;
+    outline: none;
+    box-shadow: 0px 0px 6px rgba(0, 0, 0, .5);
+}
+
+.element {
+    text-decoration: none;
+    list-style-type: none;
+    line-height: 32px;
+    padding-left: 20px;
+    padding-right: 8px;
+    color: black;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.element:hover {
+    background: #6b6f9d;
+    color: white;
+}
+
+.number-list {
+    width: 160px;
+}
+
+.headtb__select {
+    height: 35px;
+    width: calc(100%);
+    outline: none;
+    border: #e1e1e1 solid 1px;
+}
+
+.headtb__select:focus {
+    border: none;
+    border-left: 1px solid #6b6f9d;
+    border-right: 1px solid #6b6f9d;
+}

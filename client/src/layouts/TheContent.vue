@@ -1,20 +1,19 @@
 <template>
     <div class="content">
-        <pagination/>
+        <inventoryitem/>
     </div>
 </template>
 
 <script>
-import pagination from '../components/Pagination.vue'
+import inventoryitem from '../pages/inventoryitem/InventoryItem.vue'
     export default {
         components:{
-            pagination,
-        }
+            inventoryitem
+        },
+
     }
 </script>
 
 <style scoped>
-.content{
-    padding: 50px;
-}
+
 </style>
