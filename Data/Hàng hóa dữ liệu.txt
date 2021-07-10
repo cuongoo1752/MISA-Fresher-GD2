@@ -1,2 +1,218 @@
-Kính mắt|Ốp lưng|Bông tẩy trang|Quần jean|Quần đùi|Quần kaki|Áo sơ mi|Áo phông|Váy|Váy xòe|Đầm|Mũ|Nón|Găng Tay|Điện thoại|Máy tính|Tai nghe|Ipad|Ti vi|Tủ lạnh|Điền hòa|Máy ảnh|Camera|Đồng hồ|Giày|Dép|Quạt|Ấm Siêu tốc|Thẻ cào|Thẻ game|Dịch vụ Mát xa|Chuyến đi chơi Hồ Chí Minh|Ô tô|Xe máy|Nồi cơm điện|Phấn|Son|Tập Gym 3 tháng|Sách|Truyện
+
+
+
+
+
+
+-- Các Trường chung
+Tên: 
+(($"VNHo.txt") ($"VNDemNam.txt") ($"VNTenNam.txt"))|(($"VNHo.txt") ($"VNDemNu.txt") ($"VNTenNu.txt"))
+
+
+-- Bảng Đơn vị
+Tên:
+Bộ|Cái|Cân|Chiếc|Chục|Cuộc|Dây|Đôi|Đĩa|Lần|Mét|Tá|Thùng
+
+
+-- Bảng Nhóm hàng hóa
+Tên:
+Bia|Rượu|Món ăn|Tour Du lịch|Tour Bữa tối sang trọng|Trái cây|Thực phẩm tươi sống|Nguyên liệu sống|Đồ uống có cồn|Đồ ăn nhanh|Hái sản|Rau sạch
+Mã: 
+I[0-9]{4}
+
+
+-- Bảng Hàng hóa
+-Barcode: 
+1000[0-9]{10}
+-SKUCode:
+[A-Z]{3}[0-9]{2}
+-Color
 red|green|blue|black|white|pink|yellow
+-Size:
+M|L|XLL|L|XXL|XXXL|XXXXL
+
+-Tên hàng hóa:
+Kính mắt|Ốp lưng|Bông tẩy trang|Quần jean|Quần đùi|Quần kaki|Áo sơ mi|Áo phông|Váy|Váy xòe|Đầm|Mũ|Nón|Găng Tay|Điện thoại|Máy tính|Tai nghe|Ipad|Ti vi|Tủ lạnh|Điền hòa|Máy ảnh|Camera|Đồng hồ|Giày|Dép|Quạt|Ấm Siêu tốc|Thẻ cào|Thẻ game|Dịch vụ Mát xa|Chuyến đi chơi Hồ Chí Minh|Ô tô|Xe máy|Nồi cơm điện|Phấn|Son|Tập Gym 3 tháng|Sách|Truyện
+|7up
+|Aquafina
+|Vang đỏ Apec 375ml
+|Askitikos dry red( đỏ)
+|Askitikos dry white( trắng)
+|V085 Sepia Reserva
+|Ballantine 21
+|Ballantine 30
+|Beluga 0.7l
+|Beluga 1l
+|Bia hơi Hải Phòng
+|Bia hơi Hà Nội
+|Bia hơi HUDA Huế
+|Bia hơi Sài Gòn
+|Bia hơi Việt Hà
+|Bia đen 0.3 L
+|Bia đen 0.5 L
+|Bia đen 1 L
+|Bia đen 30 L
+|Bia đen 50 L
+|Bia Hà Nội
+|Bia heineken
+|Bia larue
+|Bia Sài Gòn
+|Bia vàng 0.3 L
+|Bia vàng 0.5 L
+|Bia vàng 1 L
+|Bia vàng 30 L
+|Bia vàng 50 L
+|Bò húc
+|C2
+|Cabernet
+|Cá sấu
+|Vang Cavit đỏ
+|Vang Chateau Đỏ Merlot 750ml
+|Vang Chateau Trắng 750ml
+|Rượu Chivas 12 năm
+|Rượu Chivas 18 năm
+|Rượu Chivas 21 năm
+|Rượu Chivas 38 năm
+|Chivas Revolve
+|Cocacola
+|Château Đalat 750ml
+|Dalat wine cooler đào 720ml
+|Dalat wine cooler dâu rừng 720ml
+|Dalat wine cooler dâu tây 720ml
+|DANZKA nhôm trắng 0.7l
+|DANZKA nhôm trắng 1l
+|Diet Pepsi
+|Vang Excellence Đỏ 750ml
+|Vang Excellent Trắng 750ml
+|Vang Export Đỏ 375ml
+|Vang Export Đỏ 750ml
+Vang Export Trắng 750ml
+Fanta
+Vang Gaillac Đỏ 750ml
+Glen drenach 18
+Glen drenach 21
+Rượu Glenlivet 0.7l
+Bia chai Hà Nội
+Bia chai Heniken
+Bia Heniken
+Bia chai Heniken Pháp 250ml
+Hổ cốt nhân sâm tửu
+John đen
+John vàng
+John xanh
+Trà xanh không độ
+LaCapitana đỏ
+Lapalma đỏ
+Vang Đỏ Latulip 375ml
+Nước uống thiên nhiên Lavi
+Nước uống thiên nhiên lavie 350ml
+Nước uống thiên nhiên lavie 500 ml
+Macallan 1824 1l
+Merlot
+Milo (Vừa)
+Mirinda
+Nước tăng lực numberone
+Nutifood
+Vang Đỏ Pencee 375ml
+Pepsi
+Nước Pepsi (Lớn)
+Nước Pepsi
+Vang Premium 750ml
+Putin Nga tròn
+Putin Nga vuông
+Rượu anh đào
+Rượu ba kích
+Rượu bìm bịp
+Rượu cần tây nguyên
+Rượu chim sơn cầm
+Rượu chuối hột
+Rượu dâu
+Rượu đế
+Rượu đinh lăng
+Rượu gừng
+Rượu hải mã
+Rượu hồng đào
+Rượu kim sơn
+Rượu làng vân
+Rượu lộc nhung
+Rượu mơ
+Rượu nếp
+Rượu nếp cẩm
+Rượu ngâm ong
+Rượu ngô
+Rượu nhân sâm
+Rượu rắn
+Rượu sâm
+Rượu san lùng
+Rượu sâu chít
+Rượu sữa ong chúa
+Rượu tắc kè
+Rượu táo mèo
+Rượu thuốc
+Rượu vang đỏ
+Rượu vang trắng
+Bia Sài Gòn lùn
+Santa Ema Amplus Cabernet Sauvigon
+7 up
+Sting
+Twister
+Vodka hà nội lớn
+Vodka hà nội nhỏ
+Vodka men lớn
+Vodka men nhỏ
+555
+Bánh đa nướng
+Banh trang nuong
+Chà bông cay
+Cơm cháy chà bông
+Cookies cappuccino
+Cookies chocolate
+Đậu phộng
+Kent
+Khăn lạnh
+Khăn lạnh
+Lạc rang
+Lạc rang húng lìu
+Lạc rang húng lìu
+Marlboro
+Ngô cay
+Nem chua
+Nem phùng
+Ngựa trắng
+Phồng tôm
+Thăng long
+Vinataba
+Ba ba
+Bồ câu
+Bề bề
+Bò
+Cá bạc má
+Cá bã trầu
+Cá bò da
+Cá cu
+Cá dò
+Cá đuối
+Cá kèo
+Cá lăng
+Cá mú
+Cá ngừ đại dương
+Cá tầm
+Cá xương xanh
+Cá Điêu hồng
+Cơm
+Cua cốm
+Cua đinh
+Cua gạch
+Cua thịt
+Ghẹ
+Ghẹ cốm
+Ghẹ xanh
+Gio
+Lươn
+Ngao
+Ngô ngọt
+Tôm càng xanh
+Tôm hùm
+Tôm mũ ni
+Tôm sú
+Tôm tích

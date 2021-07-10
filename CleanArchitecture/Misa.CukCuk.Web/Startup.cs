@@ -53,6 +53,18 @@ namespace Misa.CukCuk.Web
             services.AddScoped(typeof(IEntityService<>), typeof(EntityService<>));
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IEmployeeService, EmployeeService>();
+
+            services.AddScoped<IDetailComboRepository, DetailComboRepository>();
+            services.AddScoped<IDetailComboService, DetailComboService>();
+
+            services.AddScoped<IInventoryItemRepository, InventoryItemRepository>();
+            services.AddScoped<IInventoryItemService, InventoryItemService>();
+
+            services.AddScoped<IItemCategoryRepository, ItemCategoryRepository>();
+            services.AddScoped<IItemCategoryService, ItemCategoryService>();
+
+            services.AddScoped<IUnitRepository, UnitRepository>();
+            services.AddScoped<IUnitService, UnitService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2k1ogdn/NGlXeeWDokZKPwqmF5j/s0/HroSZIQ8HCT1jtuAfjmfW5DIN3mpT8cL/hE2rbzod9rc03NKD7RM6Kw==",
+  "dgSpecHash": "P26pLSdKJrHKiIgRc7lxv+VQWWI+ljqJqN+6UcGpYpT43NxwTBMVw/5tZ0HCuzPbJT3tuJJA/766k7pE3cELQA==",
   "success": true,
-  "projectFilePath": "E:\\MISA\\MISA-Fresher-GD1\\CleanArchitecture\\Misa.Infrastructure\\Misa.Infrastructure.csproj",
+  "projectFilePath": "E:\\MISA\\MISA-Fresher-GD2\\CleanArchitecture\\Misa.Infrastructure\\Misa.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DELL\\.nuget\\packages\\dapper\\2.0.90\\dapper.2.0.90.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\epplus\\5.6.4\\epplus.5.6.4.nupkg.sha512",

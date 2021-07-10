@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\MISA\\MISA-Fresher-GD1\\CleanArchitecture\\Misa.Core\\Misa.Core.csproj": {}
+    "E:\\MISA\\MISA-Fresher-GD2\\CleanArchitecture\\Misa.Core\\Misa.Core.csproj": {}
   },
   "projects": {
-    "E:\\MISA\\MISA-Fresher-GD1\\CleanArchitecture\\Misa.Core\\Misa.Core.csproj": {
+    "E:\\MISA\\MISA-Fresher-GD2\\CleanArchitecture\\Misa.Core\\Misa.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\MISA\\MISA-Fresher-GD1\\CleanArchitecture\\Misa.Core\\Misa.Core.csproj",
+        "projectUniqueName": "E:\\MISA\\MISA-Fresher-GD2\\CleanArchitecture\\Misa.Core\\Misa.Core.csproj",
         "projectName": "Misa.Core",
-        "projectPath": "E:\\MISA\\MISA-Fresher-GD1\\CleanArchitecture\\Misa.Core\\Misa.Core.csproj",
+        "projectPath": "E:\\MISA\\MISA-Fresher-GD2\\CleanArchitecture\\Misa.Core\\Misa.Core.csproj",
         "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-        "outputPath": "E:\\MISA\\MISA-Fresher-GD1\\CleanArchitecture\\Misa.Core\\obj\\",
+        "outputPath": "E:\\MISA\\MISA-Fresher-GD2\\CleanArchitecture\\Misa.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",

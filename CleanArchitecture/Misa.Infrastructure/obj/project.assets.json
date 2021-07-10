@@ -6335,11 +6335,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\MISA\\MISA-Fresher-GD1\\CleanArchitecture\\Misa.Infrastructure\\Misa.Infrastructure.csproj",
+      "projectUniqueName": "E:\\MISA\\MISA-Fresher-GD2\\CleanArchitecture\\Misa.Infrastructure\\Misa.Infrastructure.csproj",
       "projectName": "Misa.Infrastructure",
-      "projectPath": "E:\\MISA\\MISA-Fresher-GD1\\CleanArchitecture\\Misa.Infrastructure\\Misa.Infrastructure.csproj",
+      "projectPath": "E:\\MISA\\MISA-Fresher-GD2\\CleanArchitecture\\Misa.Infrastructure\\Misa.Infrastructure.csproj",
       "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-      "outputPath": "E:\\MISA\\MISA-Fresher-GD1\\CleanArchitecture\\Misa.Infrastructure\\obj\\",
+      "outputPath": "E:\\MISA\\MISA-Fresher-GD2\\CleanArchitecture\\Misa.Infrastructure\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\DELL\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -6356,8 +6356,8 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "E:\\MISA\\MISA-Fresher-GD1\\CleanArchitecture\\Misa.Core\\Misa.Core.csproj": {
-              "projectPath": "E:\\MISA\\MISA-Fresher-GD1\\CleanArchitecture\\Misa.Core\\Misa.Core.csproj"
+            "E:\\MISA\\MISA-Fresher-GD2\\CleanArchitecture\\Misa.Core\\Misa.Core.csproj": {
+              "projectPath": "E:\\MISA\\MISA-Fresher-GD2\\CleanArchitecture\\Misa.Core\\Misa.Core.csproj"
             }
           }
         }
