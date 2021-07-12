@@ -94,14 +94,10 @@ namespace Misa.Core.Service
                 //Kiểm tra thông tin bắt buộc nhập
                 if (classAttributeRequired.Length > 0)
                 {
-                    //Kiểm tra dữ liệu giới tính
-                    if (propType == typeof(Gender?) && propValue == null)
-                    {
-                        isValid = false;
-                    }
+   
 
                     //Kiểm tra dữ liệu thời gian
-                    else if (propType == typeof(DateTime?) && propValue == null)
+                    if (propType == typeof(DateTime?) && propValue == null)
                     {
                         isValid = false;
                     }

@@ -1,0 +1,86 @@
+/* STYLE CHUNG
+========================================================================== */
+
+.baseinput {
+    height: 32px;
+    display: flex;
+    align-items: center;
+}
+
+
+/* STYLE RIÊNG
+========================================================================== */
+
+.baseinput__front {
+    box-sizing: border-box;
+    padding: 0 5px 0 8px;
+    background: #f0f0f0;
+    color: #404040;
+    border: 1px solid #d0d0d0;
+    border-right: none;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    line-height: 30px;
+    width: 75px;
+}
+
+.baseinput__input {
+    padding: 5px 10px;
+    outline: none;
+    border: 1px solid #d0d0d0;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 400;
+    height: 32px;
+    width: 100%;
+    box-sizing: border-box;
+    color: #404040;
+}
+
+.baseinput__input::placeholder {
+    color: #757575;
+}
+
+.baseinput__input:focus {
+    border-color: #636dde;
+}
+
+.baseinput__input:disabled {
+    background-color: #e5e6eb;
+}
+
+.baseinput__input:disabled:focus {
+    border-color: #636dde;
+}
+
+.baseinput__icon-validate {
+    width: 16px;
+    height: 16px;
+    padding-left: 4px;
+    padding-right: 4px;
+    background: url('../../assets/img/exclamation.png');
+    background-repeat: no-repeat;
+    background-position: 4px 0;
+}
+
+.has-front {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.is-input-error {
+    border-color: #cf4c35;
+}
+
+
+/* TOOLTIP CUSTOM
+========================================================================== */
+
+.tooltip-inner {
+    background: #cf4c35;
+    color: white;
+    border-radius: 2px;
+    padding: 5px 10px 4px;
+}

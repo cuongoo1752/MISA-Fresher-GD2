@@ -51,8 +51,6 @@ namespace Misa.CukCuk.Web
             });
             services.AddScoped(typeof(IEntityRespository<>), typeof(BaseEntityRepository<>));
             services.AddScoped(typeof(IEntityService<>), typeof(EntityService<>));
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            services.AddScoped<IEmployeeService, EmployeeService>();
 
             services.AddScoped<IDetailComboRepository, DetailComboRepository>();
             services.AddScoped<IDetailComboService, DetailComboService>();

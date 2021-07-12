@@ -16,14 +16,43 @@ namespace Misa.Core.Enum
         Update = 2,
         Delete = 3
     }
-    /// <summary>
-    /// Giới tính
-    /// </summary>
-    /// CreatedBy LMCUONG (23/05/2021)
-    public enum Gender
+
+    public enum MISACode
     {
-        Male = 1,
-        Female = 0,
-        Other = 2
+        Success = 200,
+        /// <summary>
+        /// Lỗi validate dữ liệu chung
+        /// </summary>
+        Validate = 400,
+
+        /// <summary>
+        /// Lỗi validate dữ liệu không hợp lệ
+        /// </summary>
+        ValidateEntity = 401,
+
+        /// <summary>
+        /// Lỗi validate dữ liệu do không đúng nghiệp vụ
+        /// </summary>
+        ValidateBussiness = 402,
+
+        /// <summary>
+        /// Lỗi Exception
+        /// </summary>
+        Exception = 500,
+
+        /// <summary>
+        /// Lỗi File không đúng định dạng
+        /// </summary>
+        FileFormat = 600,
     }
+
+    public enum ItemType
+    {
+        Merchandise = 1,
+        Combo = 2,
+        Service = 3
+    }
+
+
+
 }

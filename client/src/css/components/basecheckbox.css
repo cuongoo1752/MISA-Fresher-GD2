@@ -1,0 +1,36 @@
+/* STYLE CHUNG
+========================================================================== */
+
+.base-checkbox {}
+
+.base-checkbox__element {
+    width: 14px;
+    height: 14px;
+    position: relative;
+}
+
+
+/* STYLE RIÊNG
+========================================================================== */
+
+.checkbox-true::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    width: 16px;
+    height: 16px;
+    background: url('../../assets/img/common-icon.png');
+    background-position: -28px -78px;
+}
+
+.checkbox-false {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    width: 16px;
+    height: 16px;
+    background: url('../../assets/img/common-icon.png');
+    background-position: -3px -78px;
+}

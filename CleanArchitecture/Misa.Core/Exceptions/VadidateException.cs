@@ -11,8 +11,6 @@ namespace Misa.Core.Exceptions
         public VadidateException(string msg = "", object Data = null) : base(msg)
         {
 
-            
-
             var objectReturn = new
                 {
                     Msg = msg,

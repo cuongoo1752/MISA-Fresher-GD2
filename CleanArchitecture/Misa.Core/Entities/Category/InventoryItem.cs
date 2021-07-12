@@ -12,7 +12,7 @@ namespace Misa.Core.Entities.Category
         public Guid InventoryItemID { get; set; }
         public string BarCode { get; set; }
         public string SKUCode { get; set; }
-        public string InventoryName { get; set; }
+        public string InventoryItemName { get; set; }
         public int InventoryItemType { get; set; }
         public Guid ItemCategoryID { get; set; }
         public double BuyPrice { get; set; }

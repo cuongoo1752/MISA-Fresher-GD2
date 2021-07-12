@@ -1,0 +1,22 @@
+/* STYLE CHUNG 
+========================================================================== */
+
+.textlabel {
+    display: flex;
+}
+
+.textlable__text {
+    color: #212121;
+}
+
+.textlable__icon {
+    margin-left: 7px;
+    height: 16px;
+    width: 16px;
+    background: url('../../assets/img/common-icon.png');
+    background-position: -179px -176px;
+}
+
+
+/* STYLE RIÊNG
+========================================================================== */

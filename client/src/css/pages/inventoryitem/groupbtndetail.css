@@ -1,0 +1,97 @@
+/* STYLE GROUP BUTTON
+========================================================================== */
+
+.groupbtndetail {
+    padding: 8px;
+    display: flex;
+    background: white;
+    cursor: pointer;
+}
+
+.groupbtndetail__btn {
+    display: flex;
+    height: 35px;
+    padding: 7px;
+    box-sizing: border-box;
+    border: 1px solid #2b3173;
+    border-radius: 4px;
+    align-items: center;
+}
+
+.groupbtndetail__btn:hover {
+    opacity: 0.75;
+}
+
+.groupbtndetail__btn+.groupbtndetail__btn {
+    margin-left: 10px;
+}
+
+.groupbtndetail__icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 3px;
+    background: url('../../../assets/img/common-icon.png');
+}
+
+.groupbtndetail__text {
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 13px;
+    font-family: var(--font-main-bold);
+    white-space: nowrap;
+    color: #2b3173;
+}
+
+
+/* STYLE RIENG CHO TỪNG LOẠI BUTTON
+========================================================================== */
+
+
+/* Bao ngoài của icon và text */
+
+.btn-blue {
+    margin-left: 4px;
+    background: #2b3173;
+}
+
+.btn-white {}
+
+.btn-outline {
+    border: 1px solid transparent;
+}
+
+.btn-outline:hover {
+    border: 1px solid #2b3173;
+    opacity: 1;
+}
+
+
+/* icon */
+
+.detail-icon-save {
+    background-position: -327px -127px;
+}
+
+.detail-icon-dup {
+    background-position: -951px -127px;
+}
+
+.detail-icon-saveadd {
+    background-position: -26px -127px;
+}
+
+.detail-icon-cancel {
+    background-position: -252px -127px;
+}
+
+
+/* text */
+
+.detail-text-save {
+    color: white;
+}
+
+.detail-text-dup,
+.detail-text-saveadd {}
+
+.detail-text-cancel {}
