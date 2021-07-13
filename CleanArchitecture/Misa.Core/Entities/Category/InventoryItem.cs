@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Misa.Core.Enum;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace Misa.Core.Entities.Category
         public string BarCode { get; set; }
         public string SKUCode { get; set; }
         public string InventoryItemName { get; set; }
-        public int InventoryItemType { get; set; }
+        public ItemType InventoryItemType { get; set; }
         public Guid ItemCategoryID { get; set; }
         public double BuyPrice { get; set; }
         public double CostPrice { get; set; }

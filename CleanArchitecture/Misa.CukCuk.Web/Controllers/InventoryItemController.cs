@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Misa.Core.Entities;
 using Misa.Core.Entities.Category;
 using Misa.Core.Entities.Page;
+using Misa.Core.Enum;
 using Misa.Core.Interfaces.Repository;
 using Misa.Core.Interfaces.Services;
 using System;
@@ -37,10 +38,10 @@ namespace Misa.CukCuk.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetOptiopPage([FromBody] OptionPage page)
         {
-   
+
             ActionServiceResult result = await _inventoryItemServices.GetOptionPage(page);
 
-            if(result.Success == true)
+            if (result.Success == true)
             {
                 return Ok(result);
             }
@@ -48,6 +49,55 @@ namespace Misa.CukCuk.Web.Controllers
             {
                 return BadRequest(result);
             }
+        }
+        /// <summary>
+        /// Xử lý tên hàng hóa từ client và trả về mã SKUCode tương ứng
+        /// </summary>
+        /// <param name="InventoryItemName">Tên hàng hóa gửi lên</param>
+        /// <returns>Kết quả chưa mã SKUCode tương ứng</returns>
+        [HttpGet("CodeMax")]
+        public async Task<IActionResult> GetSKUCode(string InventoryItemName)
+        {
+            string SKUCodeNew = await _inventoryItemServices.CreateSKUCodeMax(InventoryItemName);
+            if (string.IsNullOrEmpty(SKUCodeNew))
+            {
+                return BadRequest(new ActionServiceResult()
+                {
+                    Data = SKUCodeNew,
+                    Success = false,
+                    Code = Core.Enum.MISACode.Validate,
+                    Messenge = "Mã không hợp lệ!"
+                }) ;
+            }
+            else
+            {
+                return Ok(new ActionServiceResult()
+                {
+                    Data = SKUCodeNew,
+                    Success = true,
+                    Code = Core.Enum.MISACode.Success
+                });
+            }
+        }
+
+
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetInventoryItemById(Guid Id, ItemType type)
+        {
+            switch (type)
+            {
+                case ItemType.Merchandise:
+                    break;
+                case ItemType.Combo:
+                    break;
+                case ItemType.Service:
+                    break;
+                default:
+                    break;
+            }
+
+
+            return Ok();
         }
     }
 }

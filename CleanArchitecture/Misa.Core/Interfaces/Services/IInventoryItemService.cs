@@ -17,5 +17,11 @@ namespace Misa.Core.Interfaces.Services
         /// <param name="page">Dữ liệu phân trang</param>
         /// <returns>Danh sách hàng hóa</returns>
         public Task<ActionServiceResult> GetOptionPage(OptionPage inputPage);
+        /// <summary>
+        /// Tạo Mã SKUCode lớn nhất
+        /// </summary>
+        /// <param name="SKUCodeInput">Mã SKU nhận vào</param>
+        /// <returns>Mã SKU lớn nhất</returns>
+        public Task<string> CreateSKUCodeMax(string SKUCodeInput); 
     }
 }

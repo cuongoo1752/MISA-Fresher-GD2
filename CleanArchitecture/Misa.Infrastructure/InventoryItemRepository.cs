@@ -36,6 +36,15 @@ namespace Misa.Infrastructure
             return inventoryItems;
         }
 
+        public async Task<string> GetSKUCodeMax(string prefix)
+        {
+            Parameters.Add($"m_SKUCode", prefix);
+            string SKUCodeMax = await dbConnection.ExecuteScalarAsync<string>($"Proc_GetSKUCodeMax", param: Parameters, commandType: CommandType.StoredProcedure);
+            return SKUCodeMax;
+        }
+
+
+
 
         #endregion
     }

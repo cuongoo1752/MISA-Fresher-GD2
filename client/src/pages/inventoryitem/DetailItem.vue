@@ -23,34 +23,43 @@
         </div>
         <div class="test">
             <BaseInput v-model="msg" :type="'number'"/>
+            <BaseInputSizeAndColor :type="'color'" :id="'color'" @change="handleInputSizeOrColor"/>
+            <BaseInputSizeAndColor :type="'size'" :id="'color'" @change="handleInputSizeOrColor"/>
 
-            <base-checkbox :value="isChecked" @input="isChecked"/>
+            
 
         </div>
     </div>
 </template>
 
 <script>
-import BaseCheckbox from '../../components/BaseCheckbox.vue'
 import BaseInput from '../../components/BaseInput.vue'
+import BaseInputSizeAndColor from '../../components/BaseInputSizeAndColor.vue'
     export default {
         components: {
-            BaseInput,
-                BaseCheckbox
+            BaseInput,BaseInputSizeAndColor
         },
         data() {
             return {
                 msg: "msg",
-                isChecked: true,
+                isChecked: [],
+                list:[]
             }
         },
         methods: {
-        
+            handleInputSizeOrColor(id, state, list, element){
+                if(id == 'color'){
+                    console.log(state)
+                    console.log(list)
+                    console.log(element)
+                }
+            }
         },
     }
 </script>
 <style scoped>
 @import '../../css/pages/inventoryitem/groupbtndetail.css';
+@import '../../css/components/basecheckbox.css';
 @import '../../css/pages/inventoryitem/detailitem.css';
 .test{
     padding: 20px;

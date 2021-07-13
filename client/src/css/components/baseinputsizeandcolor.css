@@ -1,0 +1,85 @@
+/* STYLE CHUNG
+========================================================================== */
+
+.sizecolor {
+    display: flex;
+}
+
+.sizecolor__front {
+    box-sizing: border-box;
+    padding: 0 5px 0 8px;
+    background: #f0f0f0;
+    color: #404040;
+    border: 1px solid #d0d0d0;
+    border-right: none;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    line-height: 36px;
+    width: 136px;
+}
+
+.sizecolor__input-box {
+    padding: 2px 5px;
+    border: 1px solid #d0d0d0;
+    border-radius: 3px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    font-size: 13px;
+    font-weight: 400;
+    width: 303px;
+    box-sizing: border-box;
+    color: #404040;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.sizecolor__boder {
+    border-color: #636dde;
+}
+
+
+/* STYLE RIÊNG
+========================================================================== */
+
+.sizecolor__list {
+    display: flex;
+    list-style: none;
+    flex-wrap: wrap;
+}
+
+.sizecolor__element {
+    position: relative;
+    padding: 0;
+    padding-left: 5px;
+    padding-right: 21px;
+    background-color: #2b3173;
+    border: 1px solid #ececec;
+    color: #fff;
+    margin: 3px 3px 0 0;
+    border-radius: 3px;
+    line-height: 22px;
+    height: 22px;
+}
+
+.sizecolor__input {
+    height: 24px;
+    box-sizing: border-box;
+    width: 139px;
+    border-color: transparent;
+    padding: 0;
+    margin: 0;
+    margin-top: 4px;
+}
+
+.sizecolor__element-cancel {
+    position: absolute;
+    top: 2px;
+    right: 3px;
+    width: 15px;
+    height: 15px;
+    background: url('../../assets/img/icon-delete.png');
+    background-repeat: no-repeat;
+    background-position: 3px 3px;
+}

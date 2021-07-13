@@ -1,0 +1,132 @@
+/* STYLE CHUNG
+========================================================================== */
+
+.alert-box {}
+
+
+/* STYLE MÀN CHE
+========================================================================== */
+
+.hiden {
+    position: absolute;
+    background-color: black;
+    opacity: 0.4;
+    top: -51px;
+    left: -150px;
+    right: 0;
+    bottom: 0;
+    z-index: 5;
+}
+
+
+/* STYLE ALERT */
+
+.alert {
+    position: absolute;
+    top: calc(50% - 25.5px);
+    left: calc(50% - 75px);
+    transform: translate(-50%, -50%);
+    z-index: 6;
+    width: 400px;
+    border: 2px solid #dfdfdf;
+    border-radius: 3px;
+    box-sizing: border-box;
+    background: white;
+}
+
+
+/* Tiêu đề */
+
+.alert__title-box {
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 14px;
+    align-items: center;
+}
+
+.alert__title {
+    font-size: 16px;
+    line-height: 19px;
+    color: #212121;
+    font-family: var(--font-main-bold);
+}
+
+.alert__icon-cancel {
+    height: 16px;
+    width: 16px;
+    background: url('../../assets/img/common-icon.png');
+    background-position: -1126px -130px;
+}
+
+
+/* Nội dung */
+
+.alert__content-box {
+    border-top: 1px solid #dfdfdf;
+    border-bottom: 1px solid #dfdfdf;
+    padding: 10px;
+    display: flex;
+}
+
+.alert__icon-type {
+    width: 44px;
+    height: 44px;
+    background: url('../../assets/img/icon-popup.png');
+    background-repeat: no-repeat;
+}
+
+.alert__msg {
+    padding-left: 4px;
+    color: #404040;
+    line-height: 17px;
+}
+
+.alert__info {
+    background-position: -1px -0px;
+}
+
+.alert__warning {
+    background-position: -54px -0px;
+}
+
+.alert__danger {
+    background-position: -111px -0px;
+}
+
+.alert__confuse {
+    background-position: -166px -0px;
+}
+
+
+/* Nút điều hướng */
+
+.alert__groupbtn-box {
+    padding: 8px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.alert__btn-yes,
+.alert__btn-no {
+    width: 75px;
+    height: 31px;
+    box-sizing: border-box;
+    background: #2b3173;
+    outline: none;
+    padding-left: 7px;
+    padding-right: 7px;
+    border: #190472 1px solid;
+    border-radius: 3px;
+    cursor: pointer;
+    color: white;
+}
+
+.alert__btn-yes:hover,
+.alert__btn-no:hover {
+    opacity: 0.75;
+}
+
+.alert__btn-no {
+    margin-left: 6px;
+}

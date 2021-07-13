@@ -1,19 +1,14 @@
-/* STYLE CHUNG
+/* STYLE CHECKBOX
 ========================================================================== */
 
-.base-checkbox {}
-
-.base-checkbox__element {
+.checkbox {
     width: 14px;
     height: 14px;
     position: relative;
+    background: white;
 }
 
-
-/* STYLE RIÊNG
-========================================================================== */
-
-.checkbox-true::after {
+.checkbox:checked:after {
     position: absolute;
     top: 0;
     left: 0;
@@ -24,7 +19,7 @@
     background-position: -28px -78px;
 }
 
-.checkbox-false {
+.checkbox::after {
     position: absolute;
     top: 0;
     left: 0;

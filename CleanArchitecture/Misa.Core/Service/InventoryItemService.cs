@@ -6,6 +6,7 @@ using Misa.Core.Interfaces.Services;
 using System;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Misa.Core.Service
@@ -266,6 +267,91 @@ namespace Misa.Core.Service
             }
             return queryWhere;
         }
-        #endregion 
+
+        /// <summary>
+        /// Bỏ dấu các chuỗi tiêng việt
+        /// </summary>
+        /// <param name="text">Chuỗi cần bỏ dấu</param>
+        /// <returns>Chuỗi không có dấu, viết thường</returns>
+        public string RemoveVietnameseTone(string text)
+        {
+            string result = text.ToLower();
+            result = Regex.Replace(result, "à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ|/g", "a");
+            result = Regex.Replace(result, "è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ|/g", "e");
+            result = Regex.Replace(result, "ì|í|ị|ỉ|ĩ|/g", "i");
+            result = Regex.Replace(result, "ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ|/g", "o");
+            result = Regex.Replace(result, "ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ|/g", "u");
+            result = Regex.Replace(result, "ỳ|ý|ỵ|ỷ|ỹ|/g", "y");
+            result = Regex.Replace(result, "đ", "d");
+            return result;
+        }
+        public async Task<string> CreateSKUCodeMax(string SKUCodeInput)
+        {
+            if (string.IsNullOrEmpty(SKUCodeInput))
+            {
+                return "";
+            }
+
+            // Xử lý chuỗi lấy ra các chữ cái đâu tiền
+            string[] words = RemoveVietnameseTone(SKUCodeInput).Split(' ');
+            StringBuilder prefixSKUCode = new StringBuilder("");
+
+            string tempWord = "";
+            foreach (var word in words)
+            {
+                if (!string.IsNullOrEmpty(word))
+                {
+                    tempWord = word.ToUpper();
+                    prefixSKUCode.Append(tempWord[0]);
+                }
+
+            }
+
+            // Lấy mã lớn nhất từ Server
+            string SKUCodeMax = await _inventoryItemRespository.GetSKUCodeMax(prefixSKUCode.ToString());
+            string biggestEmployeeCodeNew =  "";
+            if (string.IsNullOrWhiteSpace(SKUCodeMax))
+            {
+                biggestEmployeeCodeNew = prefixSKUCode + "01";
+            }
+            else
+            {
+                // Thêm một đơn vị cho mã lớn nhất
+                string stringNumberCode = string.Empty;
+
+                //Tiến hàng lọc số trong chuỗi
+                for (int i = 0; i < SKUCodeMax.Length; i++)
+                {
+                    if (Char.IsDigit(SKUCodeMax[i]))
+                        stringNumberCode += SKUCodeMax[i];
+                }
+
+                int? numberCode = null;
+
+                //Chuyển được lọc vào biến mới kiểu int: numberCode
+                if (stringNumberCode.Length > 0)
+                    numberCode = int.Parse(stringNumberCode);
+
+                //Tăng số đã lọc lên, để không bị trùng mã cũ
+                numberCode++;
+                if(numberCode < 10)
+                {
+                    //Thêm tiền tố cho mã nhân viên
+                    biggestEmployeeCodeNew = prefixSKUCode.ToString() + "0" + numberCode.ToString();
+                }
+                else
+                {
+                    //Thêm tiền tố cho mã nhân viên
+                    biggestEmployeeCodeNew = prefixSKUCode.ToString() + numberCode.ToString();
+                }
+
+                
+            }
+            
+
+            return biggestEmployeeCodeNew;
+
+        }
+        #endregion
     }
 }
