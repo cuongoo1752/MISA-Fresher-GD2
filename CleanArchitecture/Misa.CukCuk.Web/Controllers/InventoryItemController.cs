@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Misa.Core.Entities;
 using Misa.Core.Entities.Category;
+using Misa.Core.Entities.DataController;
 using Misa.Core.Entities.Page;
 using Misa.Core.Enum;
 using Misa.Core.Interfaces.Repository;
@@ -35,7 +36,7 @@ namespace Misa.CukCuk.Web.Controllers
         /// <param name="page">Dữ liệu chứa đầy đủ các thông tin phân trang tìm kiếm, sắp xếp</param>
         /// <returns>Danh sách hàng hóa</returns>
         /// Created By: LMCUONG(12/07/2021)
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> GetOptiopPage([FromBody] OptionPage page)
         {
 
@@ -55,10 +56,10 @@ namespace Misa.CukCuk.Web.Controllers
         /// </summary>
         /// <param name="InventoryItemName">Tên hàng hóa gửi lên</param>
         /// <returns>Kết quả chưa mã SKUCode tương ứng</returns>
-        [HttpGet("CodeMax")]
+        [HttpPost("CodeMax")]
         public async Task<IActionResult> GetSKUCode(string InventoryItemName)
         {
-            string SKUCodeNew = await _inventoryItemServices.CreateSKUCodeMax(InventoryItemName);
+            string SKUCodeNew = await _inventoryItemServices.GetSKUCodeMax(InventoryItemName);
             if (string.IsNullOrEmpty(SKUCodeNew))
             {
                 return BadRequest(new ActionServiceResult()
@@ -67,7 +68,7 @@ namespace Misa.CukCuk.Web.Controllers
                     Success = false,
                     Code = Core.Enum.MISACode.Validate,
                     Messenge = "Mã không hợp lệ!"
-                }) ;
+                });
             }
             else
             {
@@ -81,23 +82,101 @@ namespace Misa.CukCuk.Web.Controllers
         }
 
 
-        [HttpGet("{Id}")]
+        [HttpPost("{Id}")]
         public async Task<IActionResult> GetInventoryItemById(Guid Id, ItemType type)
         {
+            DetailItem result = new DetailItem();
             switch (type)
             {
                 case ItemType.Merchandise:
-                    break;
+                    result = await _inventoryItemServices.GetMerchandiseByID(Id);
+
+                    if(result.inventoryItem != null)
+                    {
+                        return Ok(new ActionServiceResult()
+                        {
+                            Success = true,
+                            Code = MISACode.Success,
+                            Data = result,
+                            Messenge = "Lấy dữ liệu thành công"
+                        });
+                    }
+                    else
+                    {
+                        return BadRequest(new ActionServiceResult()
+                        {
+                            Success = false,
+                            Code = MISACode.Exception,
+                            Data = result,
+                            Messenge = "Lấy dữ liệu không thành công!"
+                        });
+                    }
+
                 case ItemType.Combo:
-                    break;
+                    return Ok();
                 case ItemType.Service:
-                    break;
+
+                    result = await _inventoryItemServices.GetMerchandiseByID(Id);
+
+                    if (result.inventoryItem != null)
+                    {
+                        return Ok(new ActionServiceResult()
+                        {
+                            Success = true,
+                            Code = MISACode.Success,
+                            Data = result,
+                            Messenge = "Lấy dữ liệu thành công"
+                        });
+                    }
+                    else
+                    {
+                        return BadRequest(new ActionServiceResult()
+                        {
+                            Success = false,
+                            Code = MISACode.Exception,
+                            Data = result,
+                            Messenge = "Lấy dữ liệu không thành công!"
+                        });
+                    }
                 default:
                     break;
             }
 
-
             return Ok();
+
+        }
+
+        [HttpPost("Delete")]
+        public async Task<IActionResult> DeleteInventoryItemByListID([FromBody] List<Guid> listID)
+        {
+            int rowAffect = await _inventoryItemRepository.DeleteInventoryItemByListID(listID);
+
+            return Ok(new ActionServiceResult()
+            {
+                Success = true,
+                Data = new
+                {
+                    rowAffect = rowAffect
+                },
+                    Code = MISACode.Success,
+                Messenge = "Xóa thành công!"
+            });
+        }
+
+        [HttpPost("InsertMerchandise")]
+        public async Task<IActionResult> InsertInventoryItem([FromBody] DetailItem detailItem)
+        {
+            int rowAffect = await _inventoryItemServices.InsertMerchandises(detailItem);
+
+            return Ok(new ActionServiceResult() {
+                Success = true,
+                Data = new
+                {
+                    rowAffect = rowAffect
+                },
+                Code = MISACode.Success,
+                Messenge = "Thêm mới thành công!"
+            });
         }
     }
 }

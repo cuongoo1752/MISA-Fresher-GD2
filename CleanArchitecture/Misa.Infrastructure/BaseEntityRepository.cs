@@ -132,32 +132,7 @@ namespace Misa.Infrastructure
             }
         }
 
-        public async Task<bool> CheckEmployeeCodeExist(string entityCode, Guid? entityId = null)
-        {
-            //Thêm thông tin mã khách hàng vào biến chuẩn bị truyền xuống cở sở dữ liệu
-            Parameters.Add($"@m_{_className}Code", entityCode);
-
-            //Thêm thông tin mã Code khách hàng vào biến chuẩn bị truyền xuống cở sở dữ liệu
-            Parameters.Add($"@m_{_className}Id", entityId);
-
-            //Kiểm tra mã nhân viên có bị trung hay không
-            var isExits = await dbConnection.ExecuteScalarAsync<bool>($"Proc_Check{_className}CodeExits", param: Parameters, commandType: CommandType.StoredProcedure);
-            return isExits;
-        }
-
-        public async Task<bool> CheckPhoneNumberExist(string PhoneNumber, Guid? entityId = null)
-        {
-            //Thêm số điện thoại di động cần kiểm tra
-            Parameters.Add("@m_MobilePhoneNumber", PhoneNumber);
-
-            //Thêm mã nhân viên cần kiểm tra
-            Parameters.Add($"@m_{_className}Id", entityId);
-
-            var isExits = false;
-            //Truy cập vào cơ sở dữ liệu kiểm tra xem mã có bị trùng hay không
-            isExits = await dbConnection.ExecuteScalarAsync<bool>($"Proc_Check{_className}PhoneNumberExits", param: Parameters, commandType: CommandType.StoredProcedure);
-            return isExits;
-        }
+        
         #endregion
 
         #endregion

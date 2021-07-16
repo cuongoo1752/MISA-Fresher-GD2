@@ -5,7 +5,7 @@
 
       :style="{ textAlign: textAlign }"
       :disabled="disabled"
-      type="text"
+      type="number"
       class="baseinput__input"
       :class="{ 'has-front': hasFront, 'is-input-error': isError }"
       :placeholder="placeholder"
@@ -54,7 +54,7 @@ export default {
       default: 255,
     },
     value: {
-      type: String
+      type: Number
     },
 
     hasFront: {
@@ -95,11 +95,10 @@ export default {
         ) {
           event.preventDefault();
         } else {
-          console.log(typeof event.target.value);
-          this.$emit("input", event.target.value);
+          this.$emit("input", parseInt( event.target.value));
         }
       } else if (this.type == "text") {
-        this.$emit("input", event.target.value);
+        this.$emit("input", parseInt( event.target.value));
       }
     },
     handleBlueInput(event) {

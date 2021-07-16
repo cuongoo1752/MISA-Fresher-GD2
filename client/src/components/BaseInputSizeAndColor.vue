@@ -67,6 +67,14 @@ export default {
   components: {
     BaseAlert,
   },
+  watch: {
+    list: {
+      handler() {
+        this.listColorOrSize = this.list;
+      },
+      deep: true,
+    },
+  },
   created() {
     this.listColorOrSize = this.list;
   },
@@ -122,22 +130,22 @@ export default {
         if (this.isVadidateInput()) {
           if (this.type == "color") {
             this.listColorOrSize.push({
-              colorID: Date.now().toString(),
+              colorCode: Date.now().toString(),
               color: this.value,
-              isEdit: false,
+              editMode: 1,
             });
           } else if (this.type == "size") {
             this.listColorOrSize.push({
-              sizeID: Date.now().toString(),
+              sizeCode: Date.now().toString(),
               size: this.value,
-              isEdit: false,
+              editMode: 1,
             });
           }
+          this.element = this.listColorOrSize[this.listColorOrSize.length - 1];
+          this.returnValueParent("add");
         }
         // Reset lại dữ liệu thanh input
         this.value = "";
-        this.element = this.listColorOrSize[this.listColorOrSize.length - 1];
-        this.returnValueParent("add");
       }
     },
     /**
@@ -193,8 +201,8 @@ export default {
 
         //Nếu tìm thấy phần tử cần xóa
         if (ID == temptID) {
-          // Nếu cho phép sửa: isEdit = false
-          if (this.listColorOrSize[index].isEdit == false) {
+          // Nếu cho phép sửa: editMode = 1
+          if (this.listColorOrSize[index].editMode == 1) {
             this.element = this.listColorOrSize[index];
             this.listColorOrSize.splice(index, 1);
             // Trả lại giá trị phần tử cha
@@ -237,10 +245,10 @@ export default {
      * Created By: LMCUONG(13/07/2021)
      */
     popElementFromtValue() {
-      if (this.listColorOrSize.length > 0) {
-        // Nếu cho phép sửa: isEdit = false
+      if (this.listColorOrSize.length > 0 && this.value == "") {
+        // Nếu cho phép sửa: editMode = 1
         if (
-          this.listColorOrSize[this.listColorOrSize.length - 1].isEdit == false
+          this.listColorOrSize[this.listColorOrSize.length - 1].editMode == 1
         ) {
           this.element = this.listColorOrSize[this.listColorOrSize.length - 1];
           this.listColorOrSize.pop();

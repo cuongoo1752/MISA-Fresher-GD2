@@ -22,5 +22,34 @@ namespace Misa.Core.Interfaces.Repository
         /// <param name="prefix">Mã đã xử lý</param>
         /// <returns>Mã lớn nhất chữa mã đã xử lý trong cơ sở dữ liệu</returns>
         public Task<string> GetSKUCodeMax(string prefix);
+        /// <summary>
+        /// Lấy danh sách đối tượng theo mã ParentID
+        /// </summary>
+        /// <param name="ParentID">mã ParentID cần tìm</param>
+        /// <returns>Danh sách đối tượng</returns>
+        public Task<IEnumerable<InventoryItem>> GetInventoryItemByParentID(Guid ParentID);
+        /// <summary>
+        /// Xóa háng hóa tất cả các loại theo danh sách ID, nếu xóa không thành công trả về ngoại lệ
+        /// </summary>
+        /// <param name="ListID">Danh sách ID đối tượng cần xóa</param>
+        /// <returns>Số bản ghi thành công</returns>
+        public Task<int> DeleteInventoryItemByListID(List<Guid> ListID);
+        /// <summary>
+        /// Kiểm tra mã SKU có bị trùng hay không
+        /// </summary>
+        /// <param name="SKUCode">Mã SKU cần kiểm tra</param>
+        /// <param name="inventoryItemId">Id đối tượng với update</param>
+        /// <returns>true - nếu trùng, false nếu không trùng</returns>
+        public  Task<bool> CheckSKUCodeExist(string SKUCode, Guid? inventoryItemId = null);
+        /// <summary>
+        /// Kiểm tra mã vạch có bị trùng hay không
+        /// </summary>
+        /// <param name="SKUCode">Mã vạch cần kiểm tra</param>
+        /// <param name="inventoryItemId">Id đối tượng với update</param>
+        /// <returns>true - nếu trùng, false - nếu không trùng</returns>
+        public Task<bool> CheckBarCodeExist(string BarCode, Guid? inventoryItemId = null);
+
+        public Task<int> InsertUpdateDeleteMerchandise(List<InventoryItem> insertItems, List<InventoryItem> updateItems, List<InventoryItem> deleteItems);
+
     }
 }

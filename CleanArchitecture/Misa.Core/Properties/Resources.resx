@@ -169,6 +169,9 @@
   <data name="PhoneNumber" xml:space="preserve">
     <value>Số điện thoại</value>
   </data>
+  <data name="VadidateMsg_BarCodeExits" xml:space="preserve">
+    <value>Mã vạch {0} đã tồn tại trong hệ thống, vui lòng kiểm tra lại.</value>
+  </data>
   <data name="VadidateMsg_CustomerCodeExits" xml:space="preserve">
     <value>Mã khách hàng đã tồn tại</value>
     <comment>Thông báo lỗi Vadidate riêng</comment>
@@ -188,5 +191,8 @@
   <data name="VadidateMsg_RequiredField" xml:space="preserve">
     <value>{0} không được để trống.</value>
     <comment>Thống báo Vadidate riêng</comment>
+  </data>
+  <data name="VadidateMsg_SKUCodeExits" xml:space="preserve">
+    <value>Mã SKU {0} đã tồn tại trong hệ thống, vui lòng kiểm tra lại.</value>
   </data>
 </root>

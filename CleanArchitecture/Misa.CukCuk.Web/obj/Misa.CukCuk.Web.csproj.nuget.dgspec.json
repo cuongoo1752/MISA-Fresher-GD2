@@ -190,6 +190,10 @@
               "target": "Package",
               "version": "[2.0.90, )"
             },
+            "Dapper.Transaction": {
+              "target": "Package",
+              "version": "[2.0.35.2, )"
+            },
             "Microsoft.Extensions.Configuration.Abstractions": {
               "target": "Package",
               "version": "[5.0.0, )"

@@ -4,3 +4,117 @@
 
 /* STYLE CHO TABLE
 ========================================================================== */
+
+
+/* STYLE CHUNG
+========================================================================== */
+
+.table-add-item-box {
+    background: white;
+    padding: 8px 8px 0 8px;
+    overflow-y: scroll;
+    height: calc(100vh - 179px);
+    border-top: 1px solid #dfdfdf;
+    border-bottom: 1px solid #dfdfdf;
+}
+
+
+/* STYLE RIÊNG
+========================================================================== */
+
+.table-add-item {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.table-add-item__tbody {}
+
+.table-add-item__body-tr {
+    height: 42px;
+}
+
+.table-add-item__td {}
+
+
+/* Các chi tiết khác */
+
+.table-add-item__title {
+    font-size: 15px;
+    color: #757575;
+    line-height: 54px;
+    font-family: var(--font-main-bold);
+}
+
+
+/* Input ảnh */
+
+.inputimage {
+    position: relative;
+    width: 198px;
+    border: 1px dashed #636dde;
+    border-radius: 3px;
+    margin-bottom: 32px;
+}
+
+.inputimage__logg-box {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 110px;
+    height: 24px;
+    border: 1px solid #ebebeb;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    padding: 0 7px 0 12px;
+    width: 113px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.inputimage__icon {
+    height: 16px;
+    width: 16px;
+    margin-right: 10px;
+    background: url('../../../assets/img/common-icon.png');
+    background-position: -1476px -126px;
+    opacity: 0.6;
+}
+
+.inputimage__text {
+    color: #b0b0b0;
+    font-family: var(--font-main-bold);
+    font-size: 12px;
+}
+
+.inputimage__image {
+    margin: 0 auto;
+    margin-top: 43px;
+    margin-bottom: 32px;
+    width: 89px;
+    height: 68px;
+    background: url('../../../assets/img/item.png');
+    background-position: 0 0;
+    background-size: cover;
+}
+
+.inputimage__file {
+    margin: 0 auto;
+    margin-bottom: 6px;
+    padding-top: 8px;
+    padding-left: 15px;
+    padding-right: 12px;
+    padding-bottom: 9px;
+    background: #2b3173;
+    color: white;
+    border-radius: 3px;
+    width: 14px;
+    text-align: center;
+    line-height: 8px;
+    font-family: var(--font-main-bold);
+    cursor: pointer;
+}
+
+.inputimage__file:hover {
+    opacity: 0.75;
+}

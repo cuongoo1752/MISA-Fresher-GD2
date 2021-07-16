@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "aWSLanIcTcq6Y2V0VhHuXZSYulwfXZJVoRuz46c/LoUEpFW1slH9Un1NryOCUDsdr4dOK9ipkTs7ifo/GyttQA==",
+  "dgSpecHash": "dQDekYTvluBhSLYSiEmwDJnF9+RZQndPyzyc6gSjurztkLHX65+vAv8HwZizgU1OhKDvnHRP6/ielJMUcSHSiA==",
   "success": true,
   "projectFilePath": "E:\\MISA\\MISA-Fresher-GD2\\CleanArchitecture\\Misa.CukCuk.Web\\Misa.CukCuk.Web.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DELL\\.nuget\\packages\\dapper\\2.0.90\\dapper.2.0.90.nupkg.sha512",
+    "C:\\Users\\DELL\\.nuget\\packages\\dapper.transaction\\2.0.35.2\\dapper.transaction.2.0.35.2.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\epplus\\5.6.4\\epplus.5.6.4.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.2.0\\microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
     "C:\\Users\\DELL\\.nuget\\packages\\microsoft.aspnetcore.authentication.core\\2.2.0\\microsoft.aspnetcore.authentication.core.2.2.0.nupkg.sha512",

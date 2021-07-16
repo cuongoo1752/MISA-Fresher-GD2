@@ -346,3 +346,4 @@ E:\MISA\MISA-Fresher-GD2\CleanArchitecture\Misa.CukCuk.Web\obj\Debug\net5.0\Misa
 E:\MISA\MISA-Fresher-GD2\CleanArchitecture\Misa.CukCuk.Web\obj\Debug\net5.0\ref\Misa.CukCuk.Web.dll
 E:\MISA\MISA-Fresher-GD2\CleanArchitecture\Misa.CukCuk.Web\obj\Debug\net5.0\Misa.CukCuk.Web.pdb
 E:\MISA\MISA-Fresher-GD2\CleanArchitecture\Misa.CukCuk.Web\obj\Debug\net5.0\Misa.CukCuk.Web.genruntimeconfig.cache
+E:\MISA\MISA-Fresher-GD2\CleanArchitecture\Misa.CukCuk.Web\bin\Debug\net5.0\Dapper.Transaction.dll

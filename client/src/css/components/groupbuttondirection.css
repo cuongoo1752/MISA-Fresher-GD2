@@ -93,6 +93,7 @@
     border: #dfdfdf 1px solid;
     outline: none;
     box-shadow: 0px 0px 6px rgba(0, 0, 0, .5);
+    z-index: 3;
 }
 
 .add-element {

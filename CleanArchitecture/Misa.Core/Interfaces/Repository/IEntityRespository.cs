@@ -60,20 +60,7 @@ namespace Misa.Core.Interfaces.Repository
         /// Created By: LMCUONG(10/06/2021)
         Task<int> Delete(Guid entityId);
 
-        /// <summary>
-        /// Kiểm tra mã khách hàng đã tồn tại hay chưa
-        /// </summary>
-        /// <param name="customerCode">Mã khách hàng</param>
-        /// <returns>true - chỉ kết quả đã tồn tại</returns>
-        /// CreateBy LMCUONG(23/05/2021)
-        Task<bool> CheckEmployeeCodeExist(string entityCode, Guid? entityId = null);
-        /// <summary>
-        /// Kiểm tra số điện thoại đã tồn tại hay chưa
-        /// </summary>
-        /// <param name="phoneNumber">Số điện thoại</param>
-        /// <returns>true - chỉ kết quả đã tồn tại</returns>
-        /// CreateBy LMCUONG(23/05/2021)
-        Task<bool> CheckPhoneNumberExist(string PhoneNumber, Guid? entityId = null);
+        
         #endregion
     }
 }

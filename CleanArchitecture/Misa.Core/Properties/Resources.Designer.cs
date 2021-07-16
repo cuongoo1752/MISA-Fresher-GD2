@@ -205,6 +205,15 @@ namespace Misa.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mã vạch {0} đã tồn tại trong hệ thống, vui lòng kiểm tra lại..
+        /// </summary>
+        public static string VadidateMsg_BarCodeExits {
+            get {
+                return ResourceManager.GetString("VadidateMsg_BarCodeExits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mã khách hàng đã tồn tại.
         /// </summary>
         public static string VadidateMsg_CustomerCodeExits {
@@ -255,6 +264,15 @@ namespace Misa.Core.Properties {
         public static string VadidateMsg_RequiredField {
             get {
                 return ResourceManager.GetString("VadidateMsg_RequiredField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mã SKU {0} đã tồn tại trong hệ thống, vui lòng kiểm tra lại..
+        /// </summary>
+        public static string VadidateMsg_SKUCodeExits {
+            get {
+                return ResourceManager.GetString("VadidateMsg_SKUCodeExits", resourceCulture);
             }
         }
     }

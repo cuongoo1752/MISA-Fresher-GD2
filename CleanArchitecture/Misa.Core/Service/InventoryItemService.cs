@@ -1,9 +1,14 @@
 ﻿using Misa.Core.Entities;
 using Misa.Core.Entities.Category;
+using Misa.Core.Entities.Category.ColorAndSize;
+using Misa.Core.Entities.DataController;
 using Misa.Core.Entities.Page;
+using Misa.Core.Enum;
+using Misa.Core.Exceptions;
 using Misa.Core.Interfaces.Repository;
 using Misa.Core.Interfaces.Services;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -18,6 +23,7 @@ namespace Misa.Core.Service
         #endregion
 
         #region CONSTRUCTOR
+
         public InventoryItemService(IInventoryItemRepository inventoryItemRespository) : base(inventoryItemRespository)
         {
             _inventoryItemRespository = inventoryItemRespository;
@@ -27,6 +33,8 @@ namespace Misa.Core.Service
         #endregion
 
         #region METHOD
+
+        #region GET
         public async Task<ActionServiceResult> GetOptionPage(OptionPage inputPage)
         {
             #region Xử lý câu lệnh Query
@@ -70,6 +78,11 @@ namespace Misa.Core.Service
             {
                 querySQL.Append("WHERE ");
                 querySQL.Append($"{abbrTableInventoryItem}.ParentID IS NULL AND ");
+            }
+            else
+            {
+                querySQL.Append("WHERE ");
+                querySQL.Append($"{abbrTableInventoryItem}.ParentID IS NULL ");
             }
             int indexFilter = 0;
             foreach (var filter in inputPage.filter)
@@ -285,7 +298,7 @@ namespace Misa.Core.Service
             result = Regex.Replace(result, "đ", "d");
             return result;
         }
-        public async Task<string> CreateSKUCodeMax(string SKUCodeInput)
+        public async Task<string> GetSKUCodeMax(string SKUCodeInput)
         {
             if (string.IsNullOrEmpty(SKUCodeInput))
             {
@@ -309,10 +322,10 @@ namespace Misa.Core.Service
 
             // Lấy mã lớn nhất từ Server
             string SKUCodeMax = await _inventoryItemRespository.GetSKUCodeMax(prefixSKUCode.ToString());
-            string biggestEmployeeCodeNew =  "";
+            string biggestSKUCodeNew =  "";
             if (string.IsNullOrWhiteSpace(SKUCodeMax))
             {
-                biggestEmployeeCodeNew = prefixSKUCode + "01";
+                biggestSKUCodeNew = prefixSKUCode + "01";
             }
             else
             {
@@ -337,21 +350,237 @@ namespace Misa.Core.Service
                 if(numberCode < 10)
                 {
                     //Thêm tiền tố cho mã nhân viên
-                    biggestEmployeeCodeNew = prefixSKUCode.ToString() + "0" + numberCode.ToString();
+                    biggestSKUCodeNew = prefixSKUCode.ToString() + "0" + numberCode.ToString();
                 }
                 else
                 {
                     //Thêm tiền tố cho mã nhân viên
-                    biggestEmployeeCodeNew = prefixSKUCode.ToString() + numberCode.ToString();
+                    biggestSKUCodeNew = prefixSKUCode.ToString() + numberCode.ToString();
                 }
 
                 
             }
             
 
-            return biggestEmployeeCodeNew;
+            return biggestSKUCodeNew;
 
         }
+
+        public async Task<DetailItem> GetMerchandiseByID(Guid InventoryItemID)
+        {
+            // Lấy dữ liệu phần tử gốc
+            InventoryItem inventoryItem = await _inventoryItemRespository.GetByid(InventoryItemID);
+
+            // Lấy dữ liệu phần tử tham chiếu có size và color
+            List<InventoryItem> inventoryItemsColor = (await _inventoryItemRespository.GetInventoryItemByParentID(InventoryItemID)).Cast<InventoryItem>().ToList();
+
+
+
+            // Tạo ra tổ hợp màu sắc
+            List<ColorItem> colors = new List<ColorItem>();
+            List<SizeItem> sizes = new List<SizeItem>();
+
+            foreach (var item in inventoryItemsColor)
+            {
+                // Thêm màu sắc
+                
+                if(colors.Exists(x => x.ColorCode == item.ColorCode) == false)
+                {
+                   colors.Add(new ColorItem()
+                   {
+                        Color = item.Color,
+                        ColorCode = item.ColorCode,
+                        EditMode = item.EditMode,
+                    });
+                }
+                // Thêm Size
+                if (sizes.Exists(x => x.SizeCode == item.SizeCode) == false)
+                {
+                    sizes.Add(new SizeItem()
+                    {
+                        Size = item.Size,
+                        SizeCode = item.SizeCode,
+                        EditMode = item.EditMode,
+                    });
+                }
+            }
+
+            return new DetailItem()
+            {
+                inventoryItem =  inventoryItem,
+                inventoryItemsColor = inventoryItemsColor,
+                colors = colors,
+            };
+        }
+
+        #endregion
+
+        #region POST
+        public async Task<int> InsertMerchandises(DetailItem detailItem)
+        {
+            int rowAffect = 0;
+
+            // Gộp vào chung một mảng
+            List<InventoryItem> inventoryItems = new List<InventoryItem>();
+            inventoryItems.Add(detailItem.inventoryItem);
+            inventoryItems.AddRange(detailItem.inventoryItemsColor);
+            // Vadidate dữ liệu
+            bool isValid = false;
+            int index = 0;
+            Guid newGuid = Guid.NewGuid();
+            foreach (var item in inventoryItems)
+            {
+                if (await VadidateMerchandise(item))
+                {
+                    isValid = true;
+                    break;
+                }
+
+                if(index == 0)
+                {
+                    item.InventoryItemID = newGuid;
+                    item.ParentID = null;
+                }
+                else
+                {
+                    item.InventoryItemID = Guid.NewGuid();
+                    item.ParentID = newGuid;
+                }
+                index++;
+            }
+
+            // Cất dữ liệu
+            if (isValid == false)
+            {
+                // Insert Dữ liệu
+                List<InventoryItem> updateItems = new List<InventoryItem>();
+                List<InventoryItem> deleteItems = new List<InventoryItem>();
+                rowAffect = await _inventoryItemRespository.InsertUpdateDeleteMerchandise(inventoryItems, updateItems, deleteItems);
+
+            }
+
+
+            return rowAffect;
+        }
+        #endregion
+
+
+        #region PUT
+        public async Task<int> UpdateMerchandises(DetailItem detailItem)
+        {
+            // Gộp vào chung một mảng
+            List<InventoryItem> inventoryItems = new List<InventoryItem>();
+            inventoryItems.Add(detailItem.inventoryItem);
+            inventoryItems.AddRange(detailItem.inventoryItemsColor);
+
+            // Vadidate dữ liệu và gán ID dữ liệu
+            bool isValid = false;
+            Guid parentID = inventoryItems[0].InventoryItemID;
+            int index = 0;
+            foreach (var item in inventoryItems)
+            {
+          
+                if(item.InventoryItemID != Guid.Empty && await VadidateMerchandise(item, item.InventoryItemID))
+                {
+                    isValid = true;
+                    break;
+                }
+                if(item.InventoryItemID == Guid.Empty && index > 0)
+                {
+                    item.InventoryItemID = Guid.NewGuid();
+                    item.ParentID = parentID;
+                }
+
+                index++;
+            }
+
+
+
+            //Lọc dữ liệu và cất dữ liệu
+            if (isValid == false)
+            {
+                //Lọc dữ liệu
+                  // Tạo dữ liệu
+                List<InventoryItem> insertItems = new List<InventoryItem>();
+                List<InventoryItem> updateItems = new List<InventoryItem>();
+                List<InventoryItem> deleteItems = new List<InventoryItem>();
+                  // Lấy mảng hàng hóa Child cũ
+                List<InventoryItem> itemsChild = (await _inventoryItemRespository.GetInventoryItemByParentID(inventoryItems[0].InventoryItemID)).Cast<InventoryItem>().ToList();
+                
+                
+                // Cất dữ liệu
+                //->List dữ liệu thêm
+                //->List dữ liệu sửa
+                //->List dữ liệu xóa
+            }
+
+            
+
+
+
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        /// <summary>
+        /// Kiểm tra Mã SKUCode và mã vạch trùng trong hệ thống 
+        /// </summary>
+        /// <param name="inventoryItem">Đối tượng cần kiểm tra</param>
+        /// <param name="inventoryItemId">Id đối tượng đối với update</param>
+        /// <returns>false - không trùng, true - có trùng</returns>
+        public async Task<bool> VadidateMerchandise(InventoryItem inventoryItem, Guid? inventoryItemId = null)
+        {
+            //Kiểm tra mã nhân viên có trùng không
+            var isDuplicateCustomerCode = false;
+
+            //Nếu đang thêm nhân viên mới
+            if (inventoryItem.EntityState == EntityState.Add)
+            {
+                //Kiểm tra mã với trường hợp thêm nhân viên mới
+                isDuplicateCustomerCode = await _inventoryItemRespository.CheckSKUCodeExist(inventoryItem.SKUCode);
+            }
+            //Nếu đang sửa nhân viên
+            else
+            {
+                //Kiểm tra mã với trường hợp sửa nhân viên
+                isDuplicateCustomerCode = await _inventoryItemRespository.CheckSKUCodeExist(inventoryItem.SKUCode, inventoryItemId);
+            }
+
+            //Nếu mã bị trùng 
+            if (isDuplicateCustomerCode == true)
+            {
+                //Trả lại ngoại lệ mã đã bị trùng
+                throw new VadidateException(string.Format(Properties.Resources.VadidateMsg_SKUCodeExits, inventoryItem.SKUCode));
+            }
+
+
+
+            //Kiểm tra xem số điện thoại cho trùng không
+            var isDuplicatePhoneNumeber = false;
+
+            //Nếu đang thêm nhân viên mới
+            if (inventoryItem.EntityState == EntityState.Add && inventoryItem.BarCode != null)
+            {
+                //Kiểm tra số điện thoại với trường thêm nhân viên
+                isDuplicatePhoneNumeber = await _inventoryItemRespository.CheckBarCodeExist(inventoryItem.BarCode);
+            }
+            //Nếu đang sửa nhân viên mới
+            else
+            {
+                //Kiểm tra số điện thoại với trường hợp sửa nhân viên
+                isDuplicatePhoneNumeber = await _inventoryItemRespository.CheckBarCodeExist(inventoryItem.BarCode, inventoryItemId);
+            }
+
+            //Nếu số điện thoại bị trùng
+            if (isDuplicatePhoneNumeber == true)
+            {
+                //Trả lại ngoại lệ số điện thoại đã bị trùng trong hệ thống
+                throw new VadidateException(string.Format(Properties.Resources.VadidateMsg_BarCodeExits, inventoryItem.BarCode));
+            }
+
+            return isDuplicateCustomerCode;
+        }
+
         #endregion
     }
 }

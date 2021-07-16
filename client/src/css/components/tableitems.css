@@ -1,0 +1,117 @@
+/* STYLE CHUNG
+========================================================================== */
+
+.table-detail-box {
+    height: 230px;
+    overflow-y: scroll;
+    position: relative;
+    border: 1px solid #e1e1e1;
+    border-radius: 0;
+}
+
+.table-detail {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+
+/* STYLE RIÊNG
+========================================================================== */
+
+
+/* Header table */
+
+.table-detail__thead {}
+
+.table-detail__tr {
+    background: #f0f0f0;
+    border-bottom: 1px solid #d0d0d0;
+    position: sticky;
+    top: 0;
+}
+
+.table-detail__th:first-child {
+    border-left: 1px solid #d0d0d0;
+}
+
+.table-detail__th {
+    padding: 7px 10px 6px;
+    font-size: 13px;
+    color: #212121;
+    font-family: var(--font-main-bold);
+    border-right: 1px solid #d0d0d0;
+}
+
+
+/* Body table */
+
+.table-detail__tbody {}
+
+.table-detail__body-tr {}
+
+.table-detail__td:first-child {
+    border-left: 1px solid #e9e9e9;
+}
+
+.table-detail__td {
+    border-right: 1px solid #e9e9e9;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.table-detail__body-tr:nth-child(even) {
+    background: #f6f6f6;
+}
+
+.table-detail__body-tr:nth-child(odd) {
+    background: white;
+}
+
+.table-detail__body-tr:hover {
+    background: #eaeff4;
+}
+
+.table-detail__body-tr:focus {
+    background: #e2e4f1;
+}
+
+
+/* Input */
+
+.table-detail__input {
+    background: transparent;
+    border: 1px solid transparent;
+    width: 100%;
+    padding: 7px 10px 6px;
+    height: 34px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.table-detail__input:focus {
+    background: white;
+    border: 1px solid #636dde;
+    border-radius: 3px;
+}
+
+
+/* icon */
+
+.table-detail__dup {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    background: url('../../assets/img/copy-down.png');
+    background-repeat: no-repeat;
+    margin-left: 16px;
+    margin-right: 6px;
+}
+
+.table-detail__delete {
+    margin: 0;
+    width: 16px;
+    height: 16px;
+    background: url('../../assets/img/common-icon.png');
+    background-position: -4px -3px;
+    margin-left: 16px;
+    margin-right: 6px;
+}

@@ -3,6 +3,7 @@
 
 .textlabel {
     display: flex;
+    padding-left: 10px;
 }
 
 .textlable__text {

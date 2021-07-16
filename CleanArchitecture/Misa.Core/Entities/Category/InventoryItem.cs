@@ -9,7 +9,7 @@ namespace Misa.Core.Entities.Category
 {
     public class InventoryItem : Entity
     {
-        public int MyProperty { get; set; }
+        
         public Guid InventoryItemID { get; set; }
         public string BarCode { get; set; }
         public string SKUCode { get; set; }
@@ -25,6 +25,7 @@ namespace Misa.Core.Entities.Category
         public bool ShowInMenu { get; set; }
         public string ShowLocation { get; set; }
         public string StockLocation { get; set; }
+        public int ManageType { get; set; }
         public string Color { get; set; }
         public string ColorCode { get; set; }
         public string Size { get; set; }
@@ -40,5 +41,25 @@ namespace Misa.Core.Entities.Category
         public double Width { get; set; }
         public double Height { get; set; }
         public Guid? ParentID { get; set; }
+        public int State { get; set; }
+
+        public string InventoryItemTypeName
+        {
+            get {
+
+                switch (InventoryItemType)
+                {
+                    case ItemType.Merchandise:
+                        return "Hàng hóa";
+                    case ItemType.Combo:
+                        return "Combo";
+                    case ItemType.Service:
+                        return "Dịch vụ";
+                    default:
+                        return "Hàng hóa";
+                }
+            }
+        }
+
     }   
 }
