@@ -1,4 +1,5 @@
 ﻿using Misa.Core.Enum;
+using Misa.Core.Interfaces.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +26,6 @@ namespace Misa.Core.Entities.Category
         public bool ShowInMenu { get; set; }
         public string ShowLocation { get; set; }
         public string StockLocation { get; set; }
-        public int ManageType { get; set; }
         public string Color { get; set; }
         public string ColorCode { get; set; }
         public string Size { get; set; }
@@ -42,6 +42,12 @@ namespace Misa.Core.Entities.Category
         public double Height { get; set; }
         public Guid? ParentID { get; set; }
         public int State { get; set; }
+        public int ManageType { get; set; }
+
+        public int Quantity { get; set; }
+        public int Part { get; set; }
+        public bool IsUse { get; set; }
+
 
         public string InventoryItemTypeName
         {
@@ -56,10 +62,65 @@ namespace Misa.Core.Entities.Category
                     case ItemType.Service:
                         return "Dịch vụ";
                     default:
-                        return "Hàng hóa";
+                        return "Tất cả";
                 }
             }
         }
 
-    }   
+
+
+        public string StateName
+        {
+            get {
+                switch (State)
+                {
+                    case 1:
+                        return "Tất cả";
+                    case 2:
+                        return "Đang kinh doanh";
+                    case 3:
+                        return "Ngừng kinh doanh";
+                    default:
+                        return "Tất cả";
+                }
+            }
+        }
+
+
+        public string ManageTypeName
+        {
+            get {
+                switch (ManageType)
+                {
+                    case 1:
+                        return "Tất cả";
+                    case 2:
+                        return "Lô/Hạn sử dụng";
+                    case 3:
+                        return "Serial IMEI";
+                    case 4:
+                        return "Khác";
+                    default:
+                        return "Khác";
+                }
+            }
+        }
+
+
+        public string  ShowInMenuName
+        {
+            get {
+                if (ShowInMenu)
+                {
+                    return "Có";
+                }
+                else
+                {
+                    return "Không";
+                }
+            }
+        }
+
+
+    }
 }

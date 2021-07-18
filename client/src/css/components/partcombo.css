@@ -1,0 +1,96 @@
+/* STYLE CHUNG 
+========================================================================== */
+
+.partcombo {}
+
+
+/* STYLE RIÊNG
+========================================================================== */
+
+
+/* Title */
+
+.partcombo__title {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 8px 4px 0;
+    height: 22px;
+}
+
+.partcombo__part {
+    color: #808080;
+    line-height: 15px;
+}
+
+.partcombo__part-detail {
+    color: #404040;
+    font-family: var(--font-main-bold);
+    line-height: 15px;
+}
+
+.partcombo__btn-cancel {
+    background: transparent;
+    display: flex;
+}
+
+.partcombo__icon-cancel {
+    height: 16px;
+    width: 16px;
+    margin-right: 5px;
+    background: url('../../assets/img/common-icon.png');
+    background-position: -4px -3px;
+}
+
+.partcombo__text-cancel {
+    color: red;
+    font-size: 12px;
+}
+
+
+/* Find item */
+
+.partcombo__find-item {
+    display: flex;
+    padding-bottom: 8px;
+}
+
+.partcombo__btn {
+    margin-left: 6px;
+    display: flex;
+    height: 35px;
+    padding: 7px;
+    padding-left: 16px;
+    padding-right: 16px;
+    box-sizing: border-box;
+    border: 1px solid #2b3173;
+    border-radius: 3px;
+    align-items: center;
+}
+
+.partcombo__btn:hover {
+    opacity: 0.75;
+}
+
+.partcombo__icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 3px;
+    background: url('../../assets/img/common-icon.png');
+    background-position: -352px -128px;
+}
+
+.partcombo__text {
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 13px;
+    font-family: var(--font-main-bold);
+    white-space: nowrap;
+    color: #2b3173;
+}
+
+
+/* Padding */
+
+.partcombo__padding {
+    padding-top: 8px;
+}

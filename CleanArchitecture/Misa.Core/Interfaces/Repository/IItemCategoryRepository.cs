@@ -9,5 +9,6 @@ namespace Misa.Core.Interfaces.Repository
 {
     public interface IItemCategoryRepository:IEntityRespository<ItemCategory>
     {
+
     }
 }

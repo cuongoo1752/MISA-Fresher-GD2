@@ -30,6 +30,10 @@ namespace Misa.CukCuk.Web.Controllers
             _inventoryItemServices = inventoryItemServices;
         }
         #endregion
+
+        #region METHOD
+
+        #region GET
         /// <summary>
         /// Trả về danh sách hàng hóa theo phân trang, tìm kiếm, sắp xếp
         /// </summary>
@@ -81,7 +85,13 @@ namespace Misa.CukCuk.Web.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Lấy thông tin Hàng hóa theo ID
+        /// </summary>
+        /// <param name="Id">Mã hàng hóa</param>
+        /// <param name="type">Loại hàng hóa: 1 - Hàng hóa thường, 2 - Combo, 3 - Dịch vụ</param>
+        /// <returns>Đối tượng hàng hóa chi tiết</returns>
+        /// Created By: LMCUONG(16/07/2021)
         [HttpPost("{Id}")]
         public async Task<IActionResult> GetInventoryItemById(Guid Id, ItemType type)
         {
@@ -90,79 +100,48 @@ namespace Misa.CukCuk.Web.Controllers
             {
                 case ItemType.Merchandise:
                     result = await _inventoryItemServices.GetMerchandiseByID(Id);
-
-                    if(result.inventoryItem != null)
-                    {
-                        return Ok(new ActionServiceResult()
-                        {
-                            Success = true,
-                            Code = MISACode.Success,
-                            Data = result,
-                            Messenge = "Lấy dữ liệu thành công"
-                        });
-                    }
-                    else
-                    {
-                        return BadRequest(new ActionServiceResult()
-                        {
-                            Success = false,
-                            Code = MISACode.Exception,
-                            Data = result,
-                            Messenge = "Lấy dữ liệu không thành công!"
-                        });
-                    }
-
+                    break;
                 case ItemType.Combo:
-                    return Ok();
+                    result = await _inventoryItemServices.GetComboByID(Id);
+                    break;
                 case ItemType.Service:
-
                     result = await _inventoryItemServices.GetMerchandiseByID(Id);
-
-                    if (result.inventoryItem != null)
-                    {
-                        return Ok(new ActionServiceResult()
-                        {
-                            Success = true,
-                            Code = MISACode.Success,
-                            Data = result,
-                            Messenge = "Lấy dữ liệu thành công"
-                        });
-                    }
-                    else
-                    {
-                        return BadRequest(new ActionServiceResult()
-                        {
-                            Success = false,
-                            Code = MISACode.Exception,
-                            Data = result,
-                            Messenge = "Lấy dữ liệu không thành công!"
-                        });
-                    }
+                    break;
                 default:
                     break;
             }
 
-            return Ok();
-
-        }
-
-        [HttpPost("Delete")]
-        public async Task<IActionResult> DeleteInventoryItemByListID([FromBody] List<Guid> listID)
-        {
-            int rowAffect = await _inventoryItemRepository.DeleteInventoryItemByListID(listID);
-
-            return Ok(new ActionServiceResult()
+            if (result.inventoryItem != null)
             {
-                Success = true,
-                Data = new
+                return Ok(new ActionServiceResult()
                 {
-                    rowAffect = rowAffect
-                },
+                    Success = true,
                     Code = MISACode.Success,
-                Messenge = "Xóa thành công!"
-            });
-        }
+                    Data = result,
+                    Messenge = "Lấy dữ liệu thành công"
+                });
+            }
+            else
+            {
+                return BadRequest(new ActionServiceResult()
+                {
+                    Success = false,
+                    Code = MISACode.Exception,
+                    Data = result,
+                    Messenge = "Lấy dữ liệu không thành công!"
+                });
+            }
 
+        }
+        #endregion
+
+        #region INSERT
+        /// <summary>
+        /// Thêm danh sách hàng hóa mới
+        /// </summary>
+        /// <param name="detailItem">Danh sách hàng hóa nhận nào</param>
+        /// <returns>Thành công hay thất bại</returns>
+        /// Created By: LMCUONG(16/07/2021)
         [HttpPost("InsertMerchandise")]
         public async Task<IActionResult> InsertInventoryItem([FromBody] DetailItem detailItem)
         {
@@ -175,8 +154,88 @@ namespace Misa.CukCuk.Web.Controllers
                     rowAffect = rowAffect
                 },
                 Code = MISACode.Success,
+                Messenge = "Thêm mới hàng hóa hoặc dịch vụ thành công!"
+            });
+        }
+        [HttpPost("InsertCombo")]
+        public async Task<IActionResult> InsertCombo([FromBody] DetailItem detailItem)
+        {
+            int rowAffect = await _inventoryItemServices.InsertCombos(detailItem);
+
+            return Ok(new ActionServiceResult()
+            {
+                Success = true,
+                Data = new
+                {
+                    rowAffect = rowAffect
+                },
+                Code = MISACode.Success,
+                Messenge = "Thêm mới Combo thành công!"
+            });
+        }
+        #endregion
+
+        #region UPDATE
+        /// <summary>
+        /// Sửa danh sách hóa đơn 
+        /// </summary>
+        /// <param name="detailItem">Danh sách hàng hóa nhận nào</param>
+        /// <returns>Thành công hay thất bại</returns>
+        /// Created By: LMCUONG(16/07/2021)
+        [HttpPut("UpdateMerchandise")] 
+        public async Task<IActionResult> UpdateInventoryItem([FromBody] DetailItem detailItem)
+        {
+            int rowAffect = await _inventoryItemServices.UpdateMerchandises(detailItem);
+
+            return Ok(new ActionServiceResult()
+            {
+                Success = true,
+                Data = new
+                {
+                    rowAffect = rowAffect
+                },
+                Code = MISACode.Success,
                 Messenge = "Thêm mới thành công!"
             });
         }
+
+        [HttpPut("UpdateCombo")]
+        public async Task<IActionResult> UpdateCombo([FromBody] DetailItem detailItem)
+        {
+            int rowAffect = await _inventoryItemServices.UpdateCombos(detailItem);
+
+            return Ok(new ActionServiceResult()
+            {
+                Success = true,
+                Data = new
+                {
+                    rowAffect = rowAffect
+                },
+                Code = MISACode.Success,
+                Messenge = "Thêm mới thành công!"
+            });
+        }
+        #endregion
+
+        #region DELETE
+        [HttpPost("Delete")]
+        public async Task<IActionResult> DeleteInventoryItemByListID([FromBody] List<Guid> listID)
+        {
+            int rowAffect = await _inventoryItemRepository.DeleteInventoryItemByListID(listID);
+
+            return Ok(new ActionServiceResult()
+            {
+                Success = true,
+                Data = new
+                {
+                    rowAffect = rowAffect
+                },
+                Code = MISACode.Success,
+                Messenge = "Xóa thành công!"
+            });
+        }
+        #endregion
+
+        #endregion
     }
 }

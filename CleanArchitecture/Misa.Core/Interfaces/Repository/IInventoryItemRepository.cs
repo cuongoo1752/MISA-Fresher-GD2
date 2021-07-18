@@ -49,7 +49,20 @@ namespace Misa.Core.Interfaces.Repository
         /// <returns>true - nếu trùng, false - nếu không trùng</returns>
         public Task<bool> CheckBarCodeExist(string BarCode, Guid? inventoryItemId = null);
 
+        /// <summary>
+        /// Thêm, Sửa, Xóa danh sách các bản ghi nhận vào
+        /// </summary>
+        /// <param name="insertItems">Các bản ghi thêm</param>
+        /// <param name="updateItems">Các bản ghi sửa</param>
+        /// <param name="deleteItems">Các bản ghi xóa</param>
+        /// <returns>Sô bản ghi bị ảnh hưởng</returns>
+        /// CreatedBy LMCUONG(16/07/2021)
         public Task<int> InsertUpdateDeleteMerchandise(List<InventoryItem> insertItems, List<InventoryItem> updateItems, List<InventoryItem> deleteItems);
-
+        /// <summary>
+        /// Lấy ra danh sách hàng hóa thuộc Combo có ComboID
+        /// </summary>
+        /// <param name="ComboID">ID của Combo cần lấy</param>
+        /// <returns>Danh sách hàng hóa thuộc Combo</returns>
+        public Task<IEnumerable<InventoryItem>> GetInventoryItemByComboID(Guid ComboID);
     }
 }

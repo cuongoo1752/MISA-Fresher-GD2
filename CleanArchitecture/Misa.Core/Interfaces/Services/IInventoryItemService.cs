@@ -32,6 +32,8 @@ namespace Misa.Core.Interfaces.Services
         /// <param name="InventoryItemID">Mã hàng hóa cần lấy thông tin</param>
         /// <returns>Chi tiết hàng hóa gồm: Hàng hóa chính, hàng hóa các màu, Các màu sắc trong hàng hóa</returns>
         public Task<DetailItem> GetMerchandiseByID(Guid InventoryItemID);
+
+        public Task<DetailItem> GetComboByID(Guid ComboID);
         #endregion
 
         #region POST
@@ -42,6 +44,8 @@ namespace Misa.Core.Interfaces.Services
         /// <returns>Số bản ghi thành công</returns>
         /// Created By LMCUONG(16/07/2021)
         public Task<int> InsertMerchandises(DetailItem detailItem);
+
+        public Task<int> InsertCombos(DetailItem detailItem);
         #endregion
 
         #region PUT
@@ -52,6 +56,7 @@ namespace Misa.Core.Interfaces.Services
         /// <returns>Số bản ghi thay đổi</returns>
         /// Created By LMCUONG(16/07/2021)
         public Task<int> UpdateMerchandises(DetailItem detailItem);
+        public Task<int> UpdateCombos(DetailItem detailItem);
         #endregion
 
         #region DELETE

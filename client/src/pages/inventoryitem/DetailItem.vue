@@ -2,26 +2,19 @@
   <div>
     <!-- Group button -->
     <div class="groupbtndetail">
-      <div class="groupbtndetail__btn btn-blue">
+      <div @click="saveDetailItem" class="groupbtndetail__btn btn-blue">
         <div class="groupbtndetail__icon detail-icon-save"></div>
-        <p class="groupbtndetail__text detail-text-save" @click="addDetailItem">
+        <p class="groupbtndetail__text detail-text-save">
           Lưu
         </p>
       </div>
-      <div class="groupbtndetail__btn btn-white">
-        <div class="groupbtndetail__icon detail-icon-dup"></div>
-        <p class="groupbtndetail__text detail-text-dup">Lưu và nhân bản</p>
-      </div>
-      <div class="groupbtndetail__btn btn-white">
-        <div class="groupbtndetail__icon detail-icon-saveadd"></div>
-        <p class="groupbtndetail__text detail-text-saveadd">Lưu và thêm mới</p>
-      </div>
-      <div class="groupbtndetail__btn btn-outline">
+
+      <div
+        @click="returnValueParent(1)"
+        class="groupbtndetail__btn btn-outline"
+      >
         <div class="groupbtndetail__icon detail-icon-cancel"></div>
-        <p
-          @click="returnValueParent(1)"
-          class="groupbtndetail__text detail-text-cancel"
-        >
+        <p class="groupbtndetail__text detail-text-cancel">
           Hủy bỏ
         </p>
       </div>
@@ -29,6 +22,7 @@
     <div class="table-add-item-box">
       <table class="table-add-item" style="width: 100%">
         <tbody class="table-add-item__tbody">
+          <!-- THÔNG TIN CƠ BẢN -->
           <tr class="table-add-item__body-tr">
             <td class="table-add-item__td" colspan="2">
               <h1 class="table-add-item__title">THÔNG TIN CƠ BẢN</h1>
@@ -51,14 +45,27 @@
             <td class="table-add-item__td">
               <text-label>Nhóm hàng hóa</text-label>
             </td>
+
             <td class="table-add-item__td">
-              <BaseInput
-                :type="'text'"
-                :placeholder="'Nhấn để tìm kiếm'"
+              <select
+                name=""
+                id=""
+                class="headtb__select"
+                style="width: 238px"
                 v-model="inventoryItem.itemCategoryID"
-              />
+              >
+                <option
+                  v-for="(opt, index) in dataItemCategorys"
+                  :key="index"
+                  :value="opt.key"
+                  class="select-element"
+                >
+                  {{ opt.value }}
+                </option>
+              </select>
             </td>
           </tr>
+          <!-- Mã SKUCode -->
           <tr class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label>Mã SKU</text-label>
@@ -71,6 +78,7 @@
               />
             </td>
           </tr>
+          <!-- Mã vạch -->
           <tr class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label>Mã vạch</text-label>
@@ -83,7 +91,57 @@
               />
             </td>
           </tr>
-          <tr class="table-add-item__body-tr">
+          <!-- Thành phần Combo -->
+          <tr v-if="type == 2" class="table-add-item__body-tr">
+            <td class="table-add-item__td">
+              <text-label>Thành phần Combo</text-label>
+            </td>
+            <td class="table-add-item__td">
+              <PartCombo
+                v-for="(part, index) in dataParts"
+                :key="index"
+                :part="index"
+                :list="dataParts[index]"
+                :dataUnits="dataUnits"
+                :baseUrl="baseUrl"
+                @change="handlePart"
+              />
+
+              <div
+                class="partcombo__btn table-add-item-box__btn-add-part "
+                style=""
+                @click="addPart"
+              >
+                <div
+                  class="partcombo__icon table-add-item-box__icon-add-part"
+                ></div>
+                <p class="partcombo__text ">
+                  Thêm thành phần
+                </p>
+              </div>
+            </td>
+          </tr>
+          <!-- Giá bán của Combo -->
+          <tr v-if="type == 2" class="table-add-item__body-tr">
+            <td class="table-add-item__td">
+              <text-label>Giá bán của Combo</text-label>
+            </td>
+            <td class="table-add-item__td">
+              <div style="display:flex">
+                <BaseInputNumber
+                  :type="'number'"
+                  :placeholder="'Tổng giá mua: 0'"
+                  v-model="inventoryItem.buyPrice"
+                /><BaseInputNumber
+                  :type="'number'"
+                  :placeholder="'0'"
+                  v-model="inventoryItem.costPrice"
+                />
+              </div>
+            </td>
+          </tr>
+          <!-- Giá mua -->
+          <tr v-if="type == 1" class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label
                 :hasInformation="true"
@@ -102,7 +160,8 @@
               />
             </td>
           </tr>
-          <tr class="table-add-item__body-tr">
+          <!-- Giá bán -->
+          <tr v-if="type == 1 || type == 3" class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label>Giá bán</text-label>
             </td>
@@ -115,15 +174,33 @@
               />
             </td>
           </tr>
+          <!-- Đơn vị tính -->
           <tr class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label>Đơn vị tính</text-label>
             </td>
+
             <td class="table-add-item__td">
-              <BaseInput :type="'text'" v-model="inventoryItem.unitID" />
+              <select
+                name=""
+                id=""
+                class="headtb__select"
+                style="width: 238px"
+                v-model="inventoryItem.unitID"
+              >
+                <option
+                  v-for="(opt, index) in dataUnits"
+                  :key="index"
+                  :value="opt.key"
+                  class="select-element"
+                >
+                  {{ opt.value }}
+                </option>
+              </select>
             </td>
           </tr>
-          <tr class="table-add-item__body-tr">
+          <!-- Tồn kho ban đầu -->
+          <tr v-if="type == 1" class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label>Tồn kho ban đầu</text-label>
             </td>
@@ -136,7 +213,8 @@
               />
             </td>
           </tr>
-          <tr class="table-add-item__body-tr">
+          <!-- Đinh mức tồn kho -->
+          <tr v-if="type == 1" class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label>Định mức tồn kho</text-label>
             </td>
@@ -162,7 +240,8 @@
               </div>
             </td>
           </tr>
-          <tr class="table-add-item__body-tr">
+          <!-- Vị trí lưu trữ trong kho -->
+          <tr v-if="type == 1 || type == 2" class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label>Vị trí lưu trữ trong kho</text-label>
             </td>
@@ -170,7 +249,8 @@
               <BaseInput :type="'text'" v-model="inventoryItem.stockLocation" />
             </td>
           </tr>
-          <tr class="table-add-item__body-tr">
+          <!-- Vị trí trưng bày -->
+          <tr v-if="type == 1 || type == 2" class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label>Vị trí trưng bày</text-label>
             </td>
@@ -178,6 +258,7 @@
               <BaseInput :type="'text'" v-model="inventoryItem.showLocation" />
             </td>
           </tr>
+          <!-- HIện thị trên màn hình bán hàng -->
           <tr class="table-add-item__body-tr">
             <td class="table-add-item__td" colspan="2">
               <div style="display:flex;padding-left: 12px">
@@ -196,12 +277,14 @@
               </div>
             </td>
           </tr>
-          <tr class="table-add-item__body-tr">
+          <!-- THÔNG TIN THUỘC TÍNH -->
+          <tr v-if="type == 1 || type == 3" class="table-add-item__body-tr">
             <td class="table-add-item__td" colspan="2">
               <h1 class="table-add-item__title">THÔNG TIN THUỘC TÍNH</h1>
             </td>
           </tr>
-          <tr class="table-add-item__body-tr">
+          <!-- Thuộc tính -->
+          <tr v-if="type == 1 || type == 3" class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label>Thuộc tính</text-label>
             </td>
@@ -214,7 +297,11 @@
               />
             </td>
           </tr>
-          <tr v-if="listTableItems.length > 0" class="table-add-item__body-tr">
+          <!-- Chi tiết thuộc tính -->
+          <tr
+            v-if="listTableItems.length > 0 && (type == 1 || type == 3)"
+            class="table-add-item__body-tr"
+          >
             <td class="table-add-item__td">
               <text-label>Chi tiết thuộc tính</text-label>
             </td>
@@ -224,12 +311,14 @@
               </div>
             </td>
           </tr>
+          <!-- THÔNG TIN BỔ XUNG -->
           <tr class="table-add-item__body-tr">
             <td class="table-add-item__td" colspan="2">
               <h1 class="table-add-item__title">THÔNG TIN BỔ XUNG</h1>
             </td>
           </tr>
-          <tr class="table-add-item__body-tr">
+          <!-- Trọng lượng gói hàng(g) -->
+          <tr v-if="type == 1 || type == 2" class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label>Trọng lượng gói hàng(g)</text-label>
             </td>
@@ -241,12 +330,14 @@
               />
             </td>
           </tr>
-          <tr class="table-add-item__body-tr">
+          <!-- Kích thước gói hàng(cm) -->
+          <tr v-if="type == 1 || type == 2" class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label>Kích thước gói hàng(cm)</text-label>
             </td>
             <td class="table-add-item__td">
               <div style="display:flex">
+                <!-- Chiều dài -->
                 <BaseInputNumber
                   :width="'76.3px'"
                   :type="'number'"
@@ -254,6 +345,7 @@
                   :placeholder="'Chiều dài'"
                   v-model="inventoryItem.length"
                 />
+                <!-- Chiều rộng -->
                 <BaseInputNumber
                   :width="'83.3px'"
                   :type="'number'"
@@ -261,6 +353,7 @@
                   :placeholder="'Chiều rộng'"
                   v-model="inventoryItem.width"
                 />
+                <!-- Chiều cao -->
                 <BaseInputNumber
                   :width="'78.3px'"
                   :type="'number'"
@@ -271,6 +364,7 @@
               </div>
             </td>
           </tr>
+          <!-- Mô tả -->
           <tr class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label>Mô tả</text-label>
@@ -279,6 +373,7 @@
               <BaseInput :type="'text'" v-model="inventoryItem.description" />
             </td>
           </tr>
+          <!-- Ảnh hàng hóa -->
           <tr class="table-add-item__body-tr">
             <td class="table-add-item__td">
               <text-label>Ảnh hàng hóa</text-label>
@@ -307,25 +402,21 @@
       </table>
     </div>
 
+    <!-- Group button -->
     <div class="groupbtndetail">
-      <div class="groupbtndetail__btn btn-blue">
+      <div @click="saveDetailItem" class="groupbtndetail__btn btn-blue">
         <div class="groupbtndetail__icon detail-icon-save"></div>
-        <p class="groupbtndetail__text detail-text-save">Lưu</p>
+        <p class="groupbtndetail__text detail-text-save">
+          Lưu
+        </p>
       </div>
-      <div class="groupbtndetail__btn btn-white">
-        <div class="groupbtndetail__icon detail-icon-dup"></div>
-        <p class="groupbtndetail__text detail-text-dup">Lưu và nhân bản</p>
-      </div>
-      <div class="groupbtndetail__btn btn-white">
-        <div class="groupbtndetail__icon detail-icon-saveadd"></div>
-        <p class="groupbtndetail__text detail-text-saveadd">Lưu và thêm mới</p>
-      </div>
-      <div class="groupbtndetail__btn btn-outline">
+
+      <div
+        @click="returnValueParent(1)"
+        class="groupbtndetail__btn btn-outline"
+      >
         <div class="groupbtndetail__icon detail-icon-cancel"></div>
-        <p
-          @click="returnValueParent(1)"
-          class="groupbtndetail__text detail-text-cancel"
-        >
+        <p class="groupbtndetail__text detail-text-cancel">
           Hủy bỏ
         </p>
       </div>
@@ -339,6 +430,7 @@ import BaseInputNumber from "../../components/BaseInputNumber.vue";
 import BaseInputSizeAndColor from "../../components/BaseInputSizeAndColor.vue";
 import TableItems from "../../components/TableItems.vue";
 import TextLabel from "../../components/TextLabel.vue";
+import PartCombo from "../../components/PartCombo.vue";
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
@@ -350,6 +442,7 @@ export default {
     TableItems,
     TextLabel,
     BaseInputNumber,
+    PartCombo,
   },
   props: {
     detailItem: {
@@ -358,15 +451,33 @@ export default {
         return {};
       },
     },
+    dataUnits: {
+      type: Array,
+      default: function() {
+        return [];
+      },
+    },
+    dataItemCategorys: {
+      type: Array,
+      default: function() {
+        return [];
+      },
+    },
     baseUrl: {
       type: String,
       default: "",
+    },
+    state: {
+      type: String,
+      default: "add",
     },
   },
   created() {
     this.inventoryItem = this.detailItem.inventoryItem;
     this.listTableItems = this.detailItem.inventoryItemsColor;
     this.listColor = this.detailItem.colors;
+    this.type = this.detailItem.inventoryItem.inventoryItemType;
+    this.createDataParts();
   },
   data() {
     return {
@@ -379,9 +490,39 @@ export default {
       // Danh sách màu hiện tại
       listColor: [],
       // Trạng thái của Form DetailItem
+      // 1 - Hàng hóa
+      // 2 - Combo
+      // 3 - Dịch vụ
+      type: 1,
+      dataParts: [[]],
     };
   },
   methods: {
+    createDataParts() {
+      for (let index in this.listTableItems) {
+        if (this.listTableItems[index].part > this.dataParts.length) {
+          let lengPartsAdd =
+            this.listTableItems[index].part - this.dataParts.length;
+          for (let a = 0; a < lengPartsAdd; a++) {
+            this.dataParts.push([]);
+          }
+        }
+
+        this.dataParts[this.listTableItems[index].part - 1].push(
+          this.listTableItems[index]
+        );
+      }
+    },
+    addPart() {
+      this.dataParts.push([]);
+    },
+    handlePart(state, list, part) {
+      if (state == "update") {
+        this.dataParts[part] = list;
+      } else if (state == "delete") {
+        this.dataParts.splice(part, 1);
+      }
+    },
     /**
      * Giá trị màu trả về khi thêm, xóa
      * @param {string}  id Mã của input thực hiện đối tượng
@@ -479,20 +620,39 @@ export default {
         this.listTableItems = list;
       }
     },
-    /** 
-    * Thêm các Item mới
-    * Created By: LMCUONG(16/07/2021) 
-    */
+    preSendDataAPI() {
+      if (this.type == 2) {
+        this.listTableItems = [];
+
+        for (let index in this.dataParts) {
+          for (let i in this.dataParts[index]) {
+            this.listTableItems.push((this.dataParts[index])[i]);
+          }
+        }
+      }
+
+    },
+    /**
+     * Thêm các Item mới
+     * Created By: LMCUONG(16/07/2021)
+     */
     addDetailItem() {
+      this.preSendDataAPI();
       // Danh sách tối tượng cần thêm
       var detailItem = JSON.stringify({
         InventoryItem: this.inventoryItem,
         InventoryItemsColor: this.listTableItems,
       });
+      let subUrl;
+      if (this.type == 2) {
+        subUrl = "InsertCombo";
+      } else {
+        subUrl = "InsertMerchandise";
+      }
       // Gọi API thêm đối tượng
       axios({
         method: "post",
-        url: this.baseUrl + "/InsertMerchandise",
+        url: this.baseUrl + "/" + subUrl,
         headers: { "Content-Type": "application/json" },
         data: detailItem,
       })
@@ -506,6 +666,50 @@ export default {
           alert(error.response.data.userMsg);
         });
     },
+    updateDetailItem() {
+      this.preSendDataAPI();
+      // Danh sách tối tượng cần thêm
+      var detailItem = JSON.stringify({
+        InventoryItem: this.inventoryItem,
+        InventoryItemsColor: this.listTableItems,
+      });
+
+      let subUrl;
+      if (this.type == 2) {
+        subUrl = "UpdateCombo";
+      } else {
+        subUrl = "UpdateMerchandise";
+      }
+      // Gọi API thêm đối tượng
+      axios({
+        method: "put",
+        url: this.baseUrl + "/" + subUrl,
+        headers: { "Content-Type": "application/json" },
+        data: detailItem,
+      })
+        .then((res) => {
+          // Thành công hiển thị thông báo thêm thành công
+          alert("Sửa thành công " + res.data.data.rowAffect + " bản ghi!");
+          this.returnValueParent(1);
+        })
+        .catch((error) => {
+          // Hiện thị lỗi
+          alert(error.response.data.userMsg);
+        });
+    },
+    /**
+     * Lưu đối tượng Detail Item tới Server
+     * Created By: LMCUONG(18/07/2021)
+     */
+    saveDetailItem() {
+      if (this.state == "add") {
+        this.addDetailItem();
+      } else if (this.state == "update") {
+        this.updateDetailItem();
+      }
+    },
+
+    //Kết hàm
   },
 };
 </script>

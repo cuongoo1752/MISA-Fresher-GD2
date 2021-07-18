@@ -168,6 +168,15 @@ namespace Misa.Infrastructure
             }
         }
 
+        public async Task<IEnumerable<InventoryItem>> GetInventoryItemByComboID(Guid ComboID)
+        {
+            Parameters.Add($"@m_ComboID", ComboID);
+
+            var inventoryItems = await dbConnection.QueryAsync<InventoryItem>($"Proc_GetInventoryItemsByComboID", param: Parameters, commandType: CommandType.StoredProcedure);
+
+            return inventoryItems;
+        }
+
         #endregion
     }
 }

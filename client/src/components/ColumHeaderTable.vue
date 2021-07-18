@@ -1,5 +1,5 @@
 <template>
-	<div class="headtb" :style="{ width: width }" tabindex="0">
+	<div class="headtb" :style="{ minWidth: width }" tabindex="0">
 		<div class="headtb__title" @click="handleClickTitle">
 			<p class="headtb__text">{{ title }}</p>
 			<div

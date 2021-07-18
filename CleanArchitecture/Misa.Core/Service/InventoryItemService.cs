@@ -20,13 +20,15 @@ namespace Misa.Core.Service
     {
         #region DECLARE
         IInventoryItemRepository _inventoryItemRespository;
+        IDetailComboRepository _detailComboRepository;
         #endregion
 
         #region CONSTRUCTOR
 
-        public InventoryItemService(IInventoryItemRepository inventoryItemRespository) : base(inventoryItemRespository)
+        public InventoryItemService(IInventoryItemRepository inventoryItemRespository, IDetailComboRepository detailComboRepository) : base(inventoryItemRespository)
         {
             _inventoryItemRespository = inventoryItemRespository;
+            _detailComboRepository = detailComboRepository;
         }
 
 
@@ -413,6 +415,20 @@ namespace Misa.Core.Service
             };
         }
 
+        public async Task<DetailItem> GetComboByID(Guid ComboID)
+        {
+            // Lấy dữ liệu phần tử combo
+            InventoryItem inventoryItem = await _inventoryItemRespository.GetByid(ComboID);
+
+            // Lấy dữ liệu phần tử chi tiết trong Combo
+            List<InventoryItem> inventoryItemsColor = (await _inventoryItemRespository.GetInventoryItemByComboID(ComboID)).Cast<InventoryItem>().ToList();
+
+            return new DetailItem()
+            {
+                inventoryItem = inventoryItem,
+                inventoryItemsColor = inventoryItemsColor,
+            };
+        }
         #endregion
 
         #region POST
@@ -430,6 +446,7 @@ namespace Misa.Core.Service
             Guid newGuid = Guid.NewGuid();
             foreach (var item in inventoryItems)
             {
+                item.EntityState = EntityState.Add;
                 if (await VadidateMerchandise(item))
                 {
                     isValid = true;
@@ -462,66 +479,147 @@ namespace Misa.Core.Service
 
             return rowAffect;
         }
-        #endregion
 
+        public async Task<int> InsertCombos(DetailItem detailItem)
+        {
+            int rowAffect = 0;
+            bool isValid = false;
+
+            //Tạo mã Guid
+            detailItem.inventoryItem.InventoryItemID = Guid.NewGuid();
+            // Vadidate
+            detailItem.inventoryItem.EntityState = EntityState.Add;
+            if(await VadidateMerchandise(detailItem.inventoryItem))
+            {
+                isValid = true;
+            }
+
+            if(isValid == false)
+            {
+                // Chuyển List inventoryitem sang detailcombo
+                List<DetailCombo> detailCombos = ConvertListInventoryItemToListDetailCombo(detailItem.inventoryItem.InventoryItemID, detailItem.inventoryItemsColor);
+
+                rowAffect += await _inventoryItemRespository.Insert(detailItem.inventoryItem) ?? 0;
+
+                // Thực hiện thêm dữ liệu DetailCombo
+                rowAffect += await _detailComboRepository.DeleteInsertDetailCombo(new Guid(), detailCombos);
+            }
+
+            return rowAffect;
+        }
+
+
+        public List<DetailCombo> ConvertListInventoryItemToListDetailCombo(Guid ComboID, List<InventoryItem> inventoryItems)
+        {
+            List<DetailCombo> detailCombos = new List<DetailCombo>();
+
+            foreach (var item in inventoryItems)
+            {
+                detailCombos.Add(new DetailCombo()
+                {
+                    ComboID = ComboID,
+                    InventoryItemID = item.InventoryItemID,
+                    Part = item.Part,
+                    IsUse = item.IsUse,
+                    Quantity = item.Quantity,
+                }) ;
+            }
+
+            return detailCombos;
+        }
+        #endregion
 
         #region PUT
         public async Task<int> UpdateMerchandises(DetailItem detailItem)
         {
+            bool isValid = false;
+            int rowAffect = 0;
             // Gộp vào chung một mảng
             List<InventoryItem> inventoryItems = new List<InventoryItem>();
             inventoryItems.Add(detailItem.inventoryItem);
             inventoryItems.AddRange(detailItem.inventoryItemsColor);
+            //Lọc dữ liệu
+            // Tạo dữ liệu
+            List<InventoryItem> updateItems = new List<InventoryItem>();
+            // Lấy mảng hàng hóa Child cũ
+            List<InventoryItem> itemsChild = (await _inventoryItemRespository.GetInventoryItemByParentID(inventoryItems[0].InventoryItemID)).Cast<InventoryItem>().ToList();
+            for (int i = 1; i < inventoryItems.Count(); i++)
+            {
 
-            // Vadidate dữ liệu và gán ID dữ liệu
-            bool isValid = false;
-            Guid parentID = inventoryItems[0].InventoryItemID;
-            int index = 0;
+                for (int a = 0; a < itemsChild.Count(); a++)
+                {
+                    if (inventoryItems[i].InventoryItemID == itemsChild[a].InventoryItemID)
+                    {
+                        updateItems.Add(inventoryItems[i]);
+                        inventoryItems.RemoveAt(i);
+                        itemsChild.RemoveAt(a);
+                        i--;
+                        a--;
+                        break;
+                    }
+                }
+            }
+
+            updateItems.Add(inventoryItems[0]);
+            inventoryItems.RemoveAt(0);
+
+            //Vadidate dữ liệu
+            // Mảng thêm mới
             foreach (var item in inventoryItems)
             {
-          
-                if(item.InventoryItemID != Guid.Empty && await VadidateMerchandise(item, item.InventoryItemID))
+                item.EntityState = EntityState.Add;
+                if(await VadidateMerchandise(item))
                 {
                     isValid = true;
                     break;
                 }
-                if(item.InventoryItemID == Guid.Empty && index > 0)
+            }
+            // Mảng chỉnh sửa
+            if(isValid == false)
+            {
+                foreach (var item in itemsChild)
                 {
-                    item.InventoryItemID = Guid.NewGuid();
-                    item.ParentID = parentID;
+                    item.EntityState = EntityState.Update;
+                    if (await VadidateMerchandise(item, item.InventoryItemID))
+                    {
+                        isValid = true;
+                        break;
+                    }
                 }
 
-                index++;
+                // Thêm, Sửa, Xóa các phần tử
+                rowAffect = await _inventoryItemRespository.InsertUpdateDeleteMerchandise(inventoryItems, updateItems, itemsChild);
+            }
+           
+            // Vadidate dữ liệu và gán ID dữ liệu
+            return rowAffect;
+        }
+
+        public async Task<int> UpdateCombos(DetailItem detailItem)
+        {
+            int rowAffect = 0;
+            bool isValid = false;
+            // Vadidate
+            detailItem.inventoryItem.EntityState = EntityState.Update;
+            if (await VadidateMerchandise(detailItem.inventoryItem, detailItem.inventoryItem.InventoryItemID))
+            {
+                isValid = true;
             }
 
-
-
-            //Lọc dữ liệu và cất dữ liệu
             if (isValid == false)
             {
-                //Lọc dữ liệu
-                  // Tạo dữ liệu
-                List<InventoryItem> insertItems = new List<InventoryItem>();
-                List<InventoryItem> updateItems = new List<InventoryItem>();
-                List<InventoryItem> deleteItems = new List<InventoryItem>();
-                  // Lấy mảng hàng hóa Child cũ
-                List<InventoryItem> itemsChild = (await _inventoryItemRespository.GetInventoryItemByParentID(inventoryItems[0].InventoryItemID)).Cast<InventoryItem>().ToList();
-                
-                
-                // Cất dữ liệu
-                //->List dữ liệu thêm
-                //->List dữ liệu sửa
-                //->List dữ liệu xóa
+                // Chuyển List inventoryitem sang detailcombo
+                List<DetailCombo> detailCombos = ConvertListInventoryItemToListDetailCombo(detailItem.inventoryItem.InventoryItemID, detailItem.inventoryItemsColor);
+
+
+                rowAffect += await _inventoryItemRespository.Update(detailItem.inventoryItem.InventoryItemID ,detailItem.inventoryItem) ?? 0;
+
+                // Thực hiện xóa, thêm dữ liệu
+                rowAffect += await _detailComboRepository.DeleteInsertDetailCombo(detailItem.inventoryItem.InventoryItemID, detailCombos);
             }
 
-            
-
-
-
-            throw new NotImplementedException();
+            return rowAffect;
         }
-        #endregion
-
         /// <summary>
         /// Kiểm tra Mã SKUCode và mã vạch trùng trong hệ thống 
         /// </summary>
@@ -580,6 +678,10 @@ namespace Misa.Core.Service
 
             return isDuplicateCustomerCode;
         }
+
+        
+        #endregion
+
 
         #endregion
     }

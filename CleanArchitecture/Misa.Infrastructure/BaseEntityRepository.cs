@@ -75,7 +75,7 @@ namespace Misa.Infrastructure
         public async Task<int?> Insert(TEntity entity)
         {
             //Thêm Mã mới vào mã đối tượng
-            entity.GetType().GetProperty($"{_className}Id").SetValue(entity, Guid.NewGuid());
+            //entity.GetType().GetProperty($"{_className}ID").SetValue(entity, Guid.NewGuid());
             
             //Thực hiện gán các phương thức của đối tượng và trường dữ liệu chuẩn bị truyền xuống database
             MappingProcParamatersValueWithObject(entity);
@@ -88,7 +88,7 @@ namespace Misa.Infrastructure
         public async Task<int?> Update(Guid entityId, TEntity entity)
         {
             //Thêm Mã mới vào mã đối tượng
-            entity.GetType().GetProperty($"{_className}Id").SetValue(entity, entityId);
+            entity.GetType().GetProperty($"{_className}ID").SetValue(entity, entityId);
 
             //Thực hiện gán các phương thức của đối tượng và trường dữ liệu chuẩn bị truyền xuống database
             MappingProcParamatersValueWithObject(entity);

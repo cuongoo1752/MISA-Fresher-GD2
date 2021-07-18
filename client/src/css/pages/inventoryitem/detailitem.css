@@ -118,3 +118,20 @@
 .inputimage__file:hover {
     opacity: 0.75;
 }
+
+
+/* Btn add part */
+
+.table-add-item-box__btn-add-part {
+    margin-left: 0px;
+    margin-top: 16px;
+    margin-bottom: 12px;
+    padding: 7px;
+    padding-left: 12px;
+    padding-right: 12px;
+    width: 157px;
+}
+
+.table-add-item-box__icon-add-part {
+    background-position: -27px -128px
+}
