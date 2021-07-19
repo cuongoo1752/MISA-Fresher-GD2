@@ -300,72 +300,64 @@ namespace Misa.Core.Service
             result = Regex.Replace(result, "đ", "d");
             return result;
         }
-        public async Task<string> GetSKUCodeMax(string SKUCodeInput)
+        public async Task<string> GetCodeMax(string tableName, string codeName)
         {
-            if (string.IsNullOrEmpty(SKUCodeInput))
+            // Lấy giá trị code lớn nhất
+            long codeMax = await _inventoryItemRespository.GetCodeMax(tableName, codeName);
+            // Tăng một đơn vị
+            codeMax++;
+            // Thêm tiền tố
+            string prefix = "";
+            if(codeName == Properties.Resources.SKUCode)
             {
-                return "";
+                prefix = Properties.Resources.Prefix_SKUCode;
+            }
+            else if (codeName == Properties.Resources.BarCode)
+            {
+                prefix = Properties.Resources.Prefix_BarCode;
             }
 
-            // Xử lý chuỗi lấy ra các chữ cái đâu tiền
-            string[] words = RemoveVietnameseTone(SKUCodeInput).Split(' ');
-            StringBuilder prefixSKUCode = new StringBuilder("");
+            return prefix + codeMax.ToString();
 
-            string tempWord = "";
-            foreach (var word in words)
+        }
+
+        public async Task<int> InsertCodeMax(string tableName, string codeName, string prefix, string value)
+        {
+            int rowAffect = 0;
+            if(value.Length > 0)
             {
-                if (!string.IsNullOrEmpty(word))
-                {
-                    tempWord = word.ToUpper();
-                    prefixSKUCode.Append(tempWord[0]);
+                // Kiểm tra tiền tố
+                if(codeName == Properties.Resources.SKUCode && value.Length > 1) {
+                    string prefixTemp = value.Substring(0, 2);
+                    if (prefixTemp != Properties.Resources.Prefix_SKUCode)
+                    {
+                        return rowAffect;
+                    }
                 }
 
-            }
-
-            // Lấy mã lớn nhất từ Server
-            string SKUCodeMax = await _inventoryItemRespository.GetSKUCodeMax(prefixSKUCode.ToString());
-            string biggestSKUCodeNew =  "";
-            if (string.IsNullOrWhiteSpace(SKUCodeMax))
-            {
-                biggestSKUCodeNew = prefixSKUCode + "01";
-            }
-            else
-            {
                 // Thêm một đơn vị cho mã lớn nhất
-                string stringNumberCode = string.Empty;
+                StringBuilder stringNumberCode = new StringBuilder("");
 
                 //Tiến hàng lọc số trong chuỗi
-                for (int i = 0; i < SKUCodeMax.Length; i++)
+                for (int i = 0; i < value.Length; i++)
                 {
-                    if (Char.IsDigit(SKUCodeMax[i]))
-                        stringNumberCode += SKUCodeMax[i];
+                    if (Char.IsDigit(value[i]))
+                            stringNumberCode.Append(value[i]);
                 }
 
-                int? numberCode = null;
+                long numberCode = 0;
 
                 //Chuyển được lọc vào biến mới kiểu int: numberCode
-                if (stringNumberCode.Length > 0)
-                    numberCode = int.Parse(stringNumberCode);
-
-                //Tăng số đã lọc lên, để không bị trùng mã cũ
-                numberCode++;
-                if(numberCode < 10)
+                if (stringNumberCode.Length > 0 && stringNumberCode.Length <= 20)
                 {
-                    //Thêm tiền tố cho mã nhân viên
-                    biggestSKUCodeNew = prefixSKUCode.ToString() + "0" + numberCode.ToString();
-                }
-                else
-                {
-                    //Thêm tiền tố cho mã nhân viên
-                    biggestSKUCodeNew = prefixSKUCode.ToString() + numberCode.ToString();
-                }
+                    numberCode = long.Parse(stringNumberCode.ToString());
 
-                
+                    rowAffect = await _inventoryItemRespository.InsertCodeMax(tableName, codeName, prefix, numberCode);
+                }
+                    
             }
-            
 
-            return biggestSKUCodeNew;
-
+            return rowAffect;
         }
 
         public async Task<DetailItem> GetMerchandiseByID(Guid InventoryItemID)
@@ -395,16 +387,7 @@ namespace Misa.Core.Service
                         EditMode = item.EditMode,
                     });
                 }
-                // Thêm Size
-                if (sizes.Exists(x => x.SizeCode == item.SizeCode) == false)
-                {
-                    sizes.Add(new SizeItem()
-                    {
-                        Size = item.Size,
-                        SizeCode = item.SizeCode,
-                        EditMode = item.EditMode,
-                    });
-                }
+                
             }
 
             return new DetailItem()
@@ -446,6 +429,18 @@ namespace Misa.Core.Service
             Guid newGuid = Guid.NewGuid();
             foreach (var item in inventoryItems)
             {
+                // Sinh Code cho đối tượng nếu chưa có
+                if (string.IsNullOrWhiteSpace(item.SKUCode))
+                {
+                    item.SKUCode = await GetCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.SKUCode);
+                }
+                 if (string.IsNullOrWhiteSpace(item.BarCode))
+                {
+                    item.BarCode = await GetCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.BarCode);
+                }
+
+
+                // Kiểm tra dữ liệu
                 item.EntityState = EntityState.Add;
                 if (await VadidateMerchandise(item))
                 {
@@ -453,6 +448,7 @@ namespace Misa.Core.Service
                     break;
                 }
 
+                // Sinh Id cho đối tượng
                 if(index == 0)
                 {
                     item.InventoryItemID = newGuid;
@@ -463,6 +459,11 @@ namespace Misa.Core.Service
                     item.InventoryItemID = Guid.NewGuid();
                     item.ParentID = newGuid;
                 }
+
+                // Thêm mới mã CodeMax
+                await InsertCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.SKUCode, null, item.SKUCode);
+                await InsertCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.BarCode, null, item.BarCode);
+
                 index++;
             }
 
@@ -487,6 +488,17 @@ namespace Misa.Core.Service
 
             //Tạo mã Guid
             detailItem.inventoryItem.InventoryItemID = Guid.NewGuid();
+
+            // Sinh Code cho đối tượng nếu chưa có
+            if (string.IsNullOrWhiteSpace(detailItem.inventoryItem.SKUCode))
+            {
+                detailItem.inventoryItem.SKUCode = await GetCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.SKUCode);
+            }
+             if (string.IsNullOrWhiteSpace(detailItem.inventoryItem.BarCode))
+            {
+                detailItem.inventoryItem.BarCode = await GetCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.BarCode);
+            }
+
             // Vadidate
             detailItem.inventoryItem.EntityState = EntityState.Add;
             if(await VadidateMerchandise(detailItem.inventoryItem))
@@ -499,6 +511,11 @@ namespace Misa.Core.Service
                 // Chuyển List inventoryitem sang detailcombo
                 List<DetailCombo> detailCombos = ConvertListInventoryItemToListDetailCombo(detailItem.inventoryItem.InventoryItemID, detailItem.inventoryItemsColor);
 
+                // Thêm mới mã CodeMax
+                await InsertCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.SKUCode, null, detailItem.inventoryItem.SKUCode);
+                await InsertCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.BarCode, null, detailItem.inventoryItem.BarCode);
+
+                // Thêm Combo chính
                 rowAffect += await _inventoryItemRespository.Insert(detailItem.inventoryItem) ?? 0;
 
                 // Thực hiện thêm dữ liệu DetailCombo
@@ -534,10 +551,12 @@ namespace Misa.Core.Service
         {
             bool isValid = false;
             int rowAffect = 0;
+
             // Gộp vào chung một mảng
             List<InventoryItem> inventoryItems = new List<InventoryItem>();
             inventoryItems.Add(detailItem.inventoryItem);
             inventoryItems.AddRange(detailItem.inventoryItemsColor);
+
             //Lọc dữ liệu
             // Tạo dữ liệu
             List<InventoryItem> updateItems = new List<InventoryItem>();
@@ -560,6 +579,7 @@ namespace Misa.Core.Service
                 }
             }
 
+            // Chuyển đối tượng chính sang mảng Update
             updateItems.Add(inventoryItems[0]);
             inventoryItems.RemoveAt(0);
 
@@ -567,31 +587,63 @@ namespace Misa.Core.Service
             // Mảng thêm mới
             foreach (var item in inventoryItems)
             {
+                // Sinh Code cho đối tượng nếu chưa có
+                if (string.IsNullOrWhiteSpace(item.SKUCode))
+                {
+                    item.SKUCode = await GetCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.SKUCode);
+                }
+                 if (string.IsNullOrWhiteSpace(item.BarCode))
+                {
+                    item.BarCode = await GetCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.BarCode);
+                }
+
                 item.EntityState = EntityState.Add;
                 if(await VadidateMerchandise(item))
                 {
                     isValid = true;
                     break;
                 }
+
+                // Thêm mới mã CodeMax
+                await InsertCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.SKUCode, null, item.SKUCode);
+                await InsertCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.BarCode, null, item.BarCode);
+
+
             }
             // Mảng chỉnh sửa
             if(isValid == false)
             {
+
                 foreach (var item in itemsChild)
                 {
+                    // Sinh Code cho đối tượng nếu chưa có
+                    if (string.IsNullOrWhiteSpace(item.SKUCode))
+                    {
+                        item.SKUCode = await GetCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.SKUCode);
+                    }
+                     if (string.IsNullOrWhiteSpace(item.BarCode))
+                    {
+                        item.BarCode = await GetCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.BarCode);
+                    }
+
                     item.EntityState = EntityState.Update;
                     if (await VadidateMerchandise(item, item.InventoryItemID))
                     {
                         isValid = true;
                         break;
                     }
+
+                    // Thêm mới mã CodeMax
+                    await InsertCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.SKUCode, null, item.SKUCode);
+                    await InsertCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.BarCode, null, item.BarCode);
+
                 }
 
                 // Thêm, Sửa, Xóa các phần tử
                 rowAffect = await _inventoryItemRespository.InsertUpdateDeleteMerchandise(inventoryItems, updateItems, itemsChild);
             }
            
-            // Vadidate dữ liệu và gán ID dữ liệu
+            
             return rowAffect;
         }
 
@@ -599,6 +651,16 @@ namespace Misa.Core.Service
         {
             int rowAffect = 0;
             bool isValid = false;
+            // Sinh Code cho đối tượng nếu chưa có
+            if (string.IsNullOrWhiteSpace(detailItem.inventoryItem.SKUCode))
+            {
+                detailItem.inventoryItem.SKUCode = await GetCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.SKUCode);
+            }
+             if (string.IsNullOrWhiteSpace(detailItem.inventoryItem.BarCode))
+            {
+                detailItem.inventoryItem.BarCode = await GetCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.BarCode);
+            }
+
             // Vadidate
             detailItem.inventoryItem.EntityState = EntityState.Update;
             if (await VadidateMerchandise(detailItem.inventoryItem, detailItem.inventoryItem.InventoryItemID))
@@ -606,12 +668,17 @@ namespace Misa.Core.Service
                 isValid = true;
             }
 
+            
             if (isValid == false)
             {
+                // Thêm mới mã CodeMax
+                await InsertCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.SKUCode, null, detailItem.inventoryItem.SKUCode);
+                await InsertCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.BarCode, null, detailItem.inventoryItem.BarCode);
+
                 // Chuyển List inventoryitem sang detailcombo
                 List<DetailCombo> detailCombos = ConvertListInventoryItemToListDetailCombo(detailItem.inventoryItem.InventoryItemID, detailItem.inventoryItemsColor);
 
-
+                // Thêm đối tượng chính vào cơ sở dữ liệu
                 rowAffect += await _inventoryItemRespository.Update(detailItem.inventoryItem.InventoryItemID ,detailItem.inventoryItem) ?? 0;
 
                 // Thực hiện xóa, thêm dữ liệu
@@ -680,6 +747,8 @@ namespace Misa.Core.Service
         }
 
         
+
+
         #endregion
 
 

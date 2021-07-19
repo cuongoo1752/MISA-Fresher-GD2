@@ -70,6 +70,15 @@ namespace Misa.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BarCode.
+        /// </summary>
+        public static string BarCode {
+            get {
+                return ResourceManager.GetString("BarCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mã khách hàng.
         /// </summary>
         public static string CustomerCode {
@@ -196,11 +205,47 @@ namespace Misa.Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to inventoryitem.
+        /// </summary>
+        public static string InventoryItemTable {
+            get {
+                return ResourceManager.GetString("InventoryItemTable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Số điện thoại.
         /// </summary>
         public static string PhoneNumber {
             get {
                 return ResourceManager.GetString("PhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Prefix_BarCode {
+            get {
+                return ResourceManager.GetString("Prefix_BarCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HH.
+        /// </summary>
+        public static string Prefix_SKUCode {
+            get {
+                return ResourceManager.GetString("Prefix_SKUCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SKUCode.
+        /// </summary>
+        public static string SKUCode {
+            get {
+                return ResourceManager.GetString("SKUCode", resourceCulture);
             }
         }
         

@@ -80,6 +80,7 @@
     padding-left: 4px;
     color: #404040;
     line-height: 17px;
+    max-width: 331px;
 }
 
 .alert__info {

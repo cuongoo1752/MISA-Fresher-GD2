@@ -20,11 +20,22 @@ namespace Misa.Core.Interfaces.Services
         /// <returns>Danh sách hàng hóa</returns>
         public Task<ActionServiceResult> GetOptionPage(OptionPage inputPage);
         /// <summary>
-        /// Tạo Mã SKUCode lớn nhất
+        /// Lấy ra mã Code lớn nhất
         /// </summary>
-        /// <param name="SKUCodeInput">Mã SKU nhận vào</param>
-        /// <returns>Mã SKU lớn nhất</returns>
-        public Task<string> GetSKUCodeMax(string SKUCodeInput);
+        /// <param name="tableName">Tên bảng </param>
+        /// <param name="codeName">Tên trường cần lấy</param>
+        /// <returns>Mã code lớp nhất trong hệ thống</returns>
+        public Task<string> GetCodeMax(string tableName, string codeName);
+
+        /// <summary>
+        /// Kiểm tra mã Code chuyển giá trị (string)value thành (long)value
+        /// </summary>
+        /// <param name="tableName">Tên bảng</param>
+        /// <param name="codeName">Tên mã cần chèn</param>
+        /// <param name="prefix">Tiền tố của mã</param>
+        /// <param name="value">Mã Code</param>
+        /// <returns></returns>
+        public Task<int> InsertCodeMax(string tableName, string codeName, string prefix, string value);
 
         /// <summary>
         /// Lấy thông tin hàng hóa theo ID

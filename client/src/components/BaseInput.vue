@@ -10,8 +10,8 @@
       :class="{ 'has-front': hasFront, 'is-input-error': isError }"
       :placeholder="placeholder"
       :value="value"
-      @input="handleInput($event)"
-      @blur="handleBlueInput($event)"
+      @input.stop="handleInput($event)"
+      @blur.stop="handleBlueInput($event)"
     />
     <div
       v-if="isError"
@@ -74,6 +74,15 @@ export default {
       type: String,
       default: "left",
     },
+    watchState:{
+      type: Number,
+      default: 0
+    }
+  },
+  watch: {
+    watchState() {
+      console.log('watchState')
+    }
   },
 
   data() {
@@ -95,14 +104,15 @@ export default {
         ) {
           event.preventDefault();
         } else {
-          console.log(typeof event.target.value);
           this.$emit("input", event.target.value);
         }
       } else if (this.type == "text") {
         this.$emit("input", event.target.value);
       }
+      this.$emit("input", event.target.value);
     },
     handleBlueInput(event) {
+      
       if (this.required == true) {
         if (
           this.value == null ||
@@ -115,8 +125,8 @@ export default {
           this.isError = false;
         }
       }
-
       this.$emit("blur", event);
+      
     },
   },
 };

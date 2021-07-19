@@ -17,11 +17,23 @@ namespace Misa.Core.Interfaces.Repository
         /// Created by: LMCUONG(12/07/2021)
         public Task<IEnumerable<InventoryItem>> GetInventoryItemsByQuery(string query);
         /// <summary>
-        /// Lấy ra mã lớn nhất trong cơ sở dữ liệu từ mã đã xử lý
+        /// Chèn mã Code vào cơ sở dữ liệu
         /// </summary>
-        /// <param name="prefix">Mã đã xử lý</param>
-        /// <returns>Mã lớn nhất chữa mã đã xử lý trong cơ sở dữ liệu</returns>
-        public Task<string> GetSKUCodeMax(string prefix);
+        /// <param name="tableName">Tên bảng</param>
+        /// <param name="codeName">Tên mã Code</param>
+        /// <param name="prefix">Tiền tố</param>
+        /// <param name="value">Giá trị mã Code cần chèn</param>
+        /// <returns>Số bản ghi thay đổi: 1 - thành công, 0 - không thay đổi</returns>
+        /// Create By: LMCUONG(19/07/2021)
+        public Task<int> InsertCodeMax(string tableName, string codeName, string prefix, long value);
+        /// <summary>
+        /// Lấy ra mã hiện tại lớn nhất trong cơ sở dữ liệu
+        /// </summary>
+        /// <param name="tableName">Tên mảng</param>
+        /// <param name="codeName">Tên mã Code</param>
+        /// <returns>Giá trị mã code lớn nhất</returns>
+        /// Created By: LMCUONG(19/07/2021)
+        public Task<long> GetCodeMax(string tableName, string codeName);
         /// <summary>
         /// Lấy danh sách đối tượng theo mã ParentID
         /// </summary>

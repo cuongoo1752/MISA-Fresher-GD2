@@ -55,35 +55,57 @@ namespace Misa.CukCuk.Web.Controllers
                 return BadRequest(result);
             }
         }
-        /// <summary>
-        /// Xử lý tên hàng hóa từ client và trả về mã SKUCode tương ứng
-        /// </summary>
-        /// <param name="InventoryItemName">Tên hàng hóa gửi lên</param>
-        /// <returns>Kết quả chưa mã SKUCode tương ứng</returns>
-        [HttpPost("CodeMax")]
-        public async Task<IActionResult> GetSKUCode(string InventoryItemName)
+
+        [HttpGet("SKUCodeMax")]
+        public async Task<IActionResult> GetSKUCodeMax()
         {
-            string SKUCodeNew = await _inventoryItemServices.GetSKUCodeMax(InventoryItemName);
-            if (string.IsNullOrEmpty(SKUCodeNew))
+            string SKUCodeMax = await _inventoryItemServices.GetCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.SKUCode);
+            if (string.IsNullOrEmpty(SKUCodeMax))
             {
                 return BadRequest(new ActionServiceResult()
                 {
-                    Data = SKUCodeNew,
+                    Data = SKUCodeMax,
                     Success = false,
                     Code = Core.Enum.MISACode.Validate,
-                    Messenge = "Mã không hợp lệ!"
+                    Messenge = "Lấy mã thành công!"
                 });
             }
             else
             {
                 return Ok(new ActionServiceResult()
                 {
-                    Data = SKUCodeNew,
+                    Data = SKUCodeMax,
                     Success = true,
                     Code = Core.Enum.MISACode.Success
                 });
             }
         }
+        [HttpGet("BarCodeMax")]
+        public async Task<IActionResult> GetBarCodeMax()
+        {
+            string SKUCodeMax = await _inventoryItemServices.GetCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.BarCode);
+            if (string.IsNullOrEmpty(SKUCodeMax))
+            {
+                return BadRequest(new ActionServiceResult()
+                {
+                    Data = SKUCodeMax,
+                    Success = false,
+                    Code = Core.Enum.MISACode.Validate,
+                    Messenge = "Lấy mã thành công!"
+                });
+            }
+            else
+            {
+                return Ok(new ActionServiceResult()
+                {
+                    Data = SKUCodeMax,
+                    Success = true,
+                    Code = Core.Enum.MISACode.Success
+                });
+            }
+        }
+
+
 
         /// <summary>
         /// Lấy thông tin Hàng hóa theo ID

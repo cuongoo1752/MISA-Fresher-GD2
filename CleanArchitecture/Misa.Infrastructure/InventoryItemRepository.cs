@@ -38,12 +38,26 @@ namespace Misa.Infrastructure
             return inventoryItems;
         }
 
-        public async Task<string> GetSKUCodeMax(string prefix)
+        public async Task<int> InsertCodeMax(string tableName, string codeName, string prefix, long value)
         {
-            Parameters.Add($"m_SKUCode", prefix);
-            string SKUCodeMax = await dbConnection.ExecuteScalarAsync<string>($"Proc_GetSKUCodeMax", param: Parameters, commandType: CommandType.StoredProcedure);
-            return SKUCodeMax;
+            Parameters.Add($"m_TableName", tableName);
+            Parameters.Add($"m_CodeName", codeName);
+            Parameters.Add($"m_Prefix", prefix);
+            Parameters.Add($"m_Value", value);
+            int rowAffect = await dbConnection.ExecuteAsync($"Proc_InsertCodeMax", param: Parameters, commandType: CommandType.StoredProcedure);
+            return rowAffect;
         }
+
+        public async Task<long> GetCodeMax(string tableName, string codeName)
+        {
+            Parameters.Add($"m_TableName", tableName);
+            Parameters.Add($"m_CodeName", codeName);
+            long codeMax = 0;
+
+            codeMax = await dbConnection.ExecuteScalarAsync<long>($"Proc_GetCodeMax", param: Parameters, commandType: CommandType.StoredProcedure);
+            return codeMax;
+        }
+
 
         public async Task<IEnumerable<InventoryItem>> GetInventoryItemByParentID(Guid ParentID)
         {
@@ -177,6 +191,9 @@ namespace Misa.Infrastructure
             return inventoryItems;
         }
 
+
+
+        
         #endregion
     }
 }

@@ -35,8 +35,10 @@
             </td>
             <td class="table-add-item__td">
               <BaseInput
+                tabindex="0"
                 :type="'text'"
                 v-model="inventoryItem.inventoryItemName"
+                @blur="outInputSKUCode"
               />
             </td>
           </tr>
@@ -72,9 +74,12 @@
             </td>
             <td class="table-add-item__td">
               <BaseInput
+                tabindex="0"
                 :type="'text'"
                 :placeholder="'Hệ thống tự sinh khi bỏ trống'"
                 v-model="inventoryItem.skuCode"
+                :watchState="watchStateSKUCode"
+                @blur="outInputSKUCode"
               />
             </td>
           </tr>
@@ -421,6 +426,8 @@
         </p>
       </div>
     </div>
+
+    <base-loading v-if="load.isShowLoad" :message="load.message" />
   </div>
 </template>
 
@@ -431,6 +438,7 @@ import BaseInputSizeAndColor from "../../components/BaseInputSizeAndColor.vue";
 import TableItems from "../../components/TableItems.vue";
 import TextLabel from "../../components/TextLabel.vue";
 import PartCombo from "../../components/PartCombo.vue";
+import BaseLoading from "../../components/BaseLoading.vue";
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
@@ -443,6 +451,7 @@ export default {
     TextLabel,
     BaseInputNumber,
     PartCombo,
+    BaseLoading,
   },
   props: {
     detailItem: {
@@ -495,6 +504,13 @@ export default {
       // 3 - Dịch vụ
       type: 1,
       dataParts: [[]],
+      watchStateSKUCode: 0,
+
+      // Loading
+      load: {
+        isShowLoad: false,
+        message: "...",
+      },
     };
   },
   methods: {
@@ -626,11 +642,10 @@ export default {
 
         for (let index in this.dataParts) {
           for (let i in this.dataParts[index]) {
-            this.listTableItems.push((this.dataParts[index])[i]);
+            this.listTableItems.push(this.dataParts[index][i]);
           }
         }
       }
-
     },
     /**
      * Thêm các Item mới
@@ -649,6 +664,9 @@ export default {
       } else {
         subUrl = "InsertMerchandise";
       }
+      // Mở loading
+      this.load.isShowLoad = true;
+
       // Gọi API thêm đối tượng
       axios({
         method: "post",
@@ -656,18 +674,22 @@ export default {
         headers: { "Content-Type": "application/json" },
         data: detailItem,
       })
-        .then((res) => {
-          // Thành công hiển thị thông báo thêm thành công
-          alert("Thêm mới thành công " + res.data.data.rowAffect + " bản ghi!");
+        .then(() => {
+          // Tắt loading
+          this.load.isShowLoad = false;
+          // Trả lại giá trị
           this.returnValueParent(1);
         })
         .catch((error) => {
-          // Hiện thị lỗi
-          alert(error.response.data.userMsg);
+          // Tắt loading
+          this.load.isShowLoad = false;
+          console.log(error);
         });
     },
     updateDetailItem() {
       this.preSendDataAPI();
+      // Mở loading
+      this.load.isShowLoad = true;
       // Danh sách tối tượng cần thêm
       var detailItem = JSON.stringify({
         InventoryItem: this.inventoryItem,
@@ -687,14 +709,16 @@ export default {
         headers: { "Content-Type": "application/json" },
         data: detailItem,
       })
-        .then((res) => {
-          // Thành công hiển thị thông báo thêm thành công
-          alert("Sửa thành công " + res.data.data.rowAffect + " bản ghi!");
+        .then(() => {
+          // Tắt loading
+          this.load.isShowLoad = false;
           this.returnValueParent(1);
         })
         .catch((error) => {
+          // Tắt loading
+          this.load.isShowLoad = false;
           // Hiện thị lỗi
-          alert(error.response.data.userMsg);
+          console.log(error.response.data.userMsg);
         });
     },
     /**
@@ -706,6 +730,28 @@ export default {
         this.addDetailItem();
       } else if (this.state == "update") {
         this.updateDetailItem();
+      }
+    },
+    outInputSKUCode() {
+      if (
+        this.inventoryItem.inventoryItemName != "" &&
+        this.inventoryItem.inventoryItemName != null &&
+        (this.inventoryItem.skuCode == "" ||
+          this.inventoryItem.skuCode == null ||
+          this.inventoryItem.skuCode == undefined)
+      ) {
+        axios({
+          method: "get",
+          url: this.baseUrl + "/" + "SKUCodeMax",
+        })
+          .then((res) => {
+            this.inventoryItem.skuCode = res.data.data;
+            this.watchStateSKUCode++;
+          })
+          .catch((error) => {
+            // Hiện thị lỗi
+            console.log(error.response.data.userMsg);
+          });
       }
     },
 

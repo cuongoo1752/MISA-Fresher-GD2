@@ -2,7 +2,7 @@
   <div class="alert-box">
     <div class="alert">
       <div class="alert__title-box">
-        <h2 class="alert__title">MISA eShop</h2>
+        <h2 class="alert__title">{{title}}</h2>
         <div @click="returnValueParent(2)" class="alert__icon-cancel"></div>
       </div>
       <div class="alert__content-box">
@@ -15,13 +15,16 @@
             alert__confuse: type == 'confuse',
           }"
         ></div>
-        <div class="alert__msg"><slot /></div>
+        <div class="alert__msg"><slot></slot></div>
       </div>
-      <div class="alert__groupbtn-box">
+      <div v-if="numberOfButton == 2" class="alert__groupbtn-box">
         <button @click="returnValueParent(1)" class="alert__btn-yes">Có</button>
         <button @click="returnValueParent(2)" class="alert__btn-no">
           Không
         </button>
+      </div>
+      <div v-if="numberOfButton == 1" class="alert__groupbtn-box">
+        <button @click="returnValueParent(1)" class="alert__btn-yes">Đồng ý</button>
       </div>
     </div>
 
@@ -40,6 +43,15 @@ export default {
       type: String,
       default: "confuse",
     },
+    title:{
+      type: String,
+      default: 'MISA eshop'
+    },
+    numberOfButton:{
+      type: Number,
+      default: 2
+    }
+
   },
   methods: {
     returnValueParent(value) {

@@ -1,0 +1,40 @@
+/* STYLE CHUNG
+========================================================================== */
+
+.hiden-load {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: black;
+    opacity: 0.40;
+    z-index: 3;
+}
+
+
+/* STYLE RIÊNG
+========================================================================== */
+
+.load {
+    z-index: 4;
+    position: absolute;
+    padding: 10px;
+    background: rgb(208, 208, 208);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.load__gif {
+    margin: 0 auto;
+    width: 16px;
+    height: 16px;
+    background: url('../../assets/img/loading.gif');
+    margin-bottom: 9px;
+}
+
+.load__text {
+    text-align: center;
+    color: #404040;
+}

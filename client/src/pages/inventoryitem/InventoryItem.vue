@@ -130,7 +130,9 @@
                   inventoryItem.inventoryItemType
                 )
               "
-              @click.stop="onClickRow($event, inventoryItem.inventoryItemID)"
+              @click.stop="
+                onClickRow($event, inventoryItem.inventoryItemID, inventoryItem)
+              "
             >
               <td class="items-element" style="text-align:center">
                 <input
@@ -138,7 +140,9 @@
                   class="checkbox"
                   :value="inventoryItem.inventoryItemID"
                   v-model="listIDCheckbox"
-                  @change.stop="changeCheckBox(inventoryItem.inventoryItemID)"
+                  @change.stop="
+                    changeCheckBox(inventoryItem.inventoryItemID, inventoryItem)
+                  "
                   @click.stop=""
                   @dblclick.stop=""
                 />
@@ -194,6 +198,30 @@
         />
       </div>
     </div>
+
+    <base-alert
+      @change="handleAlert"
+      v-if="messageAlert.isShowAlert"
+      :id="messageAlert.id"
+      :type="messageAlert.type"
+      :title="messageAlert.title"
+      :numberOfButton="messageAlert.numberOfButton"
+    >
+      <span>{{ messageAlert.message.textNormal1 }}</span>
+      <span style="font-family: var(--font-main-bold)">{{
+        messageAlert.message.textBold
+      }}</span>
+      <span style="font-family: var(--font-main-bold);color: red">{{
+        messageAlert.message.textRed
+      }}</span>
+      <span>{{ messageAlert.message.textNormal2 }}</span>
+      <a
+        style="color: blue"
+        href="https://help.mshopkeeper.vn/vi/kb/lam_the_nao_de_xoa_duoc_hang_hoa_khi_da_co_phat_sinh"
+        >{{ messageAlert.message.textLink }}</a
+      >
+    </base-alert>
+    <base-loading v-if="load.isShowLoad" :message="load.message" />
   </div>
 </template>
 
@@ -202,9 +230,11 @@ import ColumHeaderTable from "../../components/ColumHeaderTable.vue";
 import groupbuttondirection from "../../components/GroupButtonDirection.vue";
 import Pagination from "../../components/Pagination.vue";
 import DetailItem from "./DetailItem.vue";
+import BaseLoading from "../../components/BaseLoading.vue";
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
+import BaseAlert from "../../components/BaseAlert.vue";
 Vue.use(VueAxios, axios);
 export default {
   components: {
@@ -212,6 +242,8 @@ export default {
     ColumHeaderTable,
     Pagination,
     DetailItem,
+    BaseAlert,
+    BaseLoading,
   },
   created() {
     this.refreshPage();
@@ -259,7 +291,7 @@ export default {
       // Trạng thái của DetailItem
       // - add thêm hàng hóa mới
       // - update sửa hàng hóa
-      stateDetailItem: '',
+      stateDetailItem: "",
       // Đối tượng trạng thái phân trang, tìm kiếm sắp xếp
       filterPage: {
         page: 1,
@@ -303,7 +335,30 @@ export default {
         inventoryItemsColor: [],
         colors: [],
       },
+      // Các biến của Alert cảnh báo
+      messageAlert: {
+        isShowAlert: false,
+        id: "",
+        title: "",
+        type: "",
+        numberOfButton: 2,
+        message: {
+          textNormal1: "",
+          textBold: "",
+          textRed: "",
+          textNormal2: "",
+          textLink: "",
+        },
+      },
 
+      // Đối tượng vừa được chọn
+      itemSelect: {},
+
+      // Loading
+      load: {
+        isShowLoad: false,
+        message: "...",
+      },
       // Kết thúc Data
     };
   },
@@ -367,18 +422,16 @@ export default {
     handleClickButtonGroup(buttonType, buttonElementType) {
       //Thêm mới hàng hóa
       if (buttonType == 1) {
-
         if (buttonElementType == 0 || buttonElementType == 1) {
-          this.openDetailItem(1,'add');
-        }
-        else {
-          this.openDetailItem(buttonElementType,'add');
+          this.openDetailItem(1, "add");
+        } else {
+          this.openDetailItem(buttonElementType, "add");
         }
       }
 
       //Xóa hàng hóa
       if (buttonType == 4) {
-        this.DeleteInventoryItems();
+        this.handleDeleteInventoryItems();
       }
 
       // Nạp lại hàng hóa
@@ -436,6 +489,9 @@ export default {
      * Created By: LMCUONG(15/07/2021)
      */
     refreshPage() {
+      this.load.isShowLoad = true;
+      this.load.message = "Đang lấy dữ liệu...";
+
       axios({
         method: "post",
         url: this.baseUrl,
@@ -454,15 +510,79 @@ export default {
             (this.filterPage.page - 1) * this.filterPage.limit;
           this.page.endRow = res.data.data.length + this.page.startRow;
           this.page.lengRow = res.data.total;
+
+          // Tắt loading
+          this.load.isShowLoad = false;
+          this.load.message = "...";
         })
         .catch((error) => {
           console.log(error);
+          // Tắt loading
+          this.load.isShowLoad = false;
+          this.load.message = "...";
         });
     },
+    /**
+     * Giá trị trả về từ pagination
+     * @param {Number} pageIndex Giá trị page hiện tại
+     * @param {Number} pageSize Số phần tử có thể tối đa của page
+     * Created By: LMCUONG(19/07/2021)
+     */
     handlePagination(pageIndex, pageSize) {
       this.filterPage.page = pageIndex;
       this.filterPage.limit = pageSize;
       this.refreshPage();
+    },
+
+    handleDeleteInventoryItems() {
+      // Nếu đamg chọn một phần tử
+      if (this.listIDCheckbox.length == 1) {
+        this.openAlert(
+          "checkdelete",
+          "Xóa dữ liệu",
+          "confuse",
+          2,
+          "Bạn có chắc muốn xóa hàng hóa ",
+          "",
+          this.itemSelect.inventoryItemName +
+            " - (" +
+            this.itemSelect.skuCode +
+            ")",
+          " không?",
+          ""
+        );
+      } else if (this.listStyleRowByID.length == 1) {
+        this.openAlert(
+          "checkdelete",
+          "Xóa dữ liệu",
+          "confuse",
+          2,
+          "Bạn có chắc muốn xóa hàng hóa ",
+          "",
+          this.itemSelect.inventoryItemName +
+            " - (" +
+            this.itemSelect.skuCode +
+            ")",
+          " không?",
+          ""
+        );
+      }
+      // Nếu đang chọn nhiều phần tử
+      else if (
+        this.listIDCheckbox.length > 0 ||
+        this.listStyleRowByID.length > 0
+      ) {
+        this.openAlert(
+          "checkdelete",
+          "Xóa dữ liệu",
+          "confuse",
+          2,
+          "Bạn có chắc chắn muốn xóa các hàng hóa đã chọn không?",
+          "",
+          "",
+          ""
+        );
+      }
     },
     /**
      * Xóa đối tượng theo danh sách ID
@@ -473,11 +593,16 @@ export default {
         // Gửi API xóa bản ghi
 
         let listDelete = [];
-        if (this.listStyleRowByID.length > 0) {
-          listDelete = this.listStyleRowByID;
-        } else {
+        if (this.listIDCheckbox.length > 0) {
           listDelete = this.listIDCheckbox;
+        } else {
+          listDelete = this.listStyleRowByID;
         }
+
+        // Mở loading
+        this.load.isShowLoad = true;
+        this.load.message = "Đang xóa...";
+
         axios({
           method: "post",
           url: this.baseUrl + "/Delete",
@@ -485,14 +610,28 @@ export default {
           // Danh sách Id cần xóa
           data: listDelete,
         })
-          .then((res) => {
-            alert("Xóa thành công " + res.data.data.rowAffect + " bản ghi!");
+          .then(() => {
+            // Tắt loading
+            this.load.isShowLoad = false;
+            this.load.message = "..";
+            this.refreshPage();
           })
-          .catch((error) => {
-            alert(error.response.data.devMsg);
+          .catch(() => {
+            this.load.isShowLoad = false;
+            this.load.message = "..";
+            this.openAlert(
+              "",
+              "MISAEshop",
+              "danger",
+              1,
+              "Không xóa được hàng hóa do hàng hóa đã có phát sinh. Xem các tình huống phát sinh và cách xử lý ",
+              "",
+              "",
+              "",
+              "tại đây"
+            );
+            this.refreshPage();
           });
-
-        this.refreshPage();
       }
     },
     /**
@@ -511,7 +650,10 @@ export default {
           // Gán giá trị cho From Detail Item
           this.detailItem = res.data.data;
           // Mở cửa số Detail
-          this.openDetailItem(res.data.data.inventoryItem.inventoryItemType, 'update');
+          this.openDetailItem(
+            res.data.data.inventoryItem.inventoryItemType,
+            "update"
+          );
           //Format dữ liệu nhận vào
         })
         .catch((error) => {
@@ -568,7 +710,7 @@ export default {
      * @param {String} inventoryItemID mã id của hàng vừa click
      * Created By: LMCUONG(17/07/2021)
      */
-    changeCheckBox(inventoryItemID) {
+    changeCheckBox(inventoryItemID, inventoryItem) {
       // Nếu đẫ có trong mảng style hiện thị, xóa phần tử đó
       for (let index in this.listStyleRowByID) {
         if (this.listStyleRowByID[index] == inventoryItemID) {
@@ -579,6 +721,7 @@ export default {
 
       // Nếu chưa có thêm phần tử đó vào mảng hiển thị
       this.listStyleRowByID.push(inventoryItemID);
+      this.itemSelect = inventoryItem;
     },
     /**
      * Kiểm tra hàng có trong mảng Style hiện thị, true - nếu có, false - không có
@@ -594,7 +737,7 @@ export default {
      * @param {String} inventoryItemID id hàng được click
      * Created By: LMCUONG(17/07/2021)
      */
-    onClickRow(event, inventoryItemID) {
+    onClickRow(event, inventoryItemID, inventoryItem) {
       // Nếu có phím Ctrl đang bật, cho phép thêm nhiền bản ghi
       if (event.ctrlKey) {
         // Nếu có phần tử đang có hiệu ứng rồi
@@ -621,7 +764,48 @@ export default {
         this.listStyleRowByID = [];
         // Thêm phần tử mới
         this.listStyleRowByID.push(inventoryItemID);
+        this.itemSelect = inventoryItem;
       }
+    },
+
+    openAlert(
+      id,
+      title,
+      type,
+      numberOfButton,
+      textNormal1,
+      textBold,
+      textRed,
+      textNormal2,
+      textLink
+    ) {
+      // Khởi tại giá trị
+      this.messageAlert.id = id;
+      this.messageAlert.title = title;
+      this.messageAlert.type = type;
+      this.messageAlert.numberOfButton = numberOfButton;
+      this.messageAlert.message.textNormal1 = textNormal1;
+      this.messageAlert.message.textBold = textBold;
+      this.messageAlert.message.textRed = textRed;
+      this.messageAlert.message.textNormal2 = textNormal2;
+      this.messageAlert.message.textLink = textLink;
+
+      // Mở cửa sổ Popup
+      this.messageAlert.isShowAlert = true;
+    },
+    /**
+     * Trả lại giá trị từ Alert
+     * @param {string} id mã của đối tượng gọi Alert
+     * @returns {Number} value nút thứ mấy đang được bấm
+     * Created By: LMCUONG(19/07/2021)
+     */
+    handleAlert(id, value) {
+      // Cho phép xóa phần tử
+      if (id == "checkdelete" && value == 1) {
+        this.DeleteInventoryItems();
+      }
+
+      this.messageAlert.isShowAlert = false;
     },
 
     // Kết hàm
