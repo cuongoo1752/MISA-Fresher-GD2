@@ -35,10 +35,12 @@
             </td>
             <td class="table-add-item__td">
               <BaseInput
+                id="inventoryItemName"
                 tabindex="0"
                 :type="'text'"
                 v-model="inventoryItem.inventoryItemName"
                 @blur="outInputSKUCode"
+                :required="true"
               />
             </td>
           </tr>
@@ -133,14 +135,18 @@
             </td>
             <td class="table-add-item__td">
               <div style="display:flex">
-                <BaseInputNumber
-                  :type="'number'"
-                  :placeholder="'Tổng giá mua: 0'"
+                <money
                   v-model="inventoryItem.buyPrice"
-                /><BaseInputNumber
-                  :type="'number'"
-                  :placeholder="'0'"
+                  v-bind="money"
+                  style="width: 153px; text-align: right;"
+                  class="baseinput__input"
+                />
+
+                <money
                   v-model="inventoryItem.costPrice"
+                  v-bind="money"
+                  style="width: 153px; text-align: right;"
+                  class="baseinput__input"
                 />
               </div>
             </td>
@@ -157,11 +163,11 @@
               >
             </td>
             <td class="table-add-item__td">
-              <BaseInputNumber
-                :width="'153px'"
-                :type="'number'"
-                :textAlign="'right'"
+              <money
                 v-model="inventoryItem.buyPrice"
+                v-bind="money"
+                style="width: 153px; text-align: right;"
+                class="baseinput__input"
               />
             </td>
           </tr>
@@ -171,11 +177,11 @@
               <text-label>Giá bán</text-label>
             </td>
             <td class="table-add-item__td">
-              <BaseInputNumber
-                :width="'153px'"
-                :type="'number'"
-                :textAlign="'right'"
+              <money
                 v-model="inventoryItem.costPrice"
+                v-bind="money"
+                style="width: 153px; text-align: right;"
+                class="baseinput__input"
               />
             </td>
           </tr>
@@ -210,11 +216,11 @@
               <text-label>Tồn kho ban đầu</text-label>
             </td>
             <td class="table-add-item__td">
-              <BaseInputNumber
-                :width="'111px'"
-                :type="'number'"
-                :textAlign="'right'"
+              <money
                 v-model="inventoryItem.initStock"
+                v-bind="money"
+                style="width:111px; text-align: right;"
+                class="baseinput__input"
               />
             </td>
           </tr>
@@ -225,22 +231,21 @@
             </td>
             <td class="table-add-item__td">
               <div style="display:flex">
-                <BaseInputNumber
-                  :width="'142px'"
-                  :hasFront="true"
-                  :textFront="'Tối thiểu'"
-                  :type="'number'"
-                  :textAlign="'right'"
-                  v-model="inventoryItem.minimumStock"
+                <!-- Tồn kho tối thiểu -->
+                <div  class="baseinput__front">Tối thiểu</div>
+                <money
+                  v-model="inventoryItem.costPrice"
+                  v-bind="money"
+                  style="width: 75px; text-align: right;"
+                  class="baseinput__input has-front"
                 />
-                <div style="width:16px"></div>
-                <BaseInputNumber
-                  :width="'142px'"
-                  :hasFront="true"
-                  :textFront="'Tối đa'"
-                  :type="'number'"
-                  :textAlign="'right'"
-                  v-model="inventoryItem.maximumStock"
+                <!-- Tồn kho tối đa -->
+                <div style="margin-left:14px" class="baseinput__front">Tối đa</div>
+                <money
+                  v-model="inventoryItem.costPrice"
+                  v-bind="money"
+                  style="width: 75px; text-align: right;"
+                  class="baseinput__input has-front"
                 />
               </div>
             </td>
@@ -328,10 +333,11 @@
               <text-label>Trọng lượng gói hàng(g)</text-label>
             </td>
             <td class="table-add-item__td">
-              <BaseInputNumber
-                :type="'number'"
-                :textAlign="'right'"
+              <money
                 v-model="inventoryItem.weight"
+                v-bind="money"
+                style="width: 153px; text-align: right;"
+                class="baseinput__input"
               />
             </td>
           </tr>
@@ -342,29 +348,27 @@
             </td>
             <td class="table-add-item__td">
               <div style="display:flex">
-                <!-- Chiều dài -->
-                <BaseInputNumber
-                  :width="'76.3px'"
-                  :type="'number'"
-                  :textAlign="'right'"
-                  :placeholder="'Chiều dài'"
-                  v-model="inventoryItem.length"
+                <!-- Ciều dài -->
+                <money
+                  v-model="inventoryItem.costPrice"
+                  v-bind="money"
+                  style="width: 78.3px; text-align: right;"
+                  class="baseinput__input"
+                  placeholder="chiều dài"
                 />
                 <!-- Chiều rộng -->
-                <BaseInputNumber
-                  :width="'83.3px'"
-                  :type="'number'"
-                  :textAlign="'right'"
-                  :placeholder="'Chiều rộng'"
-                  v-model="inventoryItem.width"
+                <money
+                  v-model="inventoryItem.costPrice"
+                  v-bind="money"
+                  style="width: 78.3px; text-align: right;"
+                  class="baseinput__input"
                 />
                 <!-- Chiều cao -->
-                <BaseInputNumber
-                  :width="'78.3px'"
-                  :type="'number'"
-                  :textAlign="'right'"
-                  :placeholder="'Chiều cao'"
-                  v-model="inventoryItem.height"
+                <money
+                  v-model="inventoryItem.costPrice"
+                  v-bind="money"
+                  style="width: 78.3px; text-align: right;"
+                  class="baseinput__input"
                 />
               </div>
             </td>
@@ -375,7 +379,7 @@
               <text-label>Mô tả</text-label>
             </td>
             <td class="table-add-item__td">
-              <BaseInput :type="'text'" v-model="inventoryItem.description" />
+              <textarea rows="4" cols="67"  style="height: auto;width: auto" type='text' v-model="inventoryItem.description" class="baseinput__input"/>
             </td>
           </tr>
           <!-- Ảnh hàng hóa -->
@@ -433,7 +437,6 @@
 
 <script>
 import BaseInput from "../../components/BaseInput.vue";
-import BaseInputNumber from "../../components/BaseInputNumber.vue";
 import BaseInputSizeAndColor from "../../components/BaseInputSizeAndColor.vue";
 import TableItems from "../../components/TableItems.vue";
 import TextLabel from "../../components/TextLabel.vue";
@@ -442,6 +445,7 @@ import BaseLoading from "../../components/BaseLoading.vue";
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
+import { Money } from "v-money";
 Vue.use(VueAxios, axios);
 export default {
   components: {
@@ -449,9 +453,9 @@ export default {
     BaseInputSizeAndColor,
     TableItems,
     TextLabel,
-    BaseInputNumber,
     PartCombo,
     BaseLoading,
+    Money,
   },
   props: {
     detailItem: {
@@ -511,9 +515,23 @@ export default {
         isShowLoad: false,
         message: "...",
       },
+      prise: 0,
+      // confix thư viện money
+      money: {
+        decimal: "",
+        thousands: ".",
+        prefix: "",
+        suffix: "",
+        precision: 0,
+        masked: false,
+      },
     };
   },
   methods: {
+    /**
+     * Tạo phần mới
+     * Created By: LMCUONG(20/07/2021)
+     */
     createDataParts() {
       for (let index in this.listTableItems) {
         if (this.listTableItems[index].part > this.dataParts.length) {
@@ -529,9 +547,17 @@ export default {
         );
       }
     },
+    /**
+     * Thêm mảng mới
+     * Created By: LMCUONG(20/07/2021)
+     */
     addPart() {
       this.dataParts.push([]);
     },
+    /**
+     * Dữ liệu tử Part trả về
+     * Created By: LMCUONG(20/07/2021)
+     */
     handlePart(state, list, part) {
       if (state == "update") {
         this.dataParts[part] = list;
@@ -722,16 +748,41 @@ export default {
         });
     },
     /**
+     * Vadidate dữ liệu trước khi gửi đi
+     * Created By: LMCUONG(20/07/2021)
+     */
+    vadidateDetailItem() {
+      let isValid = true;
+
+      // Kiểm tra trường tên
+      if (
+        this.inventoryItem.inventoryItemName == null ||
+        this.inventoryItem.inventoryItemName == "" ||
+        this.inventoryItem.inventoryItemName == undefined
+      ) {
+        isValid = false;
+        document.getElementById("inventoryItemName").focus();
+      }
+
+      return isValid;
+    },
+    /**
      * Lưu đối tượng Detail Item tới Server
      * Created By: LMCUONG(18/07/2021)
      */
     saveDetailItem() {
-      if (this.state == "add") {
-        this.addDetailItem();
-      } else if (this.state == "update") {
-        this.updateDetailItem();
+      if (this.vadidateDetailItem()) {
+        if (this.state == "add") {
+          this.addDetailItem();
+        } else if (this.state == "update") {
+          this.updateDetailItem();
+        }
       }
     },
+    /**
+     * Khi thoát khỏi input tên
+     * Created By: LMCUONG(20/07/2021)
+     */
     outInputSKUCode() {
       if (
         this.inventoryItem.inventoryItemName != "" &&

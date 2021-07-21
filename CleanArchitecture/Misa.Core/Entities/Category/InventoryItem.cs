@@ -16,13 +16,13 @@ namespace Misa.Core.Entities.Category
         public string SKUCode { get; set; }
         public string InventoryItemName { get; set; }
         public ItemType InventoryItemType { get; set; }
-        public Guid ItemCategoryID { get; set; }
-        public double BuyPrice { get; set; }
-        public double CostPrice { get; set; }
-        public Guid UnitID { get; set; }
-        public double InitStock { get; set; }
-        public double MinimumStock { get; set; }
-        public double MaximumStock { get; set; }
+        public Guid? ItemCategoryID { get; set; }
+        public int BuyPrice { get; set; }
+        public int CostPrice { get; set; }
+        public Guid? UnitID { get; set; }
+        public int InitStock { get; set; }
+        public int MinimumStock { get; set; }
+        public int MaximumStock { get; set; }
         public bool ShowInMenu { get; set; }
         public string ShowLocation { get; set; }
         public string StockLocation { get; set; }
@@ -36,10 +36,10 @@ namespace Misa.Core.Entities.Category
         public string PictureName { get; set; }
         public Guid? PictureID { get; set; }
         public int EditMode { get; set; }
-        public double Weight { get; set; }
-        public double Length { get; set; }
-        public double Width { get; set; }
-        public double Height { get; set; }
+        public int Weight { get; set; }
+        public int Length { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
         public Guid? ParentID { get; set; }
         public int State { get; set; }
         public int ManageType { get; set; }

@@ -28,7 +28,7 @@
                   :title="'Mã SKU'"
                   :type="'string'"
                   :width="'99px'"
-                  :id="'sku'"
+                  :id="'SKUCode'"
                   @change="handleChangeColumnHeaderTable"
                 />
               </th>
@@ -36,16 +36,16 @@
                 <colum-header-table
                   :type="'string'"
                   :width="'707px'"
-                  :id="'name'"
+                  :id="'InventoryItemName'"
                   :title="'Tên hàng hóa'"
                   @change="handleChangeColumnHeaderTable"
                 />
               </th>
               <th class="items-element-title">
                 <colum-header-table
-                  :type="'select'"
+                  :type="'string'"
                   :width="'129px'"
-                  :id="'firstColum'"
+                  :id="'ItemCategoryName'"
                   :title="'Nhóm hàng hóa'"
                   :selectArray="dataItemCategorys"
                   @change="handleChangeColumnHeaderTable"
@@ -53,9 +53,9 @@
               </th>
               <th class="items-element-title">
                 <colum-header-table
-                  :type="'select'"
+                  :type="'string'"
                   :width="'99px'"
-                  :id="'unit'"
+                  :id="'UnitName'"
                   :title="'Đơn vị tính'"
                   :selectArray="dataUnits"
                   @change="handleChangeColumnHeaderTable"
@@ -65,7 +65,7 @@
                 <colum-header-table
                   :type="'number'"
                   :width="'104px'"
-                  :id="''"
+                  :id="'BuyPrice'"
                   :title="'Giá bán TB'"
                   @change="handleChangeColumnHeaderTable"
                 />
@@ -74,7 +74,7 @@
                 <colum-header-table
                   :type="'select'"
                   :width="'174px'"
-                  :id="''"
+                  :id="'ShowInMenu'"
                   :selectArray="dataShowInMenu"
                   :title="'Hiển thị trên MH hàng hóa'"
                   @change="handleChangeColumnHeaderTable"
@@ -85,7 +85,7 @@
                 <colum-header-table
                   :type="'select'"
                   :width="'119px'"
-                  :id="''"
+                  :id="'InventoryItemType'"
                   :selectArray="dataInventoryItemType"
                   :title="'Loại hàng hóa'"
                   @change="handleChangeColumnHeaderTable"
@@ -95,7 +95,7 @@
                 <colum-header-table
                   :type="'select'"
                   :width="'119px'"
-                  :id="''"
+                  :id="'ManageType'"
                   :selectArray="dataManageType"
                   :title="'Quản lý theo'"
                   @change="handleChangeColumnHeaderTable"
@@ -105,7 +105,7 @@
                 <colum-header-table
                   :type="'select'"
                   :width="'134px'"
-                  :id="''"
+                  :id="'State'"
                   :selectArray="dataState"
                   :title="'Trạng thái'"
                   @change="handleChangeColumnHeaderTable"
@@ -269,12 +269,12 @@ export default {
         { key: "1", value: "Tất cả" },
         { key: "2", value: "Lô/Hạn sử dụng" },
         { key: "3", value: "Serial IMEI" },
-        { key: "4", value: "Khác" },
+        { key: "0", value: "Khác" },
       ],
       dataState: [
-        { key: "1", value: "Tất cả" },
+        { key: "0", value: "Tất cả" },
         { key: "1", value: "Đang kinh doanh" },
-        { key: "1", value: "Ngừng kinh doanh" },
+        { key: "2", value: "Ngừng kinh doanh" },
       ],
 
       // Biến trạng thái hiện thị cửa sổ Detail
@@ -297,26 +297,8 @@ export default {
         page: 1,
         start: 0,
         limit: 50,
-        sort: [
-          {
-            property: "CreatedDate",
-            direction: "desc",
-          },
-          {
-            property: "ModifiedDate",
-            direction: "desc",
-          },
-        ],
-        filter: [
-          //   {
-          //     isFilterRow: true,
-          //     value: "a",
-          //     stateFilter: 1,
-          //     property: "ItemCategoryName",
-          //     type: 1,
-          //     tableReference: "ItemCategory",
-          //   },
-        ],
+        sort: [],
+        filter: [],
       },
       // Đối tượng trả về Pagination
       page: {
@@ -403,14 +385,14 @@ export default {
     },
     /**
      * Sự kiện Click từ nhóm các nút điều hướng
-     * @param {buttonType} Loại nút đang được Click
+     * @param {Number} buttonType nút đang được Click
      * - 1: Thêm mới
      * - 2: Nhân bản
      * - 3: Sửa
      * - 4: Xóa
      * - 5: Nạp
      * - 6: Xuất khẩu
-     * @param {buttonElementType} Loại nút đang được Click
+     * @param {Number} buttonElementType nút đang được Click
      * Thêm mới
      * - 0: Mặc định
      * - 1: Thêm mới hàng hóa
@@ -436,6 +418,18 @@ export default {
 
       // Nạp lại hàng hóa
       if (buttonType == 5) {
+        // Xóa sắp xếp khi thêm phần tử mới
+        for (let key in this.filterPage.sort) {
+          if (Object.hasOwnProperty.call(this.filterPage.sort, key)) {
+            let element = this.filterPage.sort[key];
+            // Nếu có phần sắp xếp khi thêm mới hoặc sửa thì xóa
+            if (element.property == "CreatedDate") {
+              if (this.filterPage.sort.length > 1) {
+                this.filterPage.sort.splice(key, 2);
+              }
+            }
+          }
+        }
         this.refreshPage();
       }
 
@@ -448,10 +442,127 @@ export default {
      * Trả lại gái trị của các sắp xếp trong cột
      * Created By: LMCUONG(15/07/2021)
      */
-    handleChangeColumnHeaderTable(id, stateSort, stateInput, valueSelect) {
-      console.log(
-        ">" + id + " " + stateSort + " " + stateInput + " " + valueSelect
-      );
+    handleChangeColumnHeaderTable(id, type, stateSort, stateInput, value) {
+      // Nếu sắp xếp
+      if (type == "sort") {
+        for (let key in this.filterPage.sort) {
+          if (Object.hasOwnProperty.call(this.filterPage.sort, key)) {
+            let element = this.filterPage.sort[key];
+
+            // Nếu có phần sắp xếp khi thêm mới hoặc sửa thì xóa
+            if (element.property == "CreatedDate") {
+              if (this.filterPage.sort.length > 1) {
+                this.filterPage.sort.splice(key, 2);
+              }
+            }
+
+            // Nếu tìm trong mảng có phần tử
+            if (element.property == id) {
+              // Nếu không có giá trị
+              // Xóa phần tử
+              if (stateSort == "") {
+                this.filterPage.sort.splice(key, 1);
+              }
+              // Nếu có giá trị
+              // Sửa phần tử
+              else {
+                element.direction = stateSort;
+              }
+
+              this.refreshPage();
+              return;
+            }
+          }
+        }
+
+        // Nếu phần tử chưa có trong mảng
+        // Thêm phần tử
+        this.filterPage.sort.push({
+          property: id,
+          direction: stateSort,
+        });
+        this.refreshPage();
+      }
+      // Nều tìm kiếm
+      else {
+        // Xóa sắp xếp khi thêm phần tử mới
+        for (let key in this.filterPage.sort) {
+          if (Object.hasOwnProperty.call(this.filterPage.sort, key)) {
+            let element = this.filterPage.sort[key];
+            // Nếu có phần sắp xếp khi thêm mới hoặc sửa thì xóa
+            if (element.property == "CreatedDate") {
+              if (this.filterPage.sort.length > 1) {
+                this.filterPage.sort.splice(key, 2);
+              }
+            }
+          }
+        }
+
+        // Xóa, sửa phần tử nếu tồn tại
+        for (let key in this.filterPage.filter) {
+          if (Object.hasOwnProperty.call(this.filterPage.filter, key)) {
+            let element = this.filterPage.filter[key];
+
+            // Nếu tìm trong mảng có phần tử
+            if (element.property == id) {
+              // Nếu không có giá trị
+              // Xóa phần tử
+              if (value == undefined || value == "") {
+                this.filterPage.filter.splice(key, 1);
+              } else if (type == "select" && value == 0) {
+                this.filterPage.filter.splice(key, 1);
+              }
+              // Nếu có giá trị
+              // Sửa phần tử
+              else {
+                element.value = value;
+                element.stateFilter = stateInput;
+              }
+              this.refreshPage();
+              return;
+            }
+          }
+        }
+
+        if (value != undefined && value != "") {
+          // gán giá trị value
+          let typeNumber = 1;
+          if (type == "number") typeNumber = 2;
+          else if (type == "select") typeNumber = 3;
+
+          // Nếu phần tử chưa có trong mảng
+          // Thêm phần tử
+          if (id == "UnitName") {
+            this.filterPage.filter.push({
+              isFilterRow: true,
+              value: value,
+              stateFilter: stateInput,
+              property: id,
+              type: typeNumber,
+              tableReference: "Unit",
+            });
+          } else if (id == "ItemCategoryName") {
+            this.filterPage.filter.push({
+              isFilterRow: true,
+              value: value,
+              stateFilter: stateInput,
+              property: id,
+              type: typeNumber,
+              tableReference: "ItemCategory",
+            });
+          } else {
+            this.filterPage.filter.push({
+              isFilterRow: true,
+              value: value,
+              stateFilter: stateInput,
+              property: id,
+              type: typeNumber,
+            });
+          }
+
+          this.refreshPage();
+        }
+      }
     },
     /**
      * Trả lại giá trị của sổ DetailItem
@@ -473,6 +584,26 @@ export default {
         inventoryItemsColor: [],
         colors: [],
       };
+
+      this.filterPage = {
+        page: 1,
+        start: 0,
+        limit: 50,
+        sort: [],
+        filter: [],
+      };
+
+      // Thêm sắp xếp theo thời gian tạo ngày tạo
+      this.filterPage.sort.push({
+        property: "CreatedDate",
+        direction: "desc",
+      });
+      this.filterPage.sort.push({
+        property: "ModifiedDate",
+        direction: "desc",
+      });
+
+      //Tải lại trang web
       this.refreshPage();
     },
     /**
@@ -489,6 +620,7 @@ export default {
      * Created By: LMCUONG(15/07/2021)
      */
     refreshPage() {
+      // Mở load dữ liệu
       this.load.isShowLoad = true;
       this.load.message = "Đang lấy dữ liệu...";
 
@@ -529,6 +661,19 @@ export default {
      * Created By: LMCUONG(19/07/2021)
      */
     handlePagination(pageIndex, pageSize) {
+      // Xóa sắp xếp khi thêm phần tử mới
+      for (let key in this.filterPage.sort) {
+        if (Object.hasOwnProperty.call(this.filterPage.sort, key)) {
+          let element = this.filterPage.sort[key];
+          // Nếu có phần sắp xếp khi thêm mới hoặc sửa thì xóa
+          if (element.property == "CreatedDate") {
+            if (this.filterPage.sort.length > 1) {
+              this.filterPage.sort.splice(key, 2);
+            }
+          }
+        }
+      }
+
       this.filterPage.page = pageIndex;
       this.filterPage.limit = pageSize;
       this.refreshPage();

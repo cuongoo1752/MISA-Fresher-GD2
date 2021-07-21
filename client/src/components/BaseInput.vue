@@ -1,8 +1,8 @@
 <template>
-  <div class="baseinput" :style="{ width: width }">
+  <div class="baseinput" :style="{ width: width }" @focus="focusInput">
     <div v-if="hasFront" class="baseinput__front">{{ textFront }}</div>
     <input
-
+      ref="input"
       :style="{ textAlign: textAlign }"
       :disabled="disabled"
       type="text"
@@ -14,7 +14,10 @@
       @blur.stop="handleBlueInput($event)"
     />
     <div
-      v-if="isError"
+      tabindex="0"
+      id="dangerinput"
+      ref="danger"
+      v-show="isError"
       v-tooltip.right-end="textVadidate"
       class="baseinput__icon-validate"
     ></div>
@@ -54,7 +57,7 @@ export default {
       default: 255,
     },
     value: {
-      type: String
+      type: String,
     },
 
     hasFront: {
@@ -74,15 +77,14 @@ export default {
       type: String,
       default: "left",
     },
-    watchState:{
+    watchState: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   watch: {
     watchState() {
-      console.log('watchState')
-    }
+    },
   },
 
   data() {
@@ -112,7 +114,6 @@ export default {
       this.$emit("input", event.target.value);
     },
     handleBlueInput(event) {
-      
       if (this.required == true) {
         if (
           this.value == null ||
@@ -126,7 +127,18 @@ export default {
         }
       }
       this.$emit("blur", event);
-      
+    },
+    focusInput() {
+      this.$refs.input.focus();
+      let refs = this.$refs;
+      this.textVadidate = "Trường này không được để trống";
+        this.isError = true;
+      setTimeout(function(){
+        document.getElementById("dangerinput").focus();
+      }, 30)
+      setTimeout(function(){
+        refs.input.focus();
+      }, 600)
     },
   },
 };

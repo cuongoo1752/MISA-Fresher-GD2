@@ -278,6 +278,7 @@ namespace Misa.Core.Service
                     }
 
                 default:
+                    queryWhere += $"= {filter.value}";
                     break;
             }
             return queryWhere;
