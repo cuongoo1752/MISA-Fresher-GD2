@@ -109,7 +109,7 @@ namespace Misa.Core.Service
 
                 if (indexFilter != inputPage.filter.Count - 1)
                 {
-                    querySQL.Append("AND ");
+                    querySQL.Append(" AND ");
                 }
                 else
                 {

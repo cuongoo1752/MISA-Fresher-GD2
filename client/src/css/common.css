@@ -82,3 +82,15 @@
 @import './layouts/thecontent.css';
 @import './layouts/theheader.css';
 @import './layouts/thenavbar.css';
+
+/*  */
+
+input,
+button {
+    cursor: pointer;
+    outline: none;
+}
+
+div {
+    outline: none;
+}

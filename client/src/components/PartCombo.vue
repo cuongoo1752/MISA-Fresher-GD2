@@ -6,7 +6,11 @@
         <span class="partcombo__part-detail">Gồm các hàng hóa dưới dây</span>
       </div>
 
-      <div v-if="part > 0" class="partcombo__btn-cancel" @click="returnParentValue('delete')">
+      <div
+        v-if="part > 0"
+        class="partcombo__btn-cancel"
+        @click="returnParentValue('delete')"
+      >
         <div class="partcombo__icon-cancel"></div>
         <p class="partcombo__text-cancel">
           Xóa thành phần
@@ -14,16 +18,14 @@
       </div>
     </div>
     <div class="partcombo__find-item">
-      <select name="" id="" class="headtb__select" style="width: 284px" v-model="selectInventoryItemID">
-        <option
-          v-for="(opt, index) in dataItems"
-          :key="index"
-          :value="opt.inventoryItemID"
-          class="select-element"
-        >
-          {{ opt.inventoryItemName }}
-        </option>
-      </select>
+
+      <base-autocomplete
+        @change="handleAutocomplete"
+        :selections="dataItems"
+        :width="'284px'"
+        :numberOfTableColumn="2"
+      />
+
       <div class="partcombo__btn" @click="addItemToTable">
         <div class="partcombo__icon"></div>
         <p class="partcombo__text ">
@@ -127,7 +129,7 @@
                 <div class="table-detail__dup"></div>
               </div>
             </td>
-            <td  class="table-detail__td">
+            <td class="table-detail__td">
               <div style="display: flex; justify-content: center">
                 <input type="checkbox" class="checkbox" v-model="item.isUse" />
               </div>
@@ -145,6 +147,7 @@
 
 <script>
 import BaseAlert from "../components/BaseAlert.vue";
+import BaseAutocomplete from "../components/BaseAutocomplete.vue";
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
@@ -152,6 +155,7 @@ Vue.use(VueAxios, axios);
 export default {
   components: {
     BaseAlert,
+    BaseAutocomplete,
   },
   props: {
     part: {
@@ -186,6 +190,16 @@ export default {
       },
       deep: true,
     },
+    part(){
+      console.log(1)
+      console.log(this.part)
+      for (const key in this.listItemsOnPart) {
+        if (Object.hasOwnProperty.call(this.listItemsOnPart, key)) {
+          const element = this.listItemsOnPart[key];
+          element.part = this.part + 1;
+        }
+      }
+    }
   },
   data() {
     return {
@@ -196,15 +210,15 @@ export default {
       message: "",
       // Dữ liệu tìm kiếm hàng hóa
       dataItems: [],
-      selectInventoryItemID: ""
+      selectInventoryItemID: "",
     };
   },
   methods: {
-    /** 
-    * Lấy dữ liệu hàng hóa
-    * Created By: LMCUONG(18/07/2021) 
-    */
-    getItems() {
+    /**
+     * Lấy dữ liệu hàng hóa
+     * Created By: LMCUONG(18/07/2021)
+     */
+    async getItems() {
       axios({
         method: "post",
         url: this.baseUrl,
@@ -212,69 +226,105 @@ export default {
         data: {
           page: 1,
           start: 0,
-          limit: 300,
-          sort: [
-            {
-              property: "CreatedDate",
-              direction: "desc",
-            },
-            {
-              property: "ModifiedDate",
-              direction: "desc",
-            },
-          ],
+          limit: 1000,
+          sort: [],
           filter: [
-              {
-                isFilterRow: true,
-                value: "1",
-                stateFilter: 1,
-                property: "InventoryItemType",
-                type: 2,
-              },
+            {
+              isFilterRow: true,
+              value: "1",
+              stateFilter: 1,
+              property: "InventoryItemType",
+              type: 2,
+            },
           ],
         },
       })
         .then((res) => {
-          this.dataItems = res.data.data;
+          for (const key in res.data.data) {
+            if (Object.hasOwnProperty.call(res.data.data, key)) {
+              const element = res.data.data[key];
+              this.dataItems.push({
+                key: element.inventoryItemID,
+                value: element.inventoryItemName,
+                code: element.skuCode,
+              });
+            }
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      axios({
+        method: "post",
+        url: this.baseUrl,
+        headers: {},
+        data: {
+          page: 1,
+          start: 0,
+          limit: 1000,
+          sort: [],
+          filter: [
+            {
+              isFilterRow: true,
+              value: "3",
+              stateFilter: 1,
+              property: "InventoryItemType",
+              type: 2,
+            },
+          ],
+        },
+      })
+        .then((res) => {
+          for (const key in res.data.data) {
+            if (Object.hasOwnProperty.call(res.data.data, key)) {
+              const element = res.data.data[key];
+              this.dataItems.push({
+                key: element.inventoryItemID,
+                value: element.inventoryItemName,
+                code: element.skuCode,
+              });
+            }
+          }
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    /** 
-    * Từ dữ liệu hàng hóa thêm các hàng vào bảng
-    * @param {}  
-    * @returns {}  
-    * Created By: LMCUONG(18/07/2021) 
-    */
-    addItemToTable(){
-      if(this.selectInventoryItemID != null || this.selectInventoryItemID != ""){
+    /**
+     * Từ dữ liệu hàng hóa thêm các hàng vào bảng
+     * @param {}
+     * @returns {}
+     * Created By: LMCUONG(18/07/2021)
+     */
+    addItemToTable() {
+      if (
+        this.selectInventoryItemID != null ||
+        this.selectInventoryItemID != ""
+      ) {
         axios({
-        method: "post",
-        url: this.baseUrl + "/" + this.selectInventoryItemID + "?type=" + "1",
-        headers: {},
-      })
-        .then((res) => {
-          if(res.data.data.inventoryItemsColor.length > 0){
-            this.listItemsOnPart = res.data.data.inventoryItemsColor;
-            for(let index in this.listItemsOnPart){
-              this.listItemsOnPart[index].part = this.part + 1;
-              this.listItemsOnPart[index].isUse = true;
-
-            }
-          }
-          else{
-            this.listItemsOnPart = [];
-            this.listItemsOnPart.push(res.data.data.inventoryItem);
-            this.listItemsOnPart[0].part = this.part + 1;
-            this.listItemsOnPart[0].isUse = true;
-          }
-
-          this.returnParentValue('update');
+          method: "post",
+          url: this.baseUrl + "/" + this.selectInventoryItemID + "?type=" + "1",
+          headers: {},
         })
-        .catch((error) => {
-          console.log(error);
-        });
+          .then((res) => {
+            if (res.data.data.inventoryItemsColor.length > 0) {
+              this.listItemsOnPart = res.data.data.inventoryItemsColor;
+              for (let index in this.listItemsOnPart) {
+                this.listItemsOnPart[index].part = this.part + 1;
+                this.listItemsOnPart[index].isUse = true;
+              }
+            } else {
+              this.listItemsOnPart = [];
+              this.listItemsOnPart.push(res.data.data.inventoryItem);
+              this.listItemsOnPart[0].part = this.part + 1;
+              this.listItemsOnPart[0].isUse = true;
+            }
+
+            this.returnParentValue("update");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
       }
     },
     modifiedRow(index) {
@@ -309,7 +359,10 @@ export default {
         }
       }
     },
-    
+    handleAutocomplete(id, result){
+      this.selectInventoryItemID = result;
+    }
+
     // Kết hàm
   },
 };

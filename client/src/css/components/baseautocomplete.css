@@ -1,0 +1,164 @@
+.bg {
+    background-size: cover;
+    height: 100vh;
+    background-position: center;
+}
+
+.combobox {
+    position: relative;
+}
+
+
+/* #region combobox__input */
+
+.combobox__input {
+    display: flex;
+    position: relative;
+    border: 1px solid #d0d0d0;
+    border-radius: 3px;
+}
+
+.combobox__text {
+    border: none;
+    font-size: 13px;
+    padding: 5px 10px;
+    padding-right: unset;
+    text-overflow: ellipsis;
+    background-color: white;
+    display: flex;
+    width: 100%;
+    outline: none;
+    color: #404040;
+    height: 33px;
+    box-sizing: border-box;
+}
+
+.combobox__icon {
+    width: 32px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+/* Vadidate dữ liệu */
+
+.error {
+    border: 1px solid #ff0000;
+}
+
+.valid {
+    border: 1px solid #636dde;
+}
+
+.combobox__icon:hover {
+    background: #dcdcdc;
+}
+
+.icon-dropdown {
+    width: 9px;
+    height: 4px;
+    background: url("../../assets/img/arrow-down-line.png") no-repeat;
+}
+
+
+/* #endregion */
+
+
+/* #region Phần List */
+
+
+/* Box */
+
+.box-box-table-autocomplete {
+    position: absolute;
+    left: 0;
+    top: 38px;
+    z-index: 100;
+}
+
+.box-table-autocomplete {
+    overflow-y: scroll;
+    border: 1px solid #babec5;
+    max-height: 300px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.combobox__list-result {
+    border-radius: 3px;
+    background-color: #fff;
+    outline: none;
+    border-spacing: 1px;
+}
+
+.combobox__title {
+    position: sticky;
+    top: 0px;
+    background: #e1e1e1;
+    height: 26px;
+}
+
+.title-code {
+    width: 117px;
+    padding: 0 10px;
+    background-color: transparent;
+    box-sizing: border-box;
+    text-align: center;
+    font-family: var(--font-main-bold);
+    font-size: 13px;
+}
+
+.title-name {
+    padding: 0 10px;
+    background-color: transparent;
+    text-align: center;
+    font-family: var(--font-main-bold);
+    font-size: 13px;
+}
+
+.combobox__element-result {
+    padding: 0 10px;
+    height: 29px;
+    font-size: 13px;
+    align-items: center;
+    background-color: #fff;
+    color: black;
+}
+
+.combobox__element-result:hover {
+    background-color: #6b6f9d;
+    color: white;
+}
+
+.combobox__element-result:hover .element-code,
+.combobox__element-result:hover .element-name {
+    color: white !important;
+}
+
+.select {
+    background-color: #6b6f9d;
+    color: black;
+}
+
+.select .element-code,
+.select .element-name {
+    color: white;
+}
+
+.combobox__element-result .element-code {
+    padding: 6px;
+    width: 107px;
+    box-sizing: border-box;
+    color: black !important;
+}
+
+.combobox__element-result .element-name {
+    padding: 6px;
+    color: black;
+}
+
+
+/* #endregion */

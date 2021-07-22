@@ -40,7 +40,7 @@
                 :type="'text'"
                 v-model="inventoryItem.inventoryItemName"
                 @blur="outInputSKUCode"
-                :required="true"
+                :required="isRequiredItemName"
               />
             </td>
           </tr>
@@ -51,22 +51,13 @@
             </td>
 
             <td class="table-add-item__td">
-              <select
-                name=""
-                id=""
-                class="headtb__select"
-                style="width: 238px"
-                v-model="inventoryItem.itemCategoryID"
-              >
-                <option
-                  v-for="(opt, index) in dataItemCategorys"
-                  :key="index"
-                  :value="opt.key"
-                  class="select-element"
-                >
-                  {{ opt.value }}
-                </option>
-              </select>
+              <BaseAutocomplete
+                :defaultKey="inventoryItem.itemCategoryID"
+                :id="'itemCategoryID'"
+                @change="handleAutoComplete"
+                :width="'238px'"
+                :selections="dataItemCategorys"
+              />
             </td>
           </tr>
           <!-- Mã SKUCode -->
@@ -192,22 +183,13 @@
             </td>
 
             <td class="table-add-item__td">
-              <select
-                name=""
-                id=""
-                class="headtb__select"
-                style="width: 238px"
-                v-model="inventoryItem.unitID"
-              >
-                <option
-                  v-for="(opt, index) in dataUnits"
-                  :key="index"
-                  :value="opt.key"
-                  class="select-element"
-                >
-                  {{ opt.value }}
-                </option>
-              </select>
+              <BaseAutocomplete
+                :defaultKey="inventoryItem.unitID"
+                :id="'unitID'"
+                @change="handleAutoComplete"
+                :width="'238px'"
+                :selections="dataUnits"
+              />
             </td>
           </tr>
           <!-- Tồn kho ban đầu -->
@@ -232,17 +214,19 @@
             <td class="table-add-item__td">
               <div style="display:flex">
                 <!-- Tồn kho tối thiểu -->
-                <div  class="baseinput__front">Tối thiểu</div>
+                <div class="baseinput__front">Tối thiểu</div>
                 <money
-                  v-model="inventoryItem.costPrice"
+                  v-model="inventoryItem.minimumStock"
                   v-bind="money"
                   style="width: 75px; text-align: right;"
                   class="baseinput__input has-front"
                 />
                 <!-- Tồn kho tối đa -->
-                <div style="margin-left:14px" class="baseinput__front">Tối đa</div>
+                <div style="margin-left:14px" class="baseinput__front">
+                  Tối đa
+                </div>
                 <money
-                  v-model="inventoryItem.costPrice"
+                  v-model="inventoryItem.maximumStock"
                   v-bind="money"
                   style="width: 75px; text-align: right;"
                   class="baseinput__input has-front"
@@ -350,7 +334,7 @@
               <div style="display:flex">
                 <!-- Ciều dài -->
                 <money
-                  v-model="inventoryItem.costPrice"
+                  v-model="inventoryItem.length"
                   v-bind="money"
                   style="width: 78.3px; text-align: right;"
                   class="baseinput__input"
@@ -358,14 +342,14 @@
                 />
                 <!-- Chiều rộng -->
                 <money
-                  v-model="inventoryItem.costPrice"
+                  v-model="inventoryItem.width"
                   v-bind="money"
                   style="width: 78.3px; text-align: right;"
                   class="baseinput__input"
                 />
                 <!-- Chiều cao -->
                 <money
-                  v-model="inventoryItem.costPrice"
+                  v-model="inventoryItem.height"
                   v-bind="money"
                   style="width: 78.3px; text-align: right;"
                   class="baseinput__input"
@@ -379,7 +363,14 @@
               <text-label>Mô tả</text-label>
             </td>
             <td class="table-add-item__td">
-              <textarea rows="4" cols="67"  style="height: auto;width: auto" type='text' v-model="inventoryItem.description" class="baseinput__input"/>
+              <textarea
+                rows="4"
+                cols="67"
+                style="height: auto;width: auto"
+                type="text"
+                v-model="inventoryItem.description"
+                class="baseinput__input"
+              />
             </td>
           </tr>
           <!-- Ảnh hàng hóa -->
@@ -432,6 +423,28 @@
     </div>
 
     <base-loading v-if="load.isShowLoad" :message="load.message" />
+    <base-alert
+      @change="handleAlert"
+      v-if="messageAlert.isShowAlert"
+      :id="messageAlert.id"
+      :type="messageAlert.type"
+      :title="messageAlert.title"
+      :numberOfButton="messageAlert.numberOfButton"
+    >
+      <span>{{ messageAlert.message.textNormal1 }}</span>
+      <span style="font-family: var(--font-main-bold)">{{
+        messageAlert.message.textBold
+      }}</span>
+      <span style="font-family: var(--font-main-bold);color: red">{{
+        messageAlert.message.textRed
+      }}</span>
+      <span>{{ messageAlert.message.textNormal2 }}</span>
+      <a
+        style="color: blue"
+        href="https://help.mshopkeeper.vn/vi/kb/lam_the_nao_de_xoa_duoc_hang_hoa_khi_da_co_phat_sinh"
+        >{{ messageAlert.message.textLink }}</a
+      >
+    </base-alert>
   </div>
 </template>
 
@@ -442,6 +455,8 @@ import TableItems from "../../components/TableItems.vue";
 import TextLabel from "../../components/TextLabel.vue";
 import PartCombo from "../../components/PartCombo.vue";
 import BaseLoading from "../../components/BaseLoading.vue";
+import BaseAutocomplete from "../../components/BaseAutocomplete.vue";
+import BaseAlert from "../../components/BaseAlert.vue";
 import Vue from "vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
@@ -455,6 +470,8 @@ export default {
     TextLabel,
     PartCombo,
     BaseLoading,
+    BaseAutocomplete,
+    BaseAlert,
     Money,
   },
   props: {
@@ -490,7 +507,13 @@ export default {
     this.listTableItems = this.detailItem.inventoryItemsColor;
     this.listColor = this.detailItem.colors;
     this.type = this.detailItem.inventoryItem.inventoryItemType;
-    this.createDataParts();
+    if (this.type == 2) {
+      this.createDataParts();
+    }
+  },
+  mounted() {
+    document.getElementById("inventoryItemName").focus();
+    this.isRequiredItemName = true;
   },
   data() {
     return {
@@ -524,6 +547,25 @@ export default {
         suffix: "",
         precision: 0,
         masked: false,
+      },
+
+      // Biến required cho trường tên
+      isRequiredItemName: false,
+
+      // Các biến của Alert cảnh báo
+      messageAlert: {
+        isShowAlert: false,
+        id: "",
+        title: "",
+        type: "",
+        numberOfButton: 2,
+        message: {
+          textNormal1: "",
+          textBold: "",
+          textRed: "",
+          textNormal2: "",
+          textLink: "",
+        },
       },
     };
   },
@@ -563,6 +605,12 @@ export default {
         this.dataParts[part] = list;
       } else if (state == "delete") {
         this.dataParts.splice(part, 1);
+
+        for (let index = 0; index < this.dataParts.length; index++) {
+          for (let a = 0; a < this.dataParts[index].length; a++) {
+            this.dataParts[index][a].part = index + 1;
+          }
+        }
       }
     },
     /**
@@ -595,11 +643,26 @@ export default {
      * Created By: LMCUONG(15/07/2021)
      */
     addItemColor(color) {
+      let name = "";
+      let sku = "";
+      if (
+        this.inventoryItem.inventoryItemName != undefined ||
+        this.inventoryItem.inventoryItemName != null
+      ) {
+        name = this.inventoryItem.inventoryItemName;
+      }
+
+      if (
+        this.inventoryItem.skuCode != undefined ||
+        this.inventoryItem.skuCode != null
+      ) {
+        sku = this.inventoryItem.skuCode;
+      }
+
       this.listTableItems.push({
         barCode: Date.now().toString(),
-        skuCode: this.inventoryItem.skuCode + " - " + color.color.toUpperCase(),
-        inventoryItemName:
-          this.inventoryItem.inventoryItemName + " (" + color.color + ")",
+        skuCode: sku + " - " + color.color.toUpperCase(),
+        inventoryItemName: name + " (" + color.color + ")",
         inventoryItemType: this.inventoryItem.inventoryItemType,
         itemCategoryID: this.inventoryItem.itemCategoryID,
         buyPrice: this.inventoryItem.buyPrice,
@@ -709,6 +772,17 @@ export default {
         .catch((error) => {
           // Tắt loading
           this.load.isShowLoad = false;
+          this.openAlert(
+            "add",
+            "MISA eShop",
+            "warning",
+            1,
+            error.response.data.userMsg,
+            "",
+            "",
+            "",
+            ""
+          );
           console.log(error);
         });
     },
@@ -743,6 +817,17 @@ export default {
         .catch((error) => {
           // Tắt loading
           this.load.isShowLoad = false;
+          this.openAlert(
+            "add",
+            "MISA eShop",
+            "warning",
+            1,
+            error.response.data.userMsg,
+            "",
+            "",
+            "",
+            ""
+          );
           // Hiện thị lỗi
           console.log(error.response.data.userMsg);
         });
@@ -805,7 +890,55 @@ export default {
           });
       }
     },
+    /** 
+    * Mở cửa sổ cảnh báo
+    * Created By: LMCUONG(22/07/2021) 
+    */
+    openAlert(
+      id,
+      title,
+      type,
+      numberOfButton,
+      textNormal1,
+      textBold,
+      textRed,
+      textNormal2,
+      textLink
+    ) {
+      // Khởi tại giá trị
+      this.messageAlert.id = id;
+      this.messageAlert.title = title;
+      this.messageAlert.type = type;
+      this.messageAlert.numberOfButton = numberOfButton;
+      this.messageAlert.message.textNormal1 = textNormal1;
+      this.messageAlert.message.textBold = textBold;
+      this.messageAlert.message.textRed = textRed;
+      this.messageAlert.message.textNormal2 = textNormal2;
+      this.messageAlert.message.textLink = textLink;
 
+      // Mở cửa sổ Popup
+      this.messageAlert.isShowAlert = true;
+    },
+
+    /**
+     * Trả lại giá trị từ Alert
+     * @param {string} id mã của đối tượng gọi Alert
+     * @returns {Number} value nút thứ mấy đang được bấm
+     * Created By: LMCUONG(19/07/2021)
+     */
+    handleAlert(id, value) {
+      console.log(id, value)
+      this.messageAlert.isShowAlert = false;
+    },
+    handleAutoComplete(id, selectResult) {
+      if (id == "itemCategoryID") {
+        this.inventoryItem.itemCategoryID = selectResult;
+      }
+
+      if (id == "unitID") {
+        this.inventoryItem.unitID = selectResult;
+      }
+    },
     //Kết hàm
   },
 };

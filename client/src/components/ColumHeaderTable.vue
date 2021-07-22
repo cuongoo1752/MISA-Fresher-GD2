@@ -21,13 +21,11 @@
       <input
         v-model="valueFieldInput"
         @blur="returnValueParent(type)"
+        @keyup.enter.stop="returnValueParent(type)"
         type="text"
         class="headtb__input-text"
       />
-      <ul
-        v-if="isShowSelect"
-        class="list"
-      >
+      <ul v-if="isShowSelect" class="list">
         <li class="element" @click="handleClick('*', 1)">*: Chứa</li>
         <li class="element" @click="handleClick('=', 2)">=: Bằng</li>
         <li class="element" @click="handleClick('+', 3)">
@@ -55,10 +53,7 @@
         type="text"
         class="headtb__input-text"
       />
-      <ul
-        v-if="isShowSelect"
-        class="list number-list"
-      >
+      <ul v-if="isShowSelect" class="list number-list">
         <li class="element" @click="handleClick('=', 1)">= : Bằng</li>
         <!-- eslint-disable-next-line vue/no-parsing-error -->
         <li class="element" @click="handleClick('<', 2)">< : Nhỏ hơn</li>
@@ -74,28 +69,28 @@
       </ul>
     </div>
     <div v-else-if="type == 'select'" class="headtb__input select">
-      <select
-        name=""
-        id=""
-        v-model="valueSelect"
-        @change="returnValueParent(type)"
-        class="headtb__select"
-      >
-        <option
-          v-for="(opt, index) in selectArray"
-          :key="index"
-          :value="opt.key"
-          class="select-element"
-        >
-          {{ opt.value }}
-        </option>
-      </select>
+      <BaseAutocomplete
+        :selections="selectArray"
+        :width="width"
+        :styleInput="{
+          borderRadius: '1px',
+          border: ' #e1e1e1 solid 1px !important',
+          fontSize: '12px',
+          height: '32px',
+        }"
+        :heightInput="'32px'"
+        @change="handleAutocomplete"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import BaseAutocomplete from "../components/BaseAutocomplete.vue";
 export default {
+  components: {
+    BaseAutocomplete,
+  },
 
   props: {
     // Các loại column table
@@ -184,7 +179,14 @@ export default {
      */
     returnValueParent(type) {
       if (this.type == "select") {
-        this.$emit("change", this.id, type, this.stateSort, 1, this.valueSelect);
+        this.$emit(
+          "change",
+          this.id,
+          type,
+          this.stateSort,
+          1,
+          this.valueSelect
+        );
       } else {
         this.$emit(
           "change",
@@ -196,16 +198,21 @@ export default {
         );
       }
     },
-    /** 
-    * Đặt thời gian để tắt select hiển thị
-    * Created By: LMCUONG(21/07/2021) 
-    */
-    setTimeOutShowSelete(){
+    /**
+     * Đặt thời gian để tắt select hiển thị
+     * Created By: LMCUONG(21/07/2021)
+     */
+    setTimeOutShowSelete() {
       let that = this;
-      setTimeout(function(){
+      setTimeout(function() {
         that.isShowSelect = false;
       }, 100);
-    }
+    },
+
+    handleAutocomplete(id, result) {
+      this.valueSelect = result;
+      this.returnValueParent(this.type);
+    },
   },
 };
 </script>

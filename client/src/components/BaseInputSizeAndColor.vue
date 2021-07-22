@@ -38,6 +38,7 @@
       </ul>
       <!-- input -->
       <input
+        tabindex="0"
         ref="sizecolorinput"
         @focus="isBorder = true"
         @blur="
@@ -46,10 +47,11 @@
         "
         v-model="value"
         @keyup.enter="addElementFromValue()"
-        @keyup.delete="popElementFromtValue()"
+        
         type="text"
         class="sizecolor__input"
       />
+      <!-- @keyup.delete="popElementFromtValue()" -->
     </div>
     <!-- Các component khác -->
     <base-alert

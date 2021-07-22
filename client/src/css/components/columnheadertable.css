@@ -89,7 +89,7 @@ input {
     position: absolute;
     left: 0px;
     top: 37px;
-    width: calc(100% + 20px);
+    width: 129px;
     background: white;
     border-radius: 1px;
     border: #dfdfdf 1px solid;

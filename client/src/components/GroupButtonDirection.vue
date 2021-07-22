@@ -26,10 +26,10 @@
 			<div class="refresh-icon groupbtn__icon"></div>
 			<p class="groupbtn__text">Nạp</p>
 		</div>
-		<div class=" groupbtn__btndir" @click="handleClickButton(6, 0)">
+		<!-- <div class=" groupbtn__btndir" @click="handleClickButton(6, 0)">
 			<div class="export-icon groupbtn__icon"></div>
 			<p class="groupbtn__text">Xuất khẩu</p>
-		</div>
+		</div> -->
 		
 	</div>
 </template>

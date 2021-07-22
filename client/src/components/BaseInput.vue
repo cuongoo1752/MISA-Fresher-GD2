@@ -14,7 +14,7 @@
       @blur.stop="handleBlueInput($event)"
     />
     <div
-      tabindex="0"
+      tabindex="10"
       id="dangerinput"
       ref="danger"
       v-show="isError"
@@ -83,8 +83,7 @@ export default {
     },
   },
   watch: {
-    watchState() {
-    },
+    watchState() {},
   },
 
   data() {
@@ -131,14 +130,17 @@ export default {
     focusInput() {
       this.$refs.input.focus();
       let refs = this.$refs;
-      this.textVadidate = "Trường này không được để trống";
+      if (this.required) {
+        this.textVadidate = "Trường này không được để trống";
         this.isError = true;
-      setTimeout(function(){
+      }
+
+      setTimeout(function() {
         document.getElementById("dangerinput").focus();
-      }, 30)
-      setTimeout(function(){
+      }, 30);
+      setTimeout(function() {
         refs.input.focus();
-      }, 600)
+      }, 600);
     },
   },
 };

@@ -364,6 +364,17 @@ export default {
           }
         })
         .catch((error) => {
+          this.openAlert(
+            "add",
+            "MISA eShop",
+            "warning",
+            1,
+            error.response.data.userMsg,
+            "",
+            "",
+            "",
+            ""
+          );
           console.log(error);
         });
       // Láy dữ liệu nhóm hàng hóa
@@ -380,6 +391,17 @@ export default {
           }
         })
         .catch((error) => {
+          this.openAlert(
+            "add",
+            "MISA eShop",
+            "warning",
+            1,
+            error.response.data.userMsg,
+            "",
+            "",
+            "",
+            ""
+          );
           console.log(error);
         });
     },
@@ -431,6 +453,14 @@ export default {
           }
         }
         this.refreshPage();
+      }
+
+      //Sửa hàng hóa
+      if (buttonType == 3) {
+        this.UpdateInventoryItem(
+          this.itemSelect.inventoryItemID,
+          this.itemSelect.inventoryItemType
+        );
       }
 
       // Nhân bản - Test
@@ -612,6 +642,10 @@ export default {
      */
     openDetailItem(type, state) {
       this.detailItem.inventoryItem.inventoryItemType = type;
+
+      if(state == 'add'){
+        this.detailItem.inventoryItem.showInMenu = true;
+      }
       this.stateDetailItem = state;
       this.isShowDetailItem = true;
     },
@@ -648,6 +682,17 @@ export default {
           this.load.message = "...";
         })
         .catch((error) => {
+          this.openAlert(
+            "add",
+            "MISA eShop",
+            "warning",
+            1,
+            error.response.data.userMsg,
+            "",
+            "",
+            "",
+            ""
+          );
           console.log(error);
           // Tắt loading
           this.load.isShowLoad = false;
@@ -802,6 +847,17 @@ export default {
           //Format dữ liệu nhận vào
         })
         .catch((error) => {
+          this.openAlert(
+            "add",
+            "MISA eShop",
+            "warning",
+            1,
+            error.response.data.userMsg,
+            "",
+            "",
+            "",
+            ""
+          );
           console.log(error);
         });
     },
