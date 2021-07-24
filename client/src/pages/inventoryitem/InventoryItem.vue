@@ -66,7 +66,7 @@
                   :type="'number'"
                   :width="'104px'"
                   :id="'BuyPrice'"
-                  :title="'Giá bán TB'"
+                  :title="'Giá bán'"
                   @change="handleChangeColumnHeaderTable"
                 />
               </th>
@@ -152,8 +152,18 @@
                   {{ inventoryItem.skuCode }}
                 </p>
               </td>
-              <td class="items-element">
-                <p class="item-text">{{ inventoryItem.inventoryItemName }}</p>
+              <td class="items-element ">
+                <p
+                  @click.stop="
+                    UpdateInventoryItem(
+                      inventoryItem.inventoryItemID,
+                      inventoryItem.inventoryItemType
+                    )
+                  "
+                  class="item-text items-element-name"
+                >
+                  {{ inventoryItem.inventoryItemName }}
+                </p>
               </td>
               <td class="items-element">
                 <p class="item-text" style="width:108px">
@@ -166,7 +176,9 @@
                 </p>
               </td>
               <td class="items-element">
-                <p class="item-text">{{ inventoryItem.buyPrice }}</p>
+                <p class="item-text">
+                  {{ inventoryItem.buyPrice.toLocaleString() }}
+                </p>
               </td>
               <td class="items-element">
                 <p class="item-text">{{ inventoryItem.showInMenuName }}</p>
@@ -465,6 +477,10 @@ export default {
 
       // Nhân bản - Test
       if (buttonType == 2) {
+        this.UpdateInventoryItem(
+          this.itemSelect.inventoryItemID,
+          this.itemSelect.inventoryItemType
+        );
         console.log(this.listStyleRowByID);
       }
     },
@@ -643,7 +659,7 @@ export default {
     openDetailItem(type, state) {
       this.detailItem.inventoryItem.inventoryItemType = type;
 
-      if(state == 'add'){
+      if (state == "add") {
         this.detailItem.inventoryItem.showInMenu = true;
       }
       this.stateDetailItem = state;

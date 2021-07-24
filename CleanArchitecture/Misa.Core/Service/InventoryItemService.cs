@@ -580,6 +580,8 @@ namespace Misa.Core.Service
                 }
             }
 
+            Guid ParentID = inventoryItems[0].InventoryItemID;
+
             // Chuyển đối tượng chính sang mảng Update
             updateItems.Add(inventoryItems[0]);
             inventoryItems.RemoveAt(0);
@@ -609,7 +611,9 @@ namespace Misa.Core.Service
                 await InsertCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.SKUCode, null, item.SKUCode);
                 await InsertCodeMax(Properties.Resources.InventoryItemTable, Properties.Resources.BarCode, null, item.BarCode);
 
-
+                // Gán mã mới
+                item.InventoryItemID = Guid.NewGuid();
+                item.ParentID = ParentID;
             }
             // Mảng chỉnh sửa
             if(isValid == false)

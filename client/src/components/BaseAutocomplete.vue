@@ -21,7 +21,7 @@
       >
         <input
          tabindex="0"
-          @blur="blurInput"
+          @blur.stop="blurInput"
           v-on:keydown.tab="closeAutoComplete"
           v-on:keyup="findSelectForInput($event)"
           @focus="focusInput"
@@ -94,7 +94,7 @@ export default {
     },
     heightInput:{
       type: String,
-      default: '36px'
+      default: '34px'
     },
     numberOfTableColumn: {
       type: Number,

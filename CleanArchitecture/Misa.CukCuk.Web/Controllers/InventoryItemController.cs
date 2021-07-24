@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Misa.Core.Entities;
 using Misa.Core.Entities.Category;
@@ -9,6 +10,7 @@ using Misa.Core.Interfaces.Repository;
 using Misa.Core.Interfaces.Services;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,13 +23,15 @@ namespace Misa.CukCuk.Web.Controllers
         #region DECLARE
         IInventoryItemRepository _inventoryItemRepository;
         IInventoryItemService _inventoryItemServices;
+        public static IWebHostEnvironment _environment;
         #endregion
 
         #region CONSTRUCTOR
-        public InventoryItemController(IInventoryItemRepository inventoryItemRepository, IInventoryItemService inventoryItemServices)
+        public InventoryItemController(IInventoryItemRepository inventoryItemRepository, IInventoryItemService inventoryItemServices, IWebHostEnvironment environment)
         {
             _inventoryItemRepository = inventoryItemRepository;
-            _inventoryItemServices = inventoryItemServices;
+            _inventoryItemServices = inventoryItemServices; 
+            _environment = environment;
         }
         #endregion
 
@@ -54,6 +58,8 @@ namespace Misa.CukCuk.Web.Controllers
             {
                 return BadRequest(result);
             }
+
+
         }
 
         [HttpGet("SKUCodeMax")]
@@ -167,6 +173,8 @@ namespace Misa.CukCuk.Web.Controllers
         [HttpPost("InsertMerchandise")]
         public async Task<IActionResult> InsertInventoryItem([FromBody] DetailItem detailItem)
         {
+            detailItem.inventoryItem = HandlePicture(detailItem.inventoryItem);
+
             int rowAffect = await _inventoryItemServices.InsertMerchandises(detailItem);
 
             return Ok(new ActionServiceResult() {
@@ -182,6 +190,9 @@ namespace Misa.CukCuk.Web.Controllers
         [HttpPost("InsertCombo")]
         public async Task<IActionResult> InsertCombo([FromBody] DetailItem detailItem)
         {
+            // Xử lý ảnh
+            detailItem.inventoryItem = HandlePicture(detailItem.inventoryItem);
+
             int rowAffect = await _inventoryItemServices.InsertCombos(detailItem);
 
             return Ok(new ActionServiceResult()
@@ -207,6 +218,9 @@ namespace Misa.CukCuk.Web.Controllers
         [HttpPut("UpdateMerchandise")] 
         public async Task<IActionResult> UpdateInventoryItem([FromBody] DetailItem detailItem)
         {
+            // Xử lý ảnh
+            detailItem.inventoryItem = HandlePicture(detailItem.inventoryItem);
+
             int rowAffect = await _inventoryItemServices.UpdateMerchandises(detailItem);
 
             return Ok(new ActionServiceResult()
@@ -224,6 +238,8 @@ namespace Misa.CukCuk.Web.Controllers
         [HttpPut("UpdateCombo")]
         public async Task<IActionResult> UpdateCombo([FromBody] DetailItem detailItem)
         {
+            detailItem.inventoryItem = HandlePicture(detailItem.inventoryItem);
+
             int rowAffect = await _inventoryItemServices.UpdateCombos(detailItem);
 
             return Ok(new ActionServiceResult()
@@ -236,6 +252,82 @@ namespace Misa.CukCuk.Web.Controllers
                 Code = MISACode.Success,
                 Messenge = "Thêm mới thành công!"
             });
+        }
+
+        [HttpPost("HandlePicture")]
+        public InventoryItem HandlePicture(InventoryItem inventoryItem)
+        {
+            try
+            {
+                // Nếu không có folder tạo folder
+                if (!Directory.Exists(_environment.WebRootPath + "\\InventoryItem\\"))
+                {
+                    Directory.CreateDirectory(_environment.WebRootPath + "\\InventoryItem\\");
+                }
+                if (!string.IsNullOrWhiteSpace(inventoryItem.PictureBase64))
+                {
+
+                    // Tạo đường dẫn từ file mới tải
+                    byte[] bytes = Convert.FromBase64String(inventoryItem.PictureBase64);
+
+                    //Tạo kiểu có ảnh
+                    System.Drawing.Imaging.ImageFormat imageFormat = System.Drawing.Imaging.ImageFormat.Png;
+
+                    string[] pictureType = inventoryItem.PictureType.Split("/");
+
+                    if (pictureType[0].Equals("image"))
+                    {
+                        // Gán kiểu cho ảnh
+                        if (pictureType[1].Equals("jpg") || pictureType[1].Equals("jpeg"))
+                        {
+                            imageFormat = System.Drawing.Imaging.ImageFormat.Jpeg;
+                        }
+                        else if (pictureType[1].Equals("tiff"))
+                        {
+                            imageFormat = System.Drawing.Imaging.ImageFormat.Tiff;
+                        }
+                        else if (pictureType[1].Equals("gif"))
+                        {
+                            imageFormat = System.Drawing.Imaging.ImageFormat.Gif;
+
+                        }
+                        else if (pictureType[1].Equals("bmp"))
+                        {
+                            imageFormat = System.Drawing.Imaging.ImageFormat.Bmp;
+                        }
+
+
+                        // Nếu đã có đường dẫn file, xóa file
+                        if (!string.IsNullOrEmpty(inventoryItem.PictureLocation))
+                        {
+                            FileInfo filea = new FileInfo(_environment.WebRootPath + inventoryItem.PictureLocation);
+
+                            if (filea.Length > 0)
+                            {
+                                filea.Delete();
+                            }
+                        }
+
+                        // Tạo file ảnh
+                        inventoryItem.PictureID = Guid.NewGuid();
+                        System.Drawing.Image image;
+                        using (MemoryStream ms = new MemoryStream(bytes))
+                        {
+                            image = System.Drawing.Image.FromStream(ms);
+                        }
+
+                        image.Save(_environment.WebRootPath + "\\InventoryItem\\" + inventoryItem.PictureID + inventoryItem.PictureName, imageFormat);
+                        inventoryItem.PictureLocation = "\\InventoryItem\\" + inventoryItem.PictureID + inventoryItem.PictureName;
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+
+                return inventoryItem;
+            }
+            return inventoryItem;
         }
         #endregion
 

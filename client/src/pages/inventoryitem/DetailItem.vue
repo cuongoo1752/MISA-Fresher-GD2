@@ -24,8 +24,35 @@
         <tbody class="table-add-item__tbody">
           <!-- THÔNG TIN CƠ BẢN -->
           <tr class="table-add-item__body-tr">
-            <td class="table-add-item__td" colspan="2">
+            <td class="table-add-item__td" colspan="2" style="padding-top: 0">
               <h1 class="table-add-item__title">THÔNG TIN CƠ BẢN</h1>
+            </td>
+          </tr>
+
+          <!-- Trạng thái kinh doanh -->
+          <tr v-if="state == 'update'" class="table-add-item__body-tr">
+            <td class="table-add-item__td" style="width: 168px">
+              <text-label>Trạng thái kinh doanh</text-label>
+            </td>
+            <td class="table-add-item__td" style="height: 29px;">
+              <div style="display: flex; align-item: center;">
+                <input
+                  type="radio"
+                  class="radio"
+                  v-model="inventoryItem.state"
+                  value="2"
+                  style="margin-left: 2px;margin-right: 5px;"
+                />
+                Đang kinh doanh
+                <input
+                  type="radio"
+                  class="radio"
+                  v-model="inventoryItem.state"
+                  style="margin-left: 5px;margin-right: 5px;"
+                  value="3"
+                />
+                Ngừng kinh doanh
+              </div>
             </td>
           </tr>
           <!-- Tên hàng hóa -->
@@ -84,6 +111,7 @@
             <td class="table-add-item__td">
               <BaseInput
                 :type="'text'"
+                :disabled="listColor.length > 0"
                 :placeholder="'Hệ thống tự sinh khi bỏ trống'"
                 v-model="inventoryItem.barCode"
               />
@@ -155,6 +183,7 @@
             </td>
             <td class="table-add-item__td">
               <money
+                :disabled="listColor.length > 0"
                 v-model="inventoryItem.buyPrice"
                 v-bind="money"
                 style="width: 153px; text-align: right;"
@@ -169,6 +198,7 @@
             </td>
             <td class="table-add-item__td">
               <money
+                :disabled="listColor.length > 0"
                 v-model="inventoryItem.costPrice"
                 v-bind="money"
                 style="width: 153px; text-align: right;"
@@ -199,11 +229,15 @@
             </td>
             <td class="table-add-item__td">
               <money
+                :disabled="listColor.length > 0"
                 v-model="inventoryItem.initStock"
                 v-bind="money"
                 style="width:111px; text-align: right;"
                 class="baseinput__input"
               />
+              <span class="text-initstock"
+                >Tồn kho ban đầu chỉ được nhập khi thêm mới hàng hóa.</span
+              >
             </td>
           </tr>
           <!-- Đinh mức tồn kho -->
@@ -259,6 +293,7 @@
                 <input
                   type="checkbox"
                   class="checkbox"
+                  tabindex="0"
                   v-model="inventoryItem.showInMenu"
                 />
                 <text-label
@@ -273,7 +308,11 @@
           </tr>
           <!-- THÔNG TIN THUỘC TÍNH -->
           <tr v-if="type == 1 || type == 3" class="table-add-item__body-tr">
-            <td class="table-add-item__td" colspan="2">
+            <td
+              class="table-add-item__td"
+              colspan="2"
+              style="padding-top: 16px"
+            >
               <h1 class="table-add-item__title">THÔNG TIN THUỘC TÍNH</h1>
             </td>
           </tr>
@@ -300,14 +339,16 @@
               <text-label>Chi tiết thuộc tính</text-label>
             </td>
             <td class="table-add-item__td">
-              <div style="padding-top: 5px;padding-bottom: 5px">
-                <TableItems @change="handleTableItem" :list="listTableItems" />
-              </div>
+              <TableItems @change="handleTableItem" :list="listTableItems" />
             </td>
           </tr>
           <!-- THÔNG TIN BỔ XUNG -->
           <tr class="table-add-item__body-tr">
-            <td class="table-add-item__td" colspan="2">
+            <td
+              class="table-add-item__td"
+              colspan="2"
+              style="padding-top: 16px"
+            >
               <h1 class="table-add-item__title">THÔNG TIN BỔ XUNG</h1>
             </td>
           </tr>
@@ -333,26 +374,32 @@
             <td class="table-add-item__td">
               <div style="display:flex">
                 <!-- Ciều dài -->
-                <money
+                <input
+                  :type="typeInputLength"
+                  @focus="typeInputLength = 'number'"
                   v-model="inventoryItem.length"
                   v-bind="money"
-                  style="width: 78.3px; text-align: right;"
-                  class="baseinput__input"
-                  placeholder="chiều dài"
+                  class="baseinput__input baseinput-length"
+                  placeholder="Chiều dài"
                 />
                 <!-- Chiều rộng -->
-                <money
+                <input
+                  :type="typeInputLength"
+                  @focus="typeInputLength = 'number'"
                   v-model="inventoryItem.width"
                   v-bind="money"
-                  style="width: 78.3px; text-align: right;"
-                  class="baseinput__input"
+                  class="baseinput__input baseinput-width"
+                  placeholder="Chiều rộng"
                 />
+
                 <!-- Chiều cao -->
-                <money
+                <input
+                  :type="typeInputLength"
+                  @focus="typeInputLength = 'number'"
                   v-model="inventoryItem.height"
                   v-bind="money"
-                  style="width: 78.3px; text-align: right;"
-                  class="baseinput__input"
+                  class="baseinput__input baseinput-height"
+                  placeholder="Chiều cao"
                 />
               </div>
             </td>
@@ -362,7 +409,7 @@
             <td class="table-add-item__td">
               <text-label>Mô tả</text-label>
             </td>
-            <td class="table-add-item__td">
+            <td class="table-add-item__td td-description">
               <textarea
                 rows="4"
                 cols="67"
@@ -379,23 +426,39 @@
               <text-label>Ảnh hàng hóa</text-label>
             </td>
             <td class="table-add-item__td">
-              <div class="inputimage">
-                <div
-                  @click="$refs.inputlogo.click()"
-                  class="inputimage__logg-box"
-                >
-                  <div class="inputimage__icon"></div>
-                  <p class="inputimage__text">Biểu tượng</p>
+              <div class="inputimage-box">
+                <div class="inputimage">
+                <div style="display:flex; justify-content: center;">
+                  <img :src="srcImage" class="inputimage__image" />
                 </div>
-
-                <div class="inputimage__image"></div>
-                <div @click="$refs.inputimage.click()" class="inputimage__file">
+                <div
+                  tabindex="0"
+                  @click="$refs.inputimage.click()"
+                  class="inputimage__file"
+                >
                   ...
                 </div>
 
-                <input ref="inputlogo" style="display:none" type="file" />
-                <input ref="inputimage" style="display:none" type="file" />
+                <input
+                  @change="convertImageToBase64($event)"
+                  ref="inputimage"
+                  style="display:none"
+                  type="file"
+                />
               </div>
+
+              <div class="text-note-image">
+                <p class="text-note-image__text">
+                  - Lựa chọn biểu tượng để thay thế nếu không có ảnh
+                </p>
+                 
+                <p class="text-note-image__text">
+                  <!-- eslint-disable-next-line -->
+                  - Định dạng ảnh (.jpg, .jpeg, .png, .gif) và dung lượng < 5MB
+                </p>
+              </div>
+              </div>
+              
             </td>
           </tr>
         </tbody>
@@ -510,6 +573,18 @@ export default {
     if (this.type == 2) {
       this.createDataParts();
     }
+
+    if (this.state == "add") {
+      this.inventoryItem.state = 2;
+    }
+
+    if (
+      this.inventoryItem.pictureLocation != null &&
+      this.inventoryItem.pictureLocation.length > 0
+    ) {
+      this.srcImage =
+        "https://localhost:44371" + this.inventoryItem.pictureLocation;
+    }
   },
   mounted() {
     document.getElementById("inventoryItemName").focus();
@@ -567,6 +642,13 @@ export default {
           textLink: "",
         },
       },
+
+      // Nguồn ảnh hiển thị
+      srcImage: "http://localhost:8080/img/item.e1e109ea.png",
+      srcImageBase64: null,
+
+      //
+      typeInputLength: "text",
     };
   },
   methods: {
@@ -575,6 +657,7 @@ export default {
      * Created By: LMCUONG(20/07/2021)
      */
     createDataParts() {
+      console.log(this.listTableItems[index])
       for (let index in this.listTableItems) {
         if (this.listTableItems[index].part > this.dataParts.length) {
           let lengPartsAdd =
@@ -661,7 +744,7 @@ export default {
 
       this.listTableItems.push({
         barCode: Date.now().toString(),
-        skuCode: sku + " - " + color.color.toUpperCase(),
+        skuCode: sku + " - " + this.removeAccents(color.color).toUpperCase(),
         inventoryItemName: name + " (" + color.color + ")",
         inventoryItemType: this.inventoryItem.inventoryItemType,
         itemCategoryID: this.inventoryItem.itemCategoryID,
@@ -690,6 +773,35 @@ export default {
         modifiedDate: null,
         modifiedBy: null,
       });
+    },
+    /**
+     * Chuyển chữ có dấu thành chữ không dấu
+     * (str) chuỗi có dấu
+     * return: chuỗi không dấu
+     */
+    removeAccents(str) {
+      var AccentsMap = [
+        "aàảãáạăằẳẵắặâầẩẫấậ",
+        "AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬ",
+        "dđ",
+        "DĐ",
+        "eèẻẽéẹêềểễếệ",
+        "EÈẺẼÉẸÊỀỂỄẾỆ",
+        "iìỉĩíị",
+        "IÌỈĨÍỊ",
+        "oòỏõóọôồổỗốộơờởỡớợ",
+        "OÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢ",
+        "uùủũúụưừửữứự",
+        "UÙỦŨÚỤƯỪỬỮỨỰ",
+        "yỳỷỹýỵ",
+        "YỲỶỸÝỴ",
+      ];
+      for (var i = 0; i < AccentsMap.length; i++) {
+        var re = new RegExp("[" + AccentsMap[i].substr(1) + "]", "g");
+        var char = AccentsMap[i][0];
+        str = str.replace(re, char);
+      }
+      return str;
     },
     /**
      * Xóa đôi tượng màu sắc trong danh sách màu sắc
@@ -829,7 +941,6 @@ export default {
             ""
           );
           // Hiện thị lỗi
-          console.log(error.response.data.userMsg);
         });
     },
     /**
@@ -890,10 +1001,10 @@ export default {
           });
       }
     },
-    /** 
-    * Mở cửa sổ cảnh báo
-    * Created By: LMCUONG(22/07/2021) 
-    */
+    /**
+     * Mở cửa sổ cảnh báo
+     * Created By: LMCUONG(22/07/2021)
+     */
     openAlert(
       id,
       title,
@@ -927,7 +1038,6 @@ export default {
      * Created By: LMCUONG(19/07/2021)
      */
     handleAlert(id, value) {
-      console.log(id, value)
       this.messageAlert.isShowAlert = false;
     },
     handleAutoComplete(id, selectResult) {
@@ -938,6 +1048,41 @@ export default {
       if (id == "unitID") {
         this.inventoryItem.unitID = selectResult;
       }
+    },
+
+    convertImageToBase64(event) {
+      var thisDetailItem = this;
+
+      let file = event.target.files[0];
+      this.getBase64(file)
+        .then(function(data) {
+          thisDetailItem.srcImage = data;
+
+          if (file.type != "image/jpg" && file.type != "image/jpeg") {
+            data = data.slice(22);
+          }
+
+          if (file.type == "image/jpg" || file.type == "image/jpeg") {
+            data = data.slice(23);
+          }
+
+          thisDetailItem.inventoryItem.pictureType = file.type;
+          thisDetailItem.inventoryItem.pictureBase64 = data;
+          thisDetailItem.inventoryItem.pictureName = file.name;
+          console.log(thisDetailItem.inventoryItem);
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    },
+
+    getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = (error) => reject(error);
+      });
     },
     //Kết hàm
   },

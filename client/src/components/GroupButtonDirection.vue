@@ -6,14 +6,14 @@
 			<div class="add-select" @click.stop="isShowAddSelelct = !isShowAddSelelct"></div>
 			<ul class="add-list" v-if="isShowAddSelelct" tabindex="0" @blur="isShowAddSelelct = false">
 				<li class="add-element"  @click.stop="handleClickButton(1, 1)">Thêm mới hàng hóa</li>
-				<li class="add-element" @click.stop="handleClickButton(1, 2)">Thêm mới Combo</li>
+				<li class="add-element" @click.stop="handleClickButton(1, 2)">Thêm mới combo</li>
 				<li class="add-element" @click.stop="handleClickButton(1, 3)">Thêm mới dịch vụ</li>
 			</ul>
 		</div>
-		<div class=" groupbtn__btndir" @click="handleClickButton(2, 0)">
+		<!-- <div class=" groupbtn__btndir" @click="handleClickButton(2, 0)">
 			<div class="dup-icon groupbtn__icon"></div>
 			<p class="groupbtn__text">Nhân bản</p>
-		</div>
+		</div> -->
 		<div class=" groupbtn__btndir" @click="handleClickButton(3, 0)">
 			<div class="fix-icon groupbtn__icon"></div>
 			<p class="groupbtn__text">Sửa</p>

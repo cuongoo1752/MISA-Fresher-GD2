@@ -23,6 +23,42 @@
     <Language>US</Language>
   </Settings>
   <Tables>
+    <Table Name="autoincrementcode">
+      <Checked>false</Checked>
+      <Settings>
+        <Truncate>true</Truncate>
+        <RowsToGenerate>0</RowsToGenerate>
+        <PopulationDetails>
+          <PopulationType>RowsCount</PopulationType>
+          <RowsCount>200</RowsCount>
+          <LookupProportion>30</LookupProportion>
+          <ProportionOfExistingData>10</ProportionOfExistingData>
+          <TimeTicksToPopulate>100000000</TimeTicksToPopulate>
+        </PopulationDetails>
+      </Settings>
+      <Columns>
+        <Column Name="TabeName">
+          <Checked>false</Checked>
+          <DataType>VARCHAR</DataType>
+          <Length>255</Length>
+        </Column>
+        <Column Name="CodeName">
+          <Checked>false</Checked>
+          <DataType>VARCHAR</DataType>
+          <Length>255</Length>
+        </Column>
+        <Column Name="Prefix">
+          <Checked>false</Checked>
+          <DataType>VARCHAR</DataType>
+          <Length>20</Length>
+        </Column>
+        <Column Name="Value">
+          <Checked>false</Checked>
+          <DataType>BIGINT</DataType>
+          <Precision>20</Precision>
+        </Column>
+      </Columns>
+    </Table>
     <Table Name="itemcategory">
       <Checked>true</Checked>
       <Settings>
@@ -486,7 +522,7 @@
         <RowsToGenerate>0</RowsToGenerate>
         <PopulationDetails>
           <PopulationType>RowsCount</PopulationType>
-          <RowsCount>300</RowsCount>
+          <RowsCount>800</RowsCount>
           <LookupProportion>30</LookupProportion>
           <ProportionOfExistingData>10</ProportionOfExistingData>
           <TimeTicksToPopulate>100000000</TimeTicksToPopulate>
@@ -548,77 +584,9 @@
           <GeneratorDescription>values based on a regular expression</GeneratorDescription>
           <Length>100</Length>
         </Column>
-        <Column Name="InventoryName">
-          <Checked>true</Checked>
+        <Column Name="InventoryItemName">
+          <Checked>false</Checked>
           <DataType>VARCHAR</DataType>
-          <GeneratorOptions xsi:type="MySqlRegularExpressionGeneratorOptions">
-            <AllowEmptyStrings>false</AllowEmptyStrings>
-            <EmptyStringProportion>10</EmptyStringProportion>
-            <AllowNulls>false</AllowNulls>
-            <NullProportion>10</NullProportion>
-            <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>3</SeedValue>
-            <Unique>false</Unique>
-            <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Expression>Kính mắt|Ốp lưng|Bông tẩy trang|Quần jean|Quần đùi|Quần kaki|Áo sơ mi|Áo phông|Váy|Váy xòe|Đầm|Mũ|Nón|Găng Tay|Điện thoại|Máy tính|Tai nghe|Ipad|Ti vi|Tủ lạnh|Điền hòa|Máy ảnh|Camera|Đồng hồ|Giày|Dép|Quạt|Ấm Siêu tốc|Thẻ cào|Thẻ game|Dịch vụ Mát xa|Chuyến đi chơi Hồ Chí Minh|Ô tô|Xe máy|Nồi cơm điện|Phấn|Son|Tập Gym 3 tháng|Sách|Truyện
-|7up
-|Aquafina
-|Vang đỏ Apec 375ml
-|Askitikos dry red( đỏ)
-|Askitikos dry white( trắng)
-|V085 Sepia Reserva
-|Ballantine 21
-|Ballantine 30
-|Beluga 0.7l
-|Beluga 1l
-|Bia hơi Hải Phòng
-|Bia hơi Hà Nội
-|Bia hơi HUDA Huế
-|Bia hơi Sài Gòn
-|Bia hơi Việt Hà
-|Bia đen 0.3 L
-|Bia đen 0.5 L
-|Bia đen 1 L
-|Bia đen 30 L
-|Bia đen 50 L
-|Bia Hà Nội
-|Bia heineken
-|Bia larue
-|Bia Sài Gòn
-|Bia vàng 0.3 L
-|Bia vàng 0.5 L
-|Bia vàng 1 L
-|Bia vàng 30 L
-|Bia vàng 50 L
-|Bò húc
-|C2
-|Cabernet
-|Cá sấu
-|Vang Cavit đỏ
-|Vang Chateau Đỏ Merlot 750ml
-|Vang Chateau Trắng 750ml
-|Rượu Chivas 12 năm
-|Rượu Chivas 18 năm
-|Rượu Chivas 21 năm
-|Rượu Chivas 38 năm
-|Chivas Revolve
-|Cocacola
-|Château Đalat 750ml
-|Dalat wine cooler đào 720ml
-|Dalat wine cooler dâu rừng 720ml
-|Dalat wine cooler dâu tây 720ml
-|DANZKA nhôm trắng 0.7l
-|DANZKA nhôm trắng 1l
-|Diet Pepsi
-|Vang Excellence Đỏ 750ml
-|Vang Excellent Trắng 750ml
-|Vang Export Đỏ 375ml
-|Vang Export Đỏ 750ml</Expression>
-          </GeneratorOptions>
-          <GeneratorType>MySqlRegularExpressionGenerator</GeneratorType>
-          <GeneratorName>NickName</GeneratorName>
-          <GeneratorDescription>Jodi1982, Nancey777, Terrance28, Erich95, Cindi1, Salena92, Pasquale2015, ...</GeneratorDescription>
-          <GeneratorCategory>Personal</GeneratorCategory>
           <Length>255</Length>
         </Column>
         <Column Name="InventoryItemType">
@@ -635,7 +603,7 @@
             <MinValue>1</MinValue>
             <MaxValue>3</MaxValue>
             <UseDefault>false</UseDefault>
-            <DefaultValue>NULL</DefaultValue>
+            <DefaultValue>1</DefaultValue>
           </GeneratorOptions>
           <GeneratorType>MySqlIntegerGenerator</GeneratorType>
           <GeneratorName>int</GeneratorName>
@@ -666,49 +634,47 @@
         </Column>
         <Column Name="BuyPrice">
           <Checked>true</Checked>
-          <DataType>DECIMAL</DataType>
-          <GeneratorOptions xsi:type="DecimalGeneratorOptions">
-            <AllowNulls>false</AllowNulls>
-            <NullProportion>10</NullProportion>
-            <Unique>false</Unique>
-            <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Increment xsi:type="xsd:decimal">1</Increment>
-            <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>3</SeedValue>
-            <MinValue>99</MinValue>
-            <MaxValue>999</MaxValue>
-            <UseDefault>false</UseDefault>
-            <DefaultValue>NULL</DefaultValue>
-          </GeneratorOptions>
-          <GeneratorType>MySqlDecimalGenerator</GeneratorType>
-          <GeneratorName>Product Cost</GeneratorName>
-          <GeneratorDescription>379, 942, 158, 261, ...</GeneratorDescription>
-          <GeneratorCategory>Product</GeneratorCategory>
-          <Scale>4</Scale>
-          <Precision>10</Precision>
-        </Column>
-        <Column Name="CostPrice">
-          <Checked>true</Checked>
-          <DataType>DECIMAL</DataType>
-          <GeneratorOptions xsi:type="DecimalGeneratorOptions">
+          <DataType>INT</DataType>
+          <GeneratorOptions xsi:type="MySqlIntegerGeneratorOptions">
             <AllowNulls>true</AllowNulls>
             <NullProportion>10</NullProportion>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Increment xsi:type="xsd:decimal">1</Increment>
+            <Increment xsi:type="xsd:int">1</Increment>
             <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>4</SeedValue>
+            <SeedValue>5</SeedValue>
             <MinValue>99</MinValue>
-            <MaxValue>999</MaxValue>
+            <MaxValue>1999</MaxValue>
             <UseDefault>false</UseDefault>
-            <DefaultValue>NULL</DefaultValue>
+            <DefaultValue>0</DefaultValue>
           </GeneratorOptions>
-          <GeneratorType>MySqlDecimalGenerator</GeneratorType>
+          <GeneratorType>MySqlIntegerGenerator</GeneratorType>
           <GeneratorName>Product Cost</GeneratorName>
-          <GeneratorDescription>379, 942, 158, 261, ...</GeneratorDescription>
+          <GeneratorDescription>379, 1942, 158, 261, ...</GeneratorDescription>
           <GeneratorCategory>Product</GeneratorCategory>
-          <Scale>4</Scale>
-          <Precision>10</Precision>
+          <Precision>11</Precision>
+        </Column>
+        <Column Name="CostPrice">
+          <Checked>true</Checked>
+          <DataType>INT</DataType>
+          <GeneratorOptions xsi:type="MySqlIntegerGeneratorOptions">
+            <AllowNulls>true</AllowNulls>
+            <NullProportion>10</NullProportion>
+            <Unique>false</Unique>
+            <IsAlwaysUnique>false</IsAlwaysUnique>
+            <Increment xsi:type="xsd:int">1</Increment>
+            <ValueDistributionMode>Seed</ValueDistributionMode>
+            <SeedValue>6</SeedValue>
+            <MinValue>99</MinValue>
+            <MaxValue>1999</MaxValue>
+            <UseDefault>false</UseDefault>
+            <DefaultValue>0</DefaultValue>
+          </GeneratorOptions>
+          <GeneratorType>MySqlIntegerGenerator</GeneratorType>
+          <GeneratorName>Product Cost</GeneratorName>
+          <GeneratorDescription>379, 1942, 158, 261, ...</GeneratorDescription>
+          <GeneratorCategory>Product</GeneratorCategory>
+          <Precision>11</Precision>
         </Column>
         <Column Name="UnitID">
           <Checked>true</Checked>
@@ -734,71 +700,66 @@
         </Column>
         <Column Name="InitStock">
           <Checked>true</Checked>
-          <DataType>DECIMAL</DataType>
-          <GeneratorOptions xsi:type="DecimalGeneratorOptions">
+          <DataType>INT</DataType>
+          <GeneratorOptions xsi:type="MySqlIntegerGeneratorOptions">
             <AllowNulls>true</AllowNulls>
             <NullProportion>10</NullProportion>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Increment xsi:type="xsd:decimal">1</Increment>
+            <Increment xsi:type="xsd:int">1</Increment>
             <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>3</SeedValue>
-            <MinValue>100</MinValue>
-            <MaxValue>1000</MaxValue>
+            <SeedValue>6</SeedValue>
+            <MinValue>-2147483648</MinValue>
+            <MaxValue>2147483647</MaxValue>
             <UseDefault>false</UseDefault>
             <DefaultValue>NULL</DefaultValue>
           </GeneratorOptions>
-          <GeneratorType>MySqlDecimalGenerator</GeneratorType>
-          <GeneratorName>decimal</GeneratorName>
-          <GeneratorDescription>fill with fixed precision and scale number values</GeneratorDescription>
-          <Scale>4</Scale>
-          <Precision>10</Precision>
+          <GeneratorType>MySqlIntegerGenerator</GeneratorType>
+          <GeneratorName>int</GeneratorName>
+          <GeneratorDescription>fill with 32-bit signed integer values</GeneratorDescription>
+          <Precision>11</Precision>
         </Column>
         <Column Name="MinimumStock">
           <Checked>true</Checked>
-          <DataType>DECIMAL</DataType>
-          <GeneratorOptions xsi:type="DecimalGeneratorOptions">
+          <DataType>INT</DataType>
+          <GeneratorOptions xsi:type="MySqlIntegerGeneratorOptions">
             <AllowNulls>true</AllowNulls>
             <NullProportion>10</NullProportion>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Increment xsi:type="xsd:decimal">1</Increment>
+            <Increment xsi:type="xsd:int">1</Increment>
             <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>4</SeedValue>
-            <MinValue>1</MinValue>
-            <MaxValue>99</MaxValue>
+            <SeedValue>7</SeedValue>
+            <MinValue>-2147483648</MinValue>
+            <MaxValue>2147483647</MaxValue>
             <UseDefault>false</UseDefault>
             <DefaultValue>NULL</DefaultValue>
           </GeneratorOptions>
-          <GeneratorType>MySqlDecimalGenerator</GeneratorType>
-          <GeneratorName>Product Quantity</GeneratorName>
-          <GeneratorDescription>9, 24, 89, 35, ...</GeneratorDescription>
-          <GeneratorCategory>Product</GeneratorCategory>
-          <Scale>4</Scale>
-          <Precision>8</Precision>
+          <GeneratorType>MySqlIntegerGenerator</GeneratorType>
+          <GeneratorName>int</GeneratorName>
+          <GeneratorDescription>fill with 32-bit signed integer values</GeneratorDescription>
+          <Precision>11</Precision>
         </Column>
         <Column Name="MaximumStock">
           <Checked>true</Checked>
-          <DataType>DECIMAL</DataType>
-          <GeneratorOptions xsi:type="DecimalGeneratorOptions">
+          <DataType>INT</DataType>
+          <GeneratorOptions xsi:type="MySqlIntegerGeneratorOptions">
             <AllowNulls>true</AllowNulls>
             <NullProportion>10</NullProportion>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Increment xsi:type="xsd:decimal">1</Increment>
+            <Increment xsi:type="xsd:int">1</Increment>
             <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>5</SeedValue>
-            <MinValue>1</MinValue>
-            <MaxValue>99</MaxValue>
+            <SeedValue>8</SeedValue>
+            <MinValue>-2147483648</MinValue>
+            <MaxValue>2147483647</MaxValue>
             <UseDefault>false</UseDefault>
             <DefaultValue>NULL</DefaultValue>
           </GeneratorOptions>
-          <GeneratorType>MySqlDecimalGenerator</GeneratorType>
-          <GeneratorName>Product Quantity</GeneratorName>
-          <GeneratorDescription>9, 24, 89, 35, ...</GeneratorDescription>
-          <GeneratorCategory>Product</GeneratorCategory>
-          <Scale>4</Scale>
-          <Precision>8</Precision>
+          <GeneratorType>MySqlIntegerGenerator</GeneratorType>
+          <GeneratorName>int</GeneratorName>
+          <GeneratorDescription>fill with 32-bit signed integer values</GeneratorDescription>
+          <Precision>11</Precision>
         </Column>
         <Column Name="ShowInMenu">
           <Checked>true</Checked>
@@ -975,23 +936,9 @@
           <GeneratorCategory>Product</GeneratorCategory>
           <Length>255</Length>
         </Column>
-        <Column Name="PictureDesciption">
-          <Checked>true</Checked>
+        <Column Name="PictureType">
+          <Checked>false</Checked>
           <DataType>VARCHAR</DataType>
-          <GeneratorOptions xsi:type="MySqlRegularExpressionGeneratorOptions">
-            <AllowEmptyStrings>false</AllowEmptyStrings>
-            <EmptyStringProportion>0</EmptyStringProportion>
-            <AllowNulls>true</AllowNulls>
-            <NullProportion>100</NullProportion>
-            <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>8</SeedValue>
-            <Unique>false</Unique>
-            <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Expression>[0-9A-Z]+</Expression>
-          </GeneratorOptions>
-          <GeneratorType>MySqlStringRegularExpressionGenerator</GeneratorType>
-          <GeneratorName>Reg Exp</GeneratorName>
-          <GeneratorDescription>values based on a regular expression</GeneratorDescription>
           <Length>255</Length>
         </Column>
         <Column Name="PictureLocation">
@@ -1066,7 +1013,7 @@
             <MinValue>1</MinValue>
             <MaxValue>1</MaxValue>
             <UseDefault>false</UseDefault>
-            <DefaultValue>NULL</DefaultValue>
+            <DefaultValue>1</DefaultValue>
           </GeneratorOptions>
           <GeneratorType>MySqlIntegerGenerator</GeneratorType>
           <GeneratorName>int</GeneratorName>
@@ -1074,114 +1021,43 @@
           <Precision>11</Precision>
         </Column>
         <Column Name="Weight">
-          <Checked>true</Checked>
-          <DataType>DECIMAL</DataType>
-          <GeneratorOptions xsi:type="DecimalGeneratorOptions">
-            <AllowNulls>true</AllowNulls>
-            <NullProportion>10</NullProportion>
-            <Unique>false</Unique>
-            <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Increment xsi:type="xsd:decimal">1</Increment>
-            <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>3</SeedValue>
-            <MinValue>2</MinValue>
-            <MaxValue>100</MaxValue>
-            <UseDefault>false</UseDefault>
-            <DefaultValue>NULL</DefaultValue>
-          </GeneratorOptions>
-          <GeneratorType>MySqlDecimalGenerator</GeneratorType>
-          <GeneratorName>Product Weight</GeneratorName>
-          <GeneratorDescription>625, 1293, 58, 9, 720, ...</GeneratorDescription>
-          <GeneratorCategory>Product</GeneratorCategory>
-          <Scale>4</Scale>
-          <Precision>8</Precision>
+          <Checked>false</Checked>
+          <DataType>INT</DataType>
+          <Precision>11</Precision>
         </Column>
         <Column Name="Length">
-          <Checked>true</Checked>
-          <DataType>DECIMAL</DataType>
-          <GeneratorOptions xsi:type="DecimalGeneratorOptions">
-            <AllowNulls>true</AllowNulls>
-            <NullProportion>10</NullProportion>
-            <Unique>false</Unique>
-            <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Increment xsi:type="xsd:decimal">1</Increment>
-            <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>6</SeedValue>
-            <MinValue>0</MinValue>
-            <MaxValue>100</MaxValue>
-            <UseDefault>false</UseDefault>
-            <DefaultValue>NULL</DefaultValue>
-          </GeneratorOptions>
-          <GeneratorType>MySqlDecimalGenerator</GeneratorType>
-          <GeneratorName>decimal</GeneratorName>
-          <GeneratorDescription>fill with fixed precision and scale number values</GeneratorDescription>
-          <Scale>4</Scale>
-          <Precision>8</Precision>
+          <Checked>false</Checked>
+          <DataType>INT</DataType>
+          <Precision>11</Precision>
         </Column>
         <Column Name="Width">
-          <Checked>true</Checked>
-          <DataType>DECIMAL</DataType>
-          <GeneratorOptions xsi:type="DecimalGeneratorOptions">
-            <AllowNulls>true</AllowNulls>
-            <NullProportion>10</NullProportion>
-            <Unique>false</Unique>
-            <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Increment xsi:type="xsd:decimal">1</Increment>
-            <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>7</SeedValue>
-            <MinValue>0</MinValue>
-            <MaxValue>100</MaxValue>
-            <UseDefault>false</UseDefault>
-            <DefaultValue>NULL</DefaultValue>
-          </GeneratorOptions>
-          <GeneratorType>MySqlDecimalGenerator</GeneratorType>
-          <GeneratorName>decimal</GeneratorName>
-          <GeneratorDescription>fill with fixed precision and scale number values</GeneratorDescription>
-          <Scale>4</Scale>
-          <Precision>8</Precision>
+          <Checked>false</Checked>
+          <DataType>INT</DataType>
+          <Precision>11</Precision>
         </Column>
         <Column Name="Height">
-          <Checked>true</Checked>
-          <DataType>DECIMAL</DataType>
-          <GeneratorOptions xsi:type="DecimalGeneratorOptions">
-            <AllowNulls>true</AllowNulls>
-            <NullProportion>10</NullProportion>
-            <Unique>false</Unique>
-            <IsAlwaysUnique>false</IsAlwaysUnique>
-            <Increment xsi:type="xsd:decimal">1</Increment>
-            <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>8</SeedValue>
-            <MinValue>0</MinValue>
-            <MaxValue>100</MaxValue>
-            <UseDefault>false</UseDefault>
-            <DefaultValue>NULL</DefaultValue>
-          </GeneratorOptions>
-          <GeneratorType>MySqlDecimalGenerator</GeneratorType>
-          <GeneratorName>decimal</GeneratorName>
-          <GeneratorDescription>fill with fixed precision and scale number values</GeneratorDescription>
-          <Scale>4</Scale>
-          <Precision>8</Precision>
+          <Checked>false</Checked>
+          <DataType>INT</DataType>
+          <Precision>11</Precision>
         </Column>
         <Column Name="ParentID">
           <Checked>true</Checked>
           <DataType>CHAR</DataType>
-          <GeneratorOptions xsi:type="ForeignKeyGeneratorOptions">
+          <GeneratorOptions xsi:type="MySqlRegularExpressionGeneratorOptions">
+            <AllowEmptyStrings>false</AllowEmptyStrings>
+            <EmptyStringProportion>10</EmptyStringProportion>
+            <AllowNulls>false</AllowNulls>
+            <NullProportion>10</NullProportion>
+            <ValueDistributionMode>Seed</ValueDistributionMode>
+            <SeedValue>7</SeedValue>
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <AllowNulls>true</AllowNulls>
-            <NullProportion>50</NullProportion>
-            <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>5</SeedValue>
-            <RepeatValues>false</RepeatValues>
-            <FromTimes>1</FromTimes>
-            <ToTimes>10</ToTimes>
-            <ExcludeValues>false</ExcludeValues>
-            <ExclusionValuesPercent>1</ExclusionValuesPercent>
+            <Expression>\d{5}</Expression>
           </GeneratorOptions>
-          <GeneratorType>ForeignKeyGenerator</GeneratorType>
-          <GeneratorName>Foreign Key (auto assigned)</GeneratorName>
-          <GeneratorDescription>references a column from parent table</GeneratorDescription>
-          <HasForeignKey>true</HasForeignKey>
+          <GeneratorType>MySqlRegularExpressionGenerator</GeneratorType>
+          <GeneratorName>ID (random)</GeneratorName>
+          <GeneratorDescription>54470, 16912, 43814, 06728, 36017, 82433, 95664, ...</GeneratorDescription>
+          <GeneratorCategory>Business</GeneratorCategory>
           <Length>36</Length>
         </Column>
         <Column Name="CreatedDate">
@@ -1294,6 +1170,16 @@
           <GeneratorCategory>Personal</GeneratorCategory>
           <Length>255</Length>
         </Column>
+        <Column Name="State">
+          <Checked>false</Checked>
+          <DataType>INT</DataType>
+          <Precision>11</Precision>
+        </Column>
+        <Column Name="ManageType">
+          <Checked>false</Checked>
+          <DataType>INT</DataType>
+          <Precision>11</Precision>
+        </Column>
       </Columns>
     </Table>
     <Table Name="detailcombo">
@@ -1303,23 +1189,23 @@
         <RowsToGenerate>0</RowsToGenerate>
         <PopulationDetails>
           <PopulationType>RowsCount</PopulationType>
-          <RowsCount>80</RowsCount>
+          <RowsCount>300</RowsCount>
           <LookupProportion>30</LookupProportion>
           <ProportionOfExistingData>10</ProportionOfExistingData>
           <TimeTicksToPopulate>100000000</TimeTicksToPopulate>
         </PopulationDetails>
       </Settings>
       <Columns>
-        <Column Name="ComboId">
-          <Checked>true</Checked>
+        <Column Name="ComboID">
+          <Checked>false</Checked>
           <DataType>CHAR</DataType>
           <GeneratorOptions xsi:type="ForeignKeyGeneratorOptions">
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <AllowNulls>false</AllowNulls>
+            <AllowNulls>true</AllowNulls>
             <NullProportion>10</NullProportion>
             <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>1</SeedValue>
+            <SeedValue>3</SeedValue>
             <RepeatValues>false</RepeatValues>
             <FromTimes>1</FromTimes>
             <ToTimes>10</ToTimes>
@@ -1332,16 +1218,16 @@
           <HasForeignKey>true</HasForeignKey>
           <Length>36</Length>
         </Column>
-        <Column Name="InventoryItemId">
-          <Checked>true</Checked>
+        <Column Name="InventoryItemID">
+          <Checked>false</Checked>
           <DataType>CHAR</DataType>
           <GeneratorOptions xsi:type="ForeignKeyGeneratorOptions">
             <Unique>false</Unique>
             <IsAlwaysUnique>false</IsAlwaysUnique>
-            <AllowNulls>false</AllowNulls>
+            <AllowNulls>true</AllowNulls>
             <NullProportion>10</NullProportion>
             <ValueDistributionMode>Seed</ValueDistributionMode>
-            <SeedValue>2</SeedValue>
+            <SeedValue>4</SeedValue>
             <RepeatValues>false</RepeatValues>
             <FromTimes>1</FromTimes>
             <ToTimes>10</ToTimes>
@@ -1374,6 +1260,11 @@
           <GeneratorName>Product Quantity</GeneratorName>
           <GeneratorDescription>9, 24, 89, 35, ...</GeneratorDescription>
           <GeneratorCategory>Product</GeneratorCategory>
+          <Precision>11</Precision>
+        </Column>
+        <Column Name="Part">
+          <Checked>false</Checked>
+          <DataType>INT</DataType>
           <Precision>11</Precision>
         </Column>
         <Column Name="IsUse">

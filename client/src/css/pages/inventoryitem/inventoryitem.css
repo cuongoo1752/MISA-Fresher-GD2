@@ -84,6 +84,15 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    cursor: pointer;
+}
+
+.items-element-name {
+    color: #636dde;
+}
+
+.items-element-name:hover {
+    text-decoration: underline;
 }
 
 .table-items__checkbox {

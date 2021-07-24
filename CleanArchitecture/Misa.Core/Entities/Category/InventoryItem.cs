@@ -31,7 +31,8 @@ namespace Misa.Core.Entities.Category
         public string Size { get; set; }
         public string SizeCode { get; set; }
         public string Description { get; set; }
-        public string PictureDesciption { get; set; }
+        public string PictureType { get; set; }
+        public string PictureBase64 { get; set; }
         public string PictureLocation { get; set; }
         public string PictureName { get; set; }
         public Guid? PictureID { get; set; }

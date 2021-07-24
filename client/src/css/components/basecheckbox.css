@@ -13,10 +13,11 @@
     top: 0;
     left: 0;
     content: "";
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     background: url('../../assets/img/common-icon.png');
     background-position: -28px -78px;
+    background-color: white;
 }
 
 .checkbox::after {
@@ -24,8 +25,47 @@
     top: 0;
     left: 0;
     content: "";
+    width: 14px;
+    height: 14px;
+    background: url('../../assets/img/common-icon.png');
+    background-position: -3px -78px;
+    background-color: white;
+}
+
+
+/* STYLE RADIO
+========================================================================== */
+
+.radio {
+    width: 16px;
+    height: 16px;
+    position: relative;
+    background: white;
+    background-repeat: no-repeat;
+}
+
+.radio:checked:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
     width: 16px;
     height: 16px;
     background: url('../../assets/img/common-icon.png');
-    background-position: -3px -78px;
+    background-repeat: no-repeat;
+    background-position: -102px -77px;
+    background-color: white;
+}
+
+.radio::after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    content: "";
+    width: 16px;
+    height: 16px;
+    background: url('../../assets/img/common-icon.png');
+    background-repeat: no-repeat;
+    background-position: -77px -77px;
+    background-color: white;
 }

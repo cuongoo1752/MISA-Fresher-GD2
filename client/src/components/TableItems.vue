@@ -39,18 +39,20 @@
           class="table-detail__body-tr"
           @click.stop=""
         >
-          <td class="table-detail__td">
+          <td class="table-detail__td" style="width: 382px">
             <input
               type="text"
               class="table-detail__input"
               v-model="item.inventoryItemName"
+              
             />
           </td>
-          <td class="table-detail__td">
+          <td class="table-detail__td" style="width: 149x">
             <input
               type="text"
               class="table-detail__input"
               v-model="item.skuCode"
+              
             />
           </td>
           <td class="table-detail__td">
@@ -58,33 +60,40 @@
               type="text"
               class="table-detail__input"
               v-model="item.barCode"
+              style="width: 149x"
             />
           </td>
           <td class="table-detail__td">
-            <input
+            <Money
+              v-bind="money"
               type="text"
               class="table-detail__input"
               v-model="item.buyPrice"
+              style="width: 99x"
             />
           </td>
           <td class="table-detail__td">
-            <input
+            <Money
+              v-bind="money"
               type="text"
               class="table-detail__input"
               v-model="item.costPrice"
+              style="width: 159x"
             />
           </td>
           <td class="table-detail__td">
-            <input
+            <Money
+              v-bind="money"
               type="text"
               class="table-detail__input"
               v-model="item.initStock"
+              style="width: 129x"
             />
           </td>
-          <td @click.stop="modifiedRow(index)" class="table-detail__td">
+          <td @click.stop="modifiedRow(index)" class="table-detail__td" style="width: 40px">
             <div class="table-detail__dup"></div>
           </td>
-          <td @click.stop="deleteRow(index)" class="table-detail__td">
+          <td @click.stop="deleteRow(index)" class="table-detail__td" style="width: 50px">
             <div class="table-detail__delete"></div>
           </td>
         </tr>
@@ -98,9 +107,11 @@
 
 <script>
 import BaseAlert from "../components/BaseAlert.vue";
+import { Money } from "v-money";
 export default {
   components: {
     BaseAlert,
+    Money,
   },
   props: {
     list: {
@@ -126,7 +137,16 @@ export default {
       listTableItems: [],
       isShowAlert: false,
       message: "",
-      elementDelette:{}
+      elementDelette: {},
+
+      money: {
+        decimal: "",
+        thousands: ".",
+        prefix: "",
+        suffix: "",
+        precision: 0,
+        masked: false,
+      },
     };
   },
   methods: {
@@ -135,7 +155,7 @@ export default {
         if (this.listTableItems[index].editMode == 1) {
           this.elementDelette = this.listTableItems[index];
           this.listTableItems.splice(index, 1);
-          this.returnParentValue('delete')
+          this.returnParentValue("delete");
         }
         // Nếu không cho phép xóa
         else {
@@ -148,17 +168,16 @@ export default {
       }
       // Cho phép xóa
     },
-    modifiedRow(index){
-      
+    modifiedRow(index) {
       if (typeof index == typeof 0) {
         let tempElement = this.listTableItems[index];
         index++;
-        for(;index<this.listTableItems.length;index++){
+        for (; index < this.listTableItems.length; index++) {
           this.listTableItems[index].buyPrice = tempElement.buyPrice;
           this.listTableItems[index].costPrice = tempElement.costPrice;
           this.listTableItems[index].initStock = tempElement.initStock;
         }
-        this.returnParentValue('update');
+        this.returnParentValue("update");
       }
     },
     handleAlert(id, value) {
@@ -168,9 +187,9 @@ export default {
         }
       }
     },
-    returnParentValue(state){
-      this.$emit('change', state,this.listTableItems, this.elementDelette)
-    }
+    returnParentValue(state) {
+      this.$emit("change", state, this.listTableItems, this.elementDelette);
+    },
   },
 };
 </script>

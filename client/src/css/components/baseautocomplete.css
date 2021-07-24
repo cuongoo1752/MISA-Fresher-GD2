@@ -16,10 +16,12 @@
     position: relative;
     border: 1px solid #d0d0d0;
     border-radius: 3px;
+    background: white
 }
 
 .combobox__text {
-    border: none;
+    border-width: 0;
+    border-radius: 5px;
     font-size: 13px;
     padding: 5px 10px;
     padding-right: unset;
@@ -29,12 +31,14 @@
     width: 100%;
     outline: none;
     color: #404040;
-    height: 33px;
+    height: 31px;
     box-sizing: border-box;
 }
 
 .combobox__icon {
-    width: 32px;
+    border-width: 0;
+    border-radius: 3px;
+    width: 30px;
     background-color: white;
     display: flex;
     align-items: center;
@@ -46,15 +50,11 @@
 /* Vadidate dữ liệu */
 
 .error {
-    border: 1px solid #ff0000;
+    border: 1px solid #cf4c35;
 }
 
 .valid {
     border: 1px solid #636dde;
-}
-
-.combobox__icon:hover {
-    background: #dcdcdc;
 }
 
 .icon-dropdown {
