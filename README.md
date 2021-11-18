@@ -8,5 +8,5 @@
     - Thêm, xóa, sửa số lượng hàng hóa trong combo.
 ## 2. Công nghệ sử dụng
 - Frontend: VueJS
-- Backend: .NET Core 5
+- Backend: .NET Core 5, Web API
 - Database: MySQL
